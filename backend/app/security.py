@@ -16,15 +16,33 @@ def verify_password(password: str, hashed: str) -> bool:
     return bcrypt.checkpw(password.encode(), hashed.encode())
 
 
-def create_token(user: UserRecord, token_type: str, expires: timedelta, settings: Settings) -> str:
+def create_token(
+    user: UserRecord,
+    token_type: str,
+    expires: timedelta,
+    settings: Settings,
+    session_id: str | None = None,
+) -> str:
     now = datetime.now(timezone.utc)
-    return jwt.encode({"sub": user.id, "role": user.role.value, "type": token_type,
-                       "iat": now, "exp": now + expires, "jti": str(uuid4())},
-                      settings.jwt_secret, algorithm=settings.jwt_algorithm)
+    return jwt.encode(
+        {
+            "sub": user.id,
+            "role": user.role.value,
+            "type": token_type,
+            "iat": now,
+            "exp": now + expires,
+            "jti": str(uuid4()),
+            "sid": session_id,
+        },
+        settings.jwt_secret,
+        algorithm=settings.jwt_algorithm,
+    )
 
 
 def decode_token(token: str, expected_type: str, settings: Settings) -> dict:
-    payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+    payload = jwt.decode(
+        token, settings.jwt_secret, algorithms=[settings.jwt_algorithm]
+    )
     if payload.get("type") != expected_type or not payload.get("sub"):
         raise jwt.InvalidTokenError("Invalid token type")
     return payload

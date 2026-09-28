@@ -37,10 +37,11 @@ class MongoUserRepository:
             raise ValueError("An account with that email already exists") from exc
 
     def save(self, user: UserRecord) -> UserRecord:
-        document = user.model_dump(); document["_id"] = document.pop("id"); document["email"] = str(user.email).lower()
+        document = user.model_dump()
+        document["_id"] = document.pop("id")
+        document["email"] = str(user.email).lower()
         self.database.users.replace_one({"_id": user.id}, document)
         return user
-
 
     @staticmethod
     def _model(doc: dict | None) -> UserRecord | None:
@@ -54,6 +55,12 @@ class UserService:
     def __init__(self, users: UserRepository):
         self.users = users
 
-    def create(self, email: str, password: str, role: Role) -> UserRecord:
-        user = UserRecord(id=str(uuid4()), email=email.lower(), password_hash=hash_password(password), role=role)
+    def create(self, email: str, password: str, role: Role, **profile) -> UserRecord:
+        user = UserRecord(
+            id=str(uuid4()),
+            email=email.lower(),
+            password_hash=hash_password(password),
+            role=role,
+            **profile
+        )
         return self.users.insert(user)

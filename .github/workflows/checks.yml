@@ -1,0 +1,48 @@
+name: Application checks
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r backend/requirements.txt
+      - run: |
+          docker run -d --name test-mongo -p 27017:27017 mongo:7 --replSet test --bind_ip_all
+          for i in $(seq 1 30); do docker exec test-mongo mongosh --quiet --eval "db.adminCommand('ping')" && break; sleep 2; done
+          docker exec test-mongo mongosh --quiet --eval "rs.initiate({_id:'test',members:[{_id:0,host:'localhost:27017'}]})"
+          for i in $(seq 1 30); do docker exec test-mongo mongosh --quiet --eval "if(!db.hello().isWritablePrimary) quit(1)" && break; sleep 2; done
+      - run: python -m pytest -q
+        working-directory: backend
+        env:
+          TEST_MONGODB_URI: mongodb://localhost:27017/?replicaSet=test
+  admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+        working-directory: admin
+      - run: npm run build
+        working-directory: admin
+      - run: npm test
+        working-directory: admin
+  mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+        working-directory: mobile
+      - run: flutter analyze
+        working-directory: mobile
+      - run: flutter test
+        working-directory: mobile
+      - run: flutter build web
+        working-directory: mobile

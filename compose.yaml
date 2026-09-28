@@ -1,0 +1,48 @@
+services:
+  mongo:
+    image: mongo:7
+    command: ["mongod", "--replSet", "a2", "--bind_ip_all"]
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  mongo-init:
+    image: mongo:7
+    depends_on:
+      mongo:
+        condition: service_healthy
+    entrypoint: ["mongosh", "--host", "mongo", "--quiet", "--eval"]
+    command: ["try { rs.status() } catch(e) { rs.initiate({_id:'a2',members:[{_id:0,host:'mongo:27017'}]}) }; while (!db.hello().isWritablePrimary) { sleep(1000) }"]
+  api:
+    build: ./backend
+    env_file: .env
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/?replicaSet=a2
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped
+  worker:
+    build: ./backend
+    command: ["python", "-m", "app.worker"]
+    env_file: .env
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/?replicaSet=a2
+    depends_on:
+      mongo-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+  admin:
+    build:
+      context: ./admin
+      args:
+        VITE_API_BASE_URL: http://localhost:8000/api
+    ports:
+      - "127.0.0.1:5173:80"
+volumes:
+  mongo-data:
