@@ -118,6 +118,44 @@ def enroll_customer(system):
     return result.json(), scheme, payload
 
 
+def test_local_enrollment_without_kyc(system):
+    client, mongo, root, customer, user, settings = system
+    settings.local_skip_kyc = True
+    settings.app_environment = "development"
+    mongo.database.kyc_verifications.delete_many({})
+    enrollment, _, _ = enroll_customer(system)
+    assert enrollment["kyc_reference"] is None
+    assert enrollment["kyc_skipped_for_local_testing"] is True
+    assert mongo.database.kyc_verifications.count_documents({}) == 0
+
+
+@pytest.mark.parametrize("field", ["phone_verified", "email_verified"])
+def test_local_enrollment_still_requires_verified_contacts(system, field):
+    client, mongo, root, customer, user, settings = system
+    settings.local_skip_kyc = True
+    mongo.database.users.update_one({"_id": user.id}, {"$set": {field: False}})
+    response = client.post('/api/enrollments', headers={**customer, 'Idempotency-Key': 'local-contact-check'},
+        json={'scheme_id': 'unused', 'scheme_version': 1, 'accepted_terms': True})
+    assert response.status_code == 422
+    assert 'Verified contact' in response.json()['detail']
+
+
+def test_enrollment_requires_kyc_by_default(system):
+    client, mongo, root, customer, user, settings = system
+    settings.local_skip_kyc = False
+    mongo.database.kyc_verifications.delete_many({})
+    response = client.post('/api/enrollments', headers={**customer, 'Idempotency-Key': 'required-kyc-check'},
+        json={'scheme_id': 'unused', 'scheme_version': 1, 'accepted_terms': True})
+    assert response.status_code == 422
+    assert 'Provider-verified KYC' in response.json()['detail']
+
+
+@pytest.mark.parametrize('environment', ['test', 'production'])
+def test_kyc_skip_rejected_outside_development(environment):
+    with pytest.raises(ValueError, match='only allowed in development'):
+        Settings(_env_file=None, app_environment=environment, local_skip_kyc=True)
+
+
 def test_enrollment_snapshot_survives_scheme_revision(system):
     enrollment, scheme, payload = enroll_customer(system)
     client, mongo, root, *_ = system

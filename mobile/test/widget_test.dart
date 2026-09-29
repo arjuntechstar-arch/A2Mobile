@@ -4,6 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile_shop_scheme/main.dart';
 
 void main() {
+  test('registration fields reject invalid contact and short password inputs', () {
+    const phone = InputField('phone', 'Phone', phone: true);
+    expect(phone.validate('9876543210'), isNotNull);
+    expect(phone.validate('+91 9876543210'), isNotNull);
+    expect(phone.validate('+919876543210'), isNull);
+    expect(const InputField('password', 'Password', secret: true, minLength: 12).validate('short'), isNotNull);
+    expect(const InputField('email', 'Email', email: true).validate('invalid'), isNotNull);
+  });
   testWidgets('shows the authentication entry point', (tester) async {
     FlutterSecureStorage.setMockInitialValues({});
     await tester.pumpWidget(const SchemeApp());

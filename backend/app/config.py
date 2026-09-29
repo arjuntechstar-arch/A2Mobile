@@ -37,9 +37,12 @@ class Settings(BaseSettings):
     firebase_web_vapid_key: str = ""
     data_encryption_keys: str = ""
     app_environment: Literal["development", "test", "production"] = "development"
+    local_skip_kyc: bool = False
 
     @model_validator(mode="after")
     def production_configuration(self):
+        if self.local_skip_kyc and self.app_environment != "development":
+            raise ValueError("LOCAL_SKIP_KYC is only allowed in development")
         if not self.jwt_secret:
             raise ValueError("JWT_SECRET must be configured")
         if self.app_environment == "production":

@@ -433,14 +433,14 @@ class _LoginPageState extends State<LoginPage> {
                                     FormPage(
                                         title: 'Create account',
                                         fields: const [
-                                          InputField('name', 'Full name'),
+                                          InputField('name', 'Full name', minLength: 2),
                                           InputField('email', 'Email',
                                               email: true),
                                           InputField('phone',
-                                              'Phone with country code'),
+                                              'Phone with country code (e.g. +919876543210)', phone: true),
                                           InputField('password',
                                               'Password (12+ characters)',
-                                              secret: true)
+                                              secret: true, minLength: 12)
                                         ],
                                         submit: (values) => widget.auth.request(
                                             '/auth/register',
@@ -487,9 +487,26 @@ class InputField {
       this.email = false,
       this.multiline = false,
       this.initial = '',
+      this.minLength = 0,
+      this.phone = false,
       this.optional = false});
   final String key, label, initial;
   final bool secret, email, multiline, optional;
+  final int minLength;
+  final bool phone;
+
+  String? validate(String? input) {
+    final value = secret ? (input ?? '') : (input ?? '').trim();
+    if (value.isEmpty) return optional ? null : 'This field is required';
+    if (value.length < minLength) return 'Enter at least $minLength characters';
+    if (phone && !RegExp(r'^\+[1-9]\d{7,14}$').hasMatch(value)) {
+      return 'Include + and country code, with digits only';
+    }
+    if (email && !RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value)) {
+      return 'Enter a valid email address';
+    }
+    return null;
+  }
 }
 
 class FormPage extends StatefulWidget {
@@ -592,10 +609,7 @@ class _FormPageState extends State<FormPage> {
                                         keyboardType: f.email
                                             ? TextInputType.emailAddress
                                             : TextInputType.text,
-                                        validator: (v) =>
-                                            !f.optional && (v == null || v.isEmpty)
-                                                ? 'This field is required'
-                                                : null)),
+                                        validator: f.validate)),
                               if (_error != null)
                                 Container(
                                   padding: const EdgeInsets.all(12),
@@ -1101,7 +1115,8 @@ class SchemeDetails extends StatefulWidget {
 class _SchemeDetailsState extends State<SchemeDetails> {
   bool _accepted = false, _busy = false;
   final _key =
-      '${DateTime.now().microsecondsSinceEpoch}-${Random.secure().nextInt(1 << 32)}';
+      // A bit shift by 32 wraps on the web; use the exact numeric bound.
+      '${DateTime.now().microsecondsSinceEpoch}-${Random.secure().nextInt(4294967296)}';
   Future<void> join() async {
     setState(() => _busy = true);
     try {
@@ -1209,7 +1224,7 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'A verified phone, email and provider-verified KYC are required. Complete these in Profile before joining.',
+                    'Verify your phone and email in Profile before joining. Complete KYC if requested when you enroll.',
                     style: TextStyle(fontSize: 12.5, color: Color(0xFF1E40AF), height: 1.4),
                   ),
                 ),

@@ -6,6 +6,16 @@ import 'package:mobile_shop_scheme/api.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test('validation errors identify fields without echoing submitted values', () {
+    final message = apiErrorMessage([
+      {'loc': ['body', 'password'], 'msg': 'String should have at least 12 characters', 'input': 'private-password'},
+      {'loc': ['body', 'phone'], 'msg': 'String should match pattern', 'input': 'private-phone'},
+    ]);
+    expect(message, contains('password: String should have at least 12 characters'));
+    expect(message, contains('Phone: include + and country code'));
+    expect(message, isNot(contains('private-password')));
+    expect(message, isNot(contains('private-phone')));
+  });
   test('temporary service failure preserves the stored session', () async {
     FlutterSecureStorage.setMockInitialValues(
         {'access_token': 'access', 'refresh_token': 'refresh'});

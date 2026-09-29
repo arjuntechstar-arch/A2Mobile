@@ -16,6 +16,25 @@ class ApiException implements Exception {
   String toString() => message;
 }
 
+String apiErrorMessage(dynamic detail) {
+  if (detail is String) return detail;
+  if (detail is List) {
+    final messages = <String>[];
+    for (final error in detail) {
+      if (error is! Map || error['msg'] is! String) continue;
+      final location = error['loc'];
+      final field = location is List && location.isNotEmpty
+          ? location.last.toString()
+          : 'Field';
+      messages.add(field == 'phone'
+          ? 'Phone: include + and country code, followed by digits only (for example +919876543210).'
+          : '$field: ${error['msg']}');
+    }
+    if (messages.isNotEmpty) return messages.join('\n');
+  }
+  return 'Please check the form and try again.';
+}
+
 class AuthService {
   AuthService({http.Client? client, FlutterSecureStorage? storage})
       : _client = client ?? http.Client(),
@@ -60,8 +79,7 @@ class AuthService {
     }
     if (response.statusCode >= 400) {
       final detail = data is Map ? data['detail'] : null;
-      throw ApiException(response.statusCode,
-          detail is String ? detail : 'Please check the form and try again.');
+      throw ApiException(response.statusCode, apiErrorMessage(detail));
     }
     return data;
   }

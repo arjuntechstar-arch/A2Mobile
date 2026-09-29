@@ -62,7 +62,7 @@ flutter run -d chrome --web-port 5174 --dart-define=API_BASE_URL=http://localhos
 
 Customer app uses port 5174, staff portal 5173, API 8000. `/health/ready` checks writable replica-set availability. Staff **Service configuration** reports presence of configuration, not provider connectivity or account approval. Use `http://10.0.2.2:8000/api` for Android emulator development; a physical device needs a reachable host. Web release API URLs are build-time settings.
 
-The existing local customer can log in before providers are configured. Contact/KYC verification remains required for enrollment. There is no verification bypass. Sessions created before the session upgrade must sign in again.
+The existing local customer can log in before providers are configured. Phone and email verification and accepted terms remain required for enrollment. For local testing only, set `APP_ENVIRONMENT=development` and `LOCAL_SKIP_KYC=true` to enroll without KYC. This does not mark the customer KYC-verified; the enrollment records that KYC was skipped. The flag defaults to false and is rejected outside development. Restart the API after changing it. Sessions created before the session upgrade must sign in again.
 
 ## Proposed defaults
 

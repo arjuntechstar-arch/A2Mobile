@@ -147,6 +147,8 @@ def enroll(
         )
     database = request.app.state.database
     enrollment_id = str(uuid4())
+    settings = get_settings()
+    skip_kyc = settings.app_environment == "development" and settings.local_skip_kyc
 
     def write(session):
         db = database.database
@@ -165,7 +167,7 @@ def enroll(
         kyc = db.kyc_verifications.find_one(
             {"user_id": user.id, "status": "VERIFIED"}, session=session
         )
-        if not kyc or not kyc.get("provider_reference"):
+        if not skip_kyc and (not kyc or not kyc.get("provider_reference")):
             raise HTTPException(422, "Provider-verified KYC is required")
         scheme = db.schemes.find_one(
             {
@@ -201,7 +203,8 @@ def enroll(
             "status": "ACTIVE",
             "accepted_at": now,
             "idempotency_key": idempotency_key,
-            "kyc_reference": kyc["provider_reference"],
+            "kyc_reference": kyc.get("provider_reference") if kyc else None,
+            "kyc_skipped_for_local_testing": skip_kyc,
         }
         db.enrollments.insert_one(row.copy(), session=session)
         schedule = installment_schedule(
