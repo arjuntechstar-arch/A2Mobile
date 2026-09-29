@@ -40,6 +40,7 @@ class MongoDatabase:
             "digest", unique=True, sparse=True
         )
         self.database.otp_challenges.create_index("expires", expireAfterSeconds=0)
+        self.database.signup_emails.create_index("expires", expireAfterSeconds=0)
         self.database.email_verifications.create_index("expires", expireAfterSeconds=0)
         self.database.schemes.create_index(
             [("code", ASCENDING)], unique=True, name="scheme_code_unique"

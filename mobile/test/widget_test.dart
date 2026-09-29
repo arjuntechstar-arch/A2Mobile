@@ -4,6 +4,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile_shop_scheme/main.dart';
 
 void main() {
+  testWidgets('signup requests verification before offering account creation', (tester) async {
+    await tester.pumpWidget(MaterialApp(home: RegistrationPage(auth: FakeAuthService())));
+    await tester.pumpAndSettle();
+    expect(find.text('Send email verification code'), findsOneWidget);
+    expect(find.text('Verify and create account'), findsNothing);
+    await tester.enterText(find.byType(TextFormField).at(0), 'New customer');
+    await tester.enterText(find.byType(TextFormField).at(1), 'new@example.com');
+    await tester.enterText(find.byType(TextFormField).at(2), '+919888888888');
+    await tester.enterText(find.byType(TextFormField).at(3), 'new-password-123');
+    await tester.tap(find.text('Send email verification code'));
+    await tester.pumpAndSettle();
+    expect(find.text('Send phone verification code'), findsOneWidget);
+    await tester.drag(find.byType(ListView), const Offset(0, -500));
+    await tester.pumpAndSettle();
+    expect(find.text('Verify and create account'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
   test('registration fields reject invalid contact and short password inputs', () {
     const phone = InputField('phone', 'Phone', phone: true);
     expect(phone.validate('9876543210'), isNotNull);

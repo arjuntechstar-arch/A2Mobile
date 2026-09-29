@@ -1,5 +1,8 @@
 import hashlib
+import hmac
 import secrets
+import time
+from pydantic import BaseModel, Field, EmailStr
 from datetime import timedelta
 from urllib.parse import quote
 
@@ -27,6 +30,7 @@ from app.services.verification import VerificationService
 from app.services.providers import Providers
 from app.services.sessions import throttle, issue_tokens, consume_refresh
 from app.timeutils import utcnow
+from app.services.firebase_phone import verify_phone_token
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
@@ -61,39 +65,70 @@ def deliver_email(user, service, providers):
     )
 
 
-@router.post("/register", status_code=201)
-def register(
-    payload: RegisterRequest,
-    request: Request,
-    users: UserRepository = Depends(get_users),
-    service=Depends(get_verification),
-):
-    throttle(database(request), "register", request.client.host, 5, 3600)
-    providers = Providers(get_settings())
-    providers.sms_ready()
+class SignupEmailRequest(BaseModel):
+    email: EmailStr
+
+
+class VerifiedRegistration(RegisterRequest):
+    email_code: str = Field(min_length=8, max_length=8)
+    firebase_id_token: str = Field(min_length=20, max_length=16384)
+
+
+@router.post("/registration/email", status_code=202)
+def registration_email(payload: SignupEmailRequest, request: Request):
+    db = database(request)
+    email = str(payload.email).lower()
+    throttle(db, "signup-email-ip", request.client.host, 10, 3600)
+    throttle(db, "signup-email", email, 3, 600)
+    if db.users.find_one({"email": email}):
+        raise HTTPException(409, "An account with this email already exists. Sign in.")
+    settings = get_settings()
+    providers = Providers(settings)
     providers.email_ready()
-    if users.by_email(str(payload.email)):
-        raise HTTPException(
-            409,
-            "An account with that email already exists. Sign in to resend verification.",
-        )
-    if database(request).users.find_one({"phone": payload.phone}):
-        raise HTTPException(409, "An account with this phone already exists")
-    user = UserService(users).create(
-        str(payload.email),
-        payload.password,
-        Role.CUSTOMER,
-        phone=payload.phone,
-        name=payload.name,
-    )
-    # A delivery failure leaves a recoverable unverified account; authenticated resend is available.
-    deliver_phone(user, service, providers)
-    deliver_email(user, service, providers)
-    return {
-        "id": user.id,
-        "phone_verification_required": True,
-        "email_verification_required": True,
-    }
+    code = secrets.token_hex(4).upper()
+    digest = hmac.new(settings.jwt_secret.encode(), f"{email}:{code}".encode(), hashlib.sha256).hexdigest()
+    db.signup_emails.update_one({"_id": email}, {"$set": {
+        "digest": digest, "expires": utcnow() + timedelta(minutes=10), "attempts": 0}}, upsert=True)
+    providers.send_email(email, "Verify your email to create your account",
+                         f"Your account creation code is {code}. It expires in 10 minutes.")
+    return {"status": "sent"}
+
+
+@router.post("/register", status_code=201)
+def register(payload: VerifiedRegistration, request: Request):
+    from uuid import uuid4
+    from pymongo import ReturnDocument
+    from pymongo.errors import DuplicateKeyError
+    db = database(request)
+    settings = get_settings()
+    throttle(db, "register", request.client.host, 10, 3600)
+    if settings.phone_verification_provider != "firebase":
+        raise HTTPException(503, "Firebase signup verification is not configured")
+    email = str(payload.email).lower()
+    challenge = db.signup_emails.find_one_and_update(
+        {"_id": email, "expires": {"$gt": utcnow()}, "attempts": {"$lt": 5}},
+        {"$inc": {"attempts": 1}}, return_document=ReturnDocument.AFTER)
+    digest = hmac.new(settings.jwt_secret.encode(), f"{email}:{payload.email_code.upper()}".encode(), hashlib.sha256).hexdigest()
+    if not challenge or not secrets.compare_digest(challenge["digest"], digest):
+        raise HTTPException(400, "Invalid or expired email code")
+    claims = verify_phone_token(payload.firebase_id_token, settings)
+    checked_phone_claims(claims, payload.phone)
+    user = UserRecord(id=str(uuid4()), email=email, name=payload.name, phone=payload.phone,
+                      password_hash=hash_password(payload.password), role=Role.CUSTOMER,
+                      phone_verified=True, email_verified=True)
+    document = user.model_dump()
+    document["_id"] = document.pop("id")
+    def write(session):
+        consumed = db.signup_emails.delete_one({"_id": email, "digest": digest,
+            "expires": {"$gt": utcnow()}}, session=session)
+        if not consumed.deleted_count:
+            raise HTTPException(400, "Email code expired or already used")
+        db.users.insert_one(document.copy(), session=session)
+    try:
+        request.app.state.database.transaction(write)
+    except DuplicateKeyError:
+        raise HTTPException(409, "An account with this email or phone already exists. Sign in.")
+    return {"id": user.id, "phone_verified": True, "email_verified": True}
 
 
 @router.post("/send-phone-otp", status_code=202)
@@ -103,6 +138,8 @@ def send_phone_otp(
     user=Depends(get_current_user),
     service=Depends(get_verification),
 ):
+    if get_settings().phone_verification_provider == "firebase":
+        raise HTTPException(409, "Use Firebase phone verification in the app")
     if user.phone != payload.phone:
         raise HTTPException(403, "Phone does not belong to this account")
     throttle(database(request), "send-otp", user.id, 5, 3600)
@@ -126,9 +163,38 @@ def verify_phone_otp(
     users=Depends(get_users),
     service=Depends(get_verification),
 ):
+    if get_settings().phone_verification_provider == "firebase":
+        raise HTTPException(409, "Use Firebase phone verification in the app")
     if user.phone != payload.phone:
         raise HTTPException(403, "Phone does not belong to this account")
     service.verify_phone(payload.phone, payload.code)
+    user.phone_verified = True
+    users.save(user)
+    return as_current_user(user)
+
+
+def checked_phone_claims(claims, phone):
+    if (not phone or claims.get("phone_number") != phone
+            or claims.get("firebase", {}).get("sign_in_provider") != "phone"):
+        raise HTTPException(403, "Verified phone does not match this account")
+    authenticated_at = claims.get("auth_time")
+    if not isinstance(authenticated_at, (int, float)) or not 0 <= time.time() - authenticated_at <= 600:
+        raise HTTPException(401, "Phone verification expired. Request a new code.")
+
+
+class FirebasePhoneRequest(BaseModel):
+    id_token: str = Field(min_length=20, max_length=16384)
+
+
+@router.post("/verify-phone-firebase", response_model=CurrentUser)
+def verify_phone_firebase(payload: FirebasePhoneRequest, request: Request,
+                          user=Depends(get_current_user), users=Depends(get_users)):
+    settings = get_settings()
+    if settings.phone_verification_provider != "firebase":
+        raise HTTPException(409, "Firebase phone verification is not enabled")
+    throttle(database(request), "firebase-phone", user.id, 10, 3600)
+    claims = verify_phone_token(payload.id_token, settings)
+    checked_phone_claims(claims, user.phone)
     user.phone_verified = True
     users.save(user)
     return as_current_user(user)

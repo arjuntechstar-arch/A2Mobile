@@ -38,9 +38,13 @@ class Settings(BaseSettings):
     data_encryption_keys: str = ""
     app_environment: Literal["development", "test", "production"] = "development"
     local_skip_kyc: bool = False
+    local_email_only: bool = False
+    phone_verification_provider: Literal["twilio", "firebase"] = "twilio"
 
     @model_validator(mode="after")
     def production_configuration(self):
+        if self.local_email_only and self.app_environment != "development":
+            raise ValueError("LOCAL_EMAIL_ONLY is only allowed in development")
         if self.local_skip_kyc and self.app_environment != "development":
             raise ValueError("LOCAL_SKIP_KYC is only allowed in development")
         if not self.jwt_secret:

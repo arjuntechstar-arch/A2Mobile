@@ -48,7 +48,8 @@ class AuthService {
       Map<String, String>? headers,
       bool retry = true}) async {
     final access = await _storage.read(key: 'access_token');
-    final request = http.Request(method, Uri.parse('$apiBaseUrl$path'));
+    final uri = Uri.parse('$apiBaseUrl$path');
+    final request = http.Request(method, kIsWeb ? Uri.base.resolveUri(uri) : uri);
     request.headers.addAll({
       'Content-Type': 'application/json',
       if (access != null) 'Authorization': 'Bearer $access',

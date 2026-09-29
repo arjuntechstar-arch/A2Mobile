@@ -293,6 +293,15 @@ function App() {
             is_active: values.is_active === "on",
           }),
         });
+      else if (kind === "edit_customer")
+        await api.request(`/admin/customers/${row?.id}`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            name: String(values.name).trim(),
+            email: String(values.email).trim(),
+            phone: String(values.phone).trim(),
+          }),
+        });
       else if (kind === "kyc_review")
         await api.request(`/admin/kyc/${row?.user_id}/review`, {
           method: "PATCH",
@@ -540,6 +549,9 @@ function App() {
                       </td>
                     ))}
                     <td className="actions">
+                      {page === "customers" && allowed("customer:manage") && (
+                        <button disabled={busy} onClick={() => setDialog({kind: "edit_customer", row})}>Edit customer</button>
+                      )}
                       {page === "customers" && allowed("customer:manage") && (
                         <button
                           disabled={busy}
@@ -887,6 +899,15 @@ function App() {
                         Changes are saved as a draft. Existing enrollment terms
                         stay unchanged.
                       </p>
+                    </>
+                  )}
+                  {dialog.kind === "edit_customer" && (
+                    <>
+                      {error && <p role="alert">{error}</p>}
+                      <label>Full name<input name="name" required minLength={2} maxLength={120} defaultValue={dialog.row?.name ?? ""} /></label>
+                      <label>Email<input name="email" type="email" required defaultValue={dialog.row?.email ?? ""} /></label>
+                      <label>Phone with country code<input name="phone" type="tel" required pattern={"\\+[1-9][0-9]{7,14}"} title="Use + and country code followed by digits only, for example +919876543210" defaultValue={dialog.row?.phone ?? ""} /></label>
+                      <p>Changing email or phone requires that contact to be verified again and signs out the customer's existing sessions.</p>
                     </>
                   )}
                   {dialog.kind === "store" && (

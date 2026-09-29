@@ -129,6 +129,45 @@ def test_local_enrollment_without_kyc(system):
     assert mongo.database.kyc_verifications.count_documents({}) == 0
 
 
+def test_local_email_only_enrollment(system):
+    client, mongo, root, customer, user, settings = system
+    settings.local_email_only = True
+    settings.local_skip_kyc = True
+    mongo.database.users.update_one({'_id': user.id}, {'$set': {'phone_verified': False}})
+    mongo.database.kyc_verifications.delete_many({})
+    enrollment, _, _ = enroll_customer(system)
+    assert enrollment['phone_verification_skipped_for_local_testing'] is True
+    mongo.database.users.update_one({'_id': user.id}, {'$set': {'email_verified': False}})
+    response = client.post('/api/enrollments', headers={**customer, 'Idempotency-Key': 'email-required'},
+        json={'scheme_id': 'unused', 'scheme_version': 1, 'accepted_terms': True})
+    assert response.status_code == 422
+
+
+def test_email_only_rejected_in_production():
+    with pytest.raises(ValueError, match='only allowed in development'):
+        Settings(_env_file=None, app_environment='production', local_email_only=True)
+
+
+@pytest.mark.parametrize('phone,provider,age,status', [
+    ('+919999999999', 'phone', 0, 200),
+    ('+918888888888', 'phone', 0, 403),
+    ('+919999999999', 'password', 0, 403),
+    ('+919999999999', 'phone', 700, 401),
+])
+def test_firebase_phone_proof(system, monkeypatch, phone, provider, age, status):
+    import time
+    client, mongo, root, customer, user, settings = system
+    settings.phone_verification_provider = 'firebase'
+    mongo.database.users.update_one({'_id': user.id}, {'$set': {'phone_verified': False}})
+    monkeypatch.setattr(auth, 'verify_phone_token', lambda *args: {
+        'phone_number': phone, 'auth_time': time.time() - age,
+        'firebase': {'sign_in_provider': provider}})
+    response = client.post('/api/auth/verify-phone-firebase', headers=customer,
+                           json={'id_token': 'test-token-with-enough-length'})
+    assert response.status_code == status
+    assert mongo.database.users.find_one({'_id': user.id})['phone_verified'] == (status == 200)
+
+
 @pytest.mark.parametrize("field", ["phone_verified", "email_verified"])
 def test_local_enrollment_still_requires_verified_contacts(system, field):
     client, mongo, root, customer, user, settings = system
@@ -551,61 +590,6 @@ def test_invalid_signature_and_wrong_amount_do_not_credit(system, monkeypatch):
     assert wrong.status_code == 409
     assert mongo.database.payments.count_documents({}) == 0
     assert mongo.database.installments.count_documents({"status": "PAID"}) == 0
-
-
-def test_registration_delivers_verifiable_challenges(system, monkeypatch):
-    client, mongo, root, customer, user, settings = system
-    delivered = {}
-    monkeypatch.setattr(Providers, "sms_ready", lambda self: None)
-    monkeypatch.setattr(Providers, "email_ready", lambda self: None)
-    monkeypatch.setattr(
-        Providers,
-        "send_sms",
-        lambda self, phone, message: delivered.update(sms=message),
-    )
-    monkeypatch.setattr(
-        Providers,
-        "send_email",
-        lambda self, email, subject, message: delivered.update(email=message),
-    )
-    response = client.post(
-        "/api/auth/register",
-        json={
-            "name": "New Customer",
-            "email": "new@example.com",
-            "phone": "+919888888888",
-            "password": "new-password-123",
-        },
-    )
-    assert response.status_code == 201, response.text
-    assert "code" not in response.json() and "token" not in response.json()
-    import re
-    from urllib.parse import urlparse, parse_qs
-
-    code = re.search(r"\b\d{6}\b", delivered["sms"]).group()
-    token = parse_qs(urlparse(delivered["email"].splitlines()[-1]).query)[
-        "verify_email"
-    ][0]
-    tokens = client.post(
-        "/api/auth/login",
-        json={"email": "new@example.com", "password": "new-password-123"},
-    ).json()
-    headers = {"Authorization": "Bearer " + tokens["access_token"]}
-    assert (
-        client.post(
-            "/api/auth/verify-phone-otp",
-            headers=headers,
-            json={"phone": "+919888888888", "code": code},
-        ).status_code
-        == 200
-    )
-    assert (
-        client.post("/api/auth/verify-email", json={"token": token}).status_code == 200
-    )
-    profile = client.get("/api/auth/me", headers=headers).json()
-    assert profile["phone_verified"] and profile["email_verified"]
-    saved = mongo.database.users.find_one({"email": "new@example.com"})
-    assert saved["password_hash"] != "new-password-123"
 
 
 def test_profile_encrypts_sensitive_fields(system, monkeypatch):

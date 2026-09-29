@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'api.dart';
+import 'firebase_phone.dart';
 import 'checkout.dart';
 import 'push.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -430,24 +431,7 @@ class _LoginPageState extends State<LoginPage> {
                             TextButton(
                                 onPressed: () => openPage(
                                     context,
-                                    FormPage(
-                                        title: 'Create account',
-                                        fields: const [
-                                          InputField('name', 'Full name', minLength: 2),
-                                          InputField('email', 'Email',
-                                              email: true),
-                                          InputField('phone',
-                                              'Phone with country code (e.g. +919876543210)', phone: true),
-                                          InputField('password',
-                                              'Password (12+ characters)',
-                                              secret: true, minLength: 12)
-                                        ],
-                                        submit: (values) => widget.auth.request(
-                                            '/auth/register',
-                                            method: 'POST',
-                                            body: values),
-                                        success:
-                                            'Account created. Sign in, then verify your phone and email from Profile.')),
+                                    RegistrationPage(auth: widget.auth)),
                                 child: const Text('Create an account')),
                             TextButton(
                                 onPressed: () => openPage(
@@ -479,6 +463,108 @@ class _LoginPageState extends State<LoginPage> {
                                             : 'Privacy')))
                                     .toList()),
                           ]))))));
+}
+
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({super.key, required this.auth});
+  final AuthService auth;
+  @override
+  State<RegistrationPage> createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  final form = GlobalKey<FormState>();
+  final name = TextEditingController();
+  final email = TextEditingController();
+  final phone = TextEditingController();
+  final password = TextEditingController();
+  final emailCode = TextEditingController();
+  final phoneCode = TextEditingController();
+  PhoneVerification? verification;
+  bool busy = false, codesRequested = false, finished = false;
+  String? error, notice;
+
+  @override
+  void dispose() {
+    for (final c in [name, email, phone, password, emailCode, phoneCode]) { c.dispose(); }
+    super.dispose();
+  }
+
+  Future<void> run(Future<void> Function() work) async {
+    setState(() { busy = true; error = null; notice = null; });
+    try { await work(); }
+    catch (e) { if (mounted) setState(() => error = message(e)); }
+    finally { if (mounted) setState(() => busy = false); }
+  }
+
+  Future<void> sendCodes() async {
+    if (!form.currentState!.validate()) return;
+    await run(() async {
+      await widget.auth.request('/auth/registration/email', method: 'POST', body: {'email': email.text.trim()});
+      verification = PhoneVerification(widget.auth, phone.text.trim());
+      if (mounted) setState(() { codesRequested = true; notice = 'Email code sent. Request the phone code below.'; });
+    });
+  }
+
+  Future<void> create() async {
+    if (emailCode.text.trim().length != 8 || phoneCode.text.trim().length != 6) {
+      setState(() => error = 'Enter the 8-character email code and 6-digit phone code.');
+      return;
+    }
+    await run(() async {
+      final token = await verification!.confirmToken(phoneCode.text.trim());
+      await widget.auth.request('/auth/register', method: 'POST', body: {
+        'name': name.text.trim(), 'email': email.text.trim(), 'phone': phone.text.trim(),
+        'password': password.text, 'email_code': emailCode.text.trim(), 'firebase_id_token': token,
+      });
+      if (mounted) setState(() { finished = true; notice = 'Account created. Both contacts are verified. Return to sign in.'; });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Create account')),
+    body: Center(child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 480),
+      child: ListView(padding: const EdgeInsets.all(20), children: [
+        if (!finished) ...[
+        const Text('Verify your email and phone before creating your account. Google processes your phone number for verification and abuse prevention.'),
+        const SizedBox(height: 16),
+        Form(key: form, child: Column(children: [
+          TextFormField(controller: name, enabled: !codesRequested && !busy, decoration: const InputDecoration(labelText: 'Full name'), validator: const InputField('name','Name', minLength: 2).validate),
+          const SizedBox(height: 20),
+          TextFormField(controller: email, enabled: !codesRequested && !busy, decoration: const InputDecoration(labelText: 'Email'), validator: const InputField('email','Email', email: true).validate),
+          const SizedBox(height: 20),
+          TextFormField(controller: phone, enabled: !codesRequested && !busy, decoration: const InputDecoration(labelText: 'Phone with country code'), validator: const InputField('phone','Phone', phone: true).validate),
+          const SizedBox(height: 20),
+          TextFormField(controller: password, enabled: !codesRequested && !busy, obscureText: true, decoration: const InputDecoration(labelText: 'Password (12+ characters)'), validator: const InputField('password','Password', secret: true, minLength: 12).validate),
+        ])),
+        ],
+        const SizedBox(height: 16),
+        if (!codesRequested) FilledButton(onPressed: busy ? null : sendCodes, child: const Text('Send email verification code')),
+        if (codesRequested && !finished) ...[
+          TextFormField(controller: emailCode, decoration: const InputDecoration(labelText: 'Email code (8 characters)')),
+          TextButton(onPressed: busy ? null : () => run(() async {
+            await widget.auth.request('/auth/registration/email', method: 'POST', body: {'email': email.text.trim()});
+            if (mounted) setState(() => notice = 'New email code sent.');
+          }), child: const Text('Resend email code')),
+          FilledButton(onPressed: busy ? null : () => run(() async {
+            await verification!.send();
+            if (mounted) setState(() => notice = 'Phone code sent.');
+          }), child: const Text('Send phone verification code')),
+          TextFormField(controller: phoneCode, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Phone OTP (6 digits)')),
+          const SizedBox(height: 16),
+          FilledButton(onPressed: busy ? null : create, child: const Text('Verify and create account')),
+          TextButton(onPressed: busy ? null : () => setState(() { codesRequested = false; verification = null; emailCode.clear(); phoneCode.clear(); }), child: const Text('Edit contact details')),
+        ],
+        if (busy) const LinearProgressIndicator(),
+        if (error != null) Text(error!, style: const TextStyle(color: Colors.red)),
+        if (notice != null) Text(notice!),
+        if (finished) ...[
+          const SizedBox(height: 20),
+          FilledButton(onPressed: () => Navigator.pop(context), child: const Text('Return to sign in')),
+        ],
+      ]))),
+  );
 }
 
 class InputField {
@@ -1224,7 +1310,7 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'Verify your phone and email in Profile before joining. Complete KYC if requested when you enroll.',
+                    'Verify your email in Profile before joining. Complete phone verification and KYC if requested when you enroll.',
                     style: TextStyle(fontSize: 12.5, color: Color(0xFF1E40AF), height: 1.4),
                   ),
                 ),
@@ -1875,10 +1961,18 @@ class ProfilePage extends StatelessWidget {
       });
 }
 
-class VerificationPage extends StatelessWidget {
+class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key, required this.auth, required this.phone});
   final AuthService auth;
   final String phone;
+
+  @override
+  State<VerificationPage> createState() => _VerificationPageState();
+}
+
+class _VerificationPageState extends State<VerificationPage> {
+  late final verification = PhoneVerification(widget.auth, widget.phone);
+  bool sending = false;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -1897,25 +1991,25 @@ class VerificationPage extends StatelessWidget {
               const Icon(Icons.phone_android_rounded, size: 48, color: Color(0xFF2563EB)),
               const SizedBox(height: 12),
               Text(
-                'Verification for $phone',
+                'Verification for ${widget.phone}',
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF0F172A)),
               ),
               const SizedBox(height: 6),
               const Text(
-                'We will send a 6-digit one-time password to verify your mobile number.',
+                'Send a code to verify your phone. By continuing, you agree that Google processes your number for verification and abuse prevention.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
               ),
               const SizedBox(height: 16),
               FilledButton.icon(
-                  onPressed: () async {
+                  onPressed: sending ? null : () async {
+                    setState(() => sending = true);
                     try {
-                      await auth.request('/auth/send-phone-otp',
-                          method: 'POST', body: {'phone': phone});
+                      await verification.send();
                       if (context.mounted) showMessage(context, 'Code sent.');
                     } catch (e) {
                       if (context.mounted) showMessage(context, message(e));
-                    }
+                    } finally { if (mounted) setState(() => sending = false); }
                   },
                   icon: const Icon(Icons.send_rounded, size: 18),
                   label: const Text('Send verification code')),
@@ -1926,8 +2020,7 @@ class VerificationPage extends StatelessWidget {
             child: FormPage(
                 title: 'Enter code',
                 fields: const [InputField('code', 'Six-digit code')],
-                submit: (values) => auth.request('/auth/verify-phone-otp',
-                    method: 'POST', body: {'phone': phone, ...values}),
+                submit: (values) => verification.confirm(values['code']),
                 success: 'Phone verified. Return to Profile and refresh.'))
       ]));
 }

@@ -141,7 +141,9 @@ def enroll(
     user=Depends(get_current_user),
     idempotency_key: str = Header(min_length=8, max_length=100),
 ):
-    if not payload.accepted_terms or not user.phone_verified or not user.email_verified:
+    settings = get_settings()
+    email_only = settings.app_environment == "development" and settings.local_email_only
+    if not payload.accepted_terms or not user.email_verified or (not email_only and not user.phone_verified):
         raise HTTPException(
             422, "Verified contact details and accepted terms are required"
         )
@@ -205,6 +207,7 @@ def enroll(
             "idempotency_key": idempotency_key,
             "kyc_reference": kyc.get("provider_reference") if kyc else None,
             "kyc_skipped_for_local_testing": skip_kyc,
+            "phone_verification_skipped_for_local_testing": email_only,
         }
         db.enrollments.insert_one(row.copy(), session=session)
         schedule = installment_schedule(

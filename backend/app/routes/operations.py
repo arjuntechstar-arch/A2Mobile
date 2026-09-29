@@ -28,6 +28,7 @@ def app_config():
         "iosBundleId",
     }
     return {
+        "phoneVerificationProvider": settings.phone_verification_provider,
         "firebase": {
             platform: {key: value for key, value in options.items() if key in allowed}
             for platform, options in settings.firebase_client_options.items()

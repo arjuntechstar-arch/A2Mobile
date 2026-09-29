@@ -15,6 +15,12 @@ Use the customer account in the mobile app and the owner account in the staff po
 
 ## Configuration
 
+### Verification-first signup and customer editing
+
+New customers enter their details, request an eight-character email code, request a Firebase phone OTP, then select **Verify and create account**. `POST /api/auth/registration/email` stores only an expiring challenge; `POST /api/auth/register` creates the application customer only after both proofs succeed. Email delivery failure creates no customer. Codes expire after ten minutes and allow at most five registration attempts; successful account creation consumes the challenge transactionally. Local enrollment bypass flags do not bypass signup verification. Firebase may create its own authentication identity during phone verification, before the application customer exists.
+
+In the admin portal, **Customers → Edit customer** allows authorized staff to edit name, email, and phone; Activate/Deactivate controls access. Contact changes clear the corresponding verified status, invalidate old challenges and revoke sessions. Customers cannot grant themselves admin access or verification status. Existing accounts are retained and can sign in to finish verification. Working Brevo SMTP credentials and Firebase Phone configuration are required for new signup.
+
 Run API and worker from `backend/`; both read the root `.env`. Restart them after configuration changes. Copy `.env.example` on a new installation. Leave unused providers empty rather than entering dummy values.
 
 Payments and refunds use **Razorpay**. Set `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` and `RAZORPAY_WEBHOOK_SECRET` in the root `.env`. Cashfree settings are exclusively for KYC. Docker Compose passes the same `.env` to API and worker, so no separate gateway change is needed in `compose.yaml`.
@@ -36,6 +42,14 @@ Payments and refunds use **Razorpay**. Set `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECR
 Provider references: [Razorpay orders](https://razorpay.com/docs/api/orders/create/), [Twilio messages](https://www.twilio.com/docs/messaging/api/message-resource), [SES SMTP](https://docs.aws.amazon.com/ses/latest/dg/smtp-connect.html), [Cashfree PAN](https://www.cashfree.com/docs/api-reference/vrs/v2/pan/verify-pan-sync), [DigiLocker consent](https://www.cashfree.com/docs/api-reference/vrs/v2/digilocker/create-digilocker-url), [DigiLocker document](https://www.cashfree.com/docs/api-reference/vrs/v2/digilocker/get-document-from-digilocker), [Firebase setup](https://firebase.google.com/docs/cloud-messaging/flutter/get-started).
 
 ## Local processes
+
+### Firebase phone verification
+
+For a shared HTTPS customer demo, build from `mobile/` with `flutter build web --dart-define=API_BASE_URL=/api`, then run `.venv/Scripts/python.exe scripts/customer-web-server.py` from the repository root. This listens on loopback port 5174 and serves the built app plus an explicit customer API allowlist. Keep the API on port 8000. Tunnel port 5174, add the generated hostname to Firebase authorized domains, and set `PUBLIC_APP_URL` to that HTTPS origin for email links. The existing Razorpay webhook tunnel remains separate. Stop the Flutter development server before starting this server on the same port. Rebuild after Flutter code changes. Customer requests are same-origin; the admin portal continues to use its local API configuration.
+
+Set `PHONE_VERIFICATION_PROVIDER=firebase` with `FIREBASE_CREDENTIALS` pointing to the private service-account JSON and `FIREBASE_CLIENT_OPTIONS` containing the public platform options. Set `LOCAL_EMAIL_ONLY=false` to require phone verification again. Registration sends the Brevo email; customers request Firebase OTP from Profile. The backend verifies revoked/expired tokens, the phone sign-in provider, matching saved phone, and authentication within ten minutes. KYC can still be skipped locally with `LOCAL_SKIP_KYC=true`.
+
+Enable Phone in Firebase Authentication, configure SMS regions and an authorized customer-web hostname. Real SMS requires Firebase billing; fictional Firebase test numbers use configured codes without SMS. The existing webhook-only tunnel cannot host the customer app. Android needs its own Firebase options and signing fingerprints; web config alone does not enable Android. Firebase phone authentication is not a general SMS replacement: redemption SMS still uses the existing provider.
 
 Use Python 3.11, Node 22.12+ and Flutter stable. Install `backend/requirements.txt`, run `npm ci` in `admin/` and `flutter pub get` in `mobile/`. From separate terminals:
 
