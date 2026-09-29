@@ -96,6 +96,37 @@ const field = (
     />
   </label>
 );
+
+const renderCell = (key: string, val: any) => {
+  if (key.endsWith("_paise") && typeof val === "number") return money(val);
+  if (typeof val === "object" && val !== null) return JSON.stringify(val);
+  const str = String(val ?? "");
+  const upper = str.toUpperCase();
+  const knownStatuses: Record<string, string> = {
+    ACTIVE: "active",
+    COMPLETED: "completed",
+    CAPTURED: "captured",
+    VERIFIED: "verified",
+    RESOLVED: "resolved",
+    CONFIGURED: "configured",
+    PENDING: "pending",
+    PENDING_APPROVAL: "pending",
+    DUE: "due",
+    OPEN: "open",
+    IN_PROGRESS: "in_progress",
+    REQUIRES_REVIEW: "requires_review",
+    FAILED: "failed",
+    OVERDUE: "overdue",
+    CLOSED: "closed",
+    REJECTED: "rejected",
+    CONFIGURATION_REQUIRED: "configuration_required",
+  };
+  if (knownStatuses[upper]) {
+    return <span className={`status-pill ${knownStatuses[upper]}`}>{str}</span>;
+  }
+  return str;
+};
+
 function App() {
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -302,22 +333,29 @@ function App() {
   }
   if (!user)
     return (
-      <main className="login">
-        <h1>Mobile Shop Scheme</h1>
-        <p>Staff portal</p>
-        {error && (
-          <p role="alert" className="error">
-            {error}
-          </p>
-        )}
-        <form onSubmit={login}>
-          {field("email", "Email", "email")}
-          {field("password", "Password", "password")}
-          <button disabled={busy || loading}>
-            {busy ? "Signing in…" : "Sign in"}
-          </button>
-        </form>
-      </main>
+      <div className="login-wrapper">
+        <main className="login">
+          <div className="login-brand">
+            <div className="login-brand-icon">A2</div>
+            <div>
+              <h1>A2Mobile</h1>
+              <p style={{ margin: 0, fontSize: "13px" }}>Scheme Administration Portal</p>
+            </div>
+          </div>
+          {error && (
+            <p role="alert" className="error">
+              {error}
+            </p>
+          )}
+          <form onSubmit={login}>
+            {field("email", "Email address", "email")}
+            {field("password", "Password", "password")}
+            <button disabled={busy || loading} className="primary-btn">
+              {busy ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
+        </main>
+      </div>
     );
   const scheme = dialog?.row ?? initialScheme;
   const policy = scheme.policy ?? initialScheme.policy;
@@ -338,8 +376,13 @@ function App() {
   return (
     <div className="app">
       <aside>
-        <h2>Mobile Shop</h2>
-        <p>{user.role.replaceAll("_", " ")}</p>
+        <div className="brand-header">
+          <div className="brand-icon">A2</div>
+          <div>
+            <h2>A2Mobile</h2>
+            <div className="role-badge">{user.role.replaceAll("_", " ")}</div>
+          </div>
+        </div>
         <nav>
           {Object.keys(names)
             .filter((p) => allowed(permissions[p]))
@@ -358,6 +401,7 @@ function App() {
             ))}
         </nav>
         <button
+          className="signout-btn"
           onClick={() => {
             void api.logout().finally(() => setUser(null));
           }}
@@ -367,13 +411,18 @@ function App() {
       </aside>
       <main>
         <header>
-          <div>
+          <div className="header-title-wrap">
             <h1>{names[page]}</h1>
-            <span>{user.email}</span>
+            <div className="header-user-badge">
+              <span>●</span>
+              <span>{user.email}</span>
+            </div>
           </div>
-          <button disabled={loading} onClick={() => void load()}>
-            Refresh
-          </button>
+          <div className="header-actions">
+            <button disabled={loading} onClick={() => void load()}>
+              Refresh
+            </button>
+          </div>
         </header>
         {error && (
           <p role="alert" className="error">
@@ -487,11 +536,7 @@ function App() {
                   <tr key={row.id ?? i}>
                     {columns.map((key) => (
                       <td key={key}>
-                        {key.endsWith("_paise") && typeof row[key] === "number"
-                          ? money(row[key])
-                          : typeof row[key] === "object"
-                            ? JSON.stringify(row[key])
-                            : String(row[key] ?? "")}
+                        {renderCell(key, row[key])}
                       </td>
                     ))}
                     <td className="actions">

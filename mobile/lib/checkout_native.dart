@@ -30,7 +30,7 @@ Future<Map<String, dynamic>> checkout(Map<String, dynamic> order) async {
       'order_id': order['order_id'],
       'amount': order['amount_paise'],
       'currency': 'INR',
-      'name': 'Mobile Shop Scheme'
+      'name': 'A2Mobile'
     });
     return await result.future;
   } finally {
