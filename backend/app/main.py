@@ -1,7 +1,9 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from starlette.requests import Request
 
 from app.config import get_settings
@@ -46,6 +48,9 @@ settings = get_settings()
 app = FastAPI(title="Mobile Shop Scheme API", version="0.1.0", lifespan=lifespan)
 app.state.settings = settings
 
+
+Path(settings.upload_directory).mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=settings.upload_directory), name="uploads")
 
 @app.exception_handler(DuplicateKeyError)
 async def duplicate_record(request: Request, exc: DuplicateKeyError):

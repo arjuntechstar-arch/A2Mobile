@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-low": "#f2f3ff", "surface-container-lowest": "#ffffff", "on-primary-container": "#eeefff", "secondary-fixed": "#ffdbd1", "primary-container": "#2563eb", "on-surface-variant": "#434655", "surface-tint": "#0053db", "on-tertiary": "#ffffff", "tertiary-fixed": "#6ffbbe", "on-error": "#ffffff", "inverse-surface": "#283044", "error": "#ba1a1a", "on-background": "#131b2e", "on-tertiary-container": "#bdffdb", "outline-variant": "#c3c6d7", "on-primary": "#ffffff", "error-container": "#ffdad6", "surface-variant": "#dae2fd", "primary": "#004ac6", "secondary-container": "#fe5824", "tertiary": "#006242", "on-tertiary-fixed-variant": "#005236", "secondary": "#b02f00", "tertiary-fixed-dim": "#4edea3", "secondary-fixed-dim": "#ffb5a0", "primary-fixed": "#dbe1ff", "primary-fixed-dim": "#b4c5ff", "inverse-primary": "#b4c5ff", "surface-bright": "#faf8ff", "outline": "#737686", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#003ea8", "background": "#faf8ff", "surface-dim": "#d2d9f4", "on-primary-fixed": "#00174b", "surface-container": "#eaedff", "on-secondary-container": "#531100", "on-surface": "#131b2e", "surface-container-high": "#e2e7ff", "on-error-container": "#93000a", "on-secondary-fixed": "#3b0900", "surface": "#faf8ff", "inverse-on-surface": "#eef0ff", "on-secondary-fixed-variant": "#862200", "tertiary-container": "#007d55", "surface-container-highest": "#dae2fd", "on-tertiary-fixed": "#002113" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xs": "0.25rem", "gutter": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-xl": "2rem", "space-md": "1rem", "margin": "1rem" }, "fontFamily": { "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Inter"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-md": ["Inter"], "label-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "headline-xl": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, "fontSize": { "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "700"}], "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "700"}], "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "700"}], "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "800"}], "headline-lg-mobile": ["22px", {"lineHeight": "30px", "fontWeight": "700"}], "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-xl": ["36px", {"lineHeight": "44px", "fontWeight": "800"}], "headline-xl-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}], "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;min-height:100%;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="VoltMart Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1Uldbor9CrrNUe81244s_Xec7H0VxIoaLLApwGSx4bMZdWojJhD2KCxR6T4ZMPZO7z36PnzKd_mnwBrqFlL9RFJdVCREqB_hLyRyraVEgl-gPabNSj3LJ-VY8o29ITSWCu9pu6no5cAJIdLJQVVUgU_a1mjOdrjXISUvdYw1aJ4jVd2zHY-b-H4Uu5P6Yrpti1h7oCgnP0vRlCkbz7XbHfStf5_VCHX2aXy9j2XYxJiRz-f4ynBWLxiWA"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">VoltMart</span><span class="text-xs text-on-surface-variant font-body-sm text-body-sm leading-none">•</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Retail</span></div><button class="flex items-center gap-1 text-left min-h-[24px] focus:outline-none" type="button"><span class="font-label-md text-label-md text-on-surface truncate">Downtown Flagship Hub</span><span class="material-symbols-outlined text-[16px] text-primary shrink-0">arrow_drop_down</span></button></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Notifications" class="w-11 h-11 relative flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary active:bg-surface-container-high transition-colors focus:outline-none" type="button"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-secondary-container ring-2 ring-surface"></span></button><button aria-label="Customer Account" class="w-11 h-11 flex items-center justify-center rounded-full p-0.5 focus:outline-none active:scale-95 transition-transform" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwuTddeus_W4dNvVH5Ncv3NblDJ52Cqa9aBSEdyS9OH-_FZCSNfyHOBlVOKodxEBb8zNmVsV24siXXyMideH8hvFAQ27nOMPjRJheuADpc05YB4D1UzBC9xN95MVK9iaGSlkE0SymVnAX0MsUqEUttsX3CEnq6MH-0nQRMjUPBKHIZXyyKHf_MWUGwW4-dCFquC3sGTeMs76yIqzVCXMOCMmLYtq5o5pHIzrFQUZo0p7TzbVAOONPA"/></button></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Celebratory Hero Header Block -->
+<div class="relative overflow-hidden bg-primary-container text-on-primary-container px-gutter pt-6 pb-8 rounded-b-[2rem] shadow-xl">
+<!-- Ambient Sparkle SVGs & Micro-bursts -->
+<div class="absolute -top-12 -right-8 w-44 h-44 rounded-full bg-secondary-container/20 blur-2xl pointer-events-none"></div>
+<div class="absolute top-1/2 -left-10 w-36 h-36 rounded-full bg-tertiary-fixed/20 blur-2xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<!-- Badge Ribbon -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-lowest/20 backdrop-blur-md shadow-sm mb-3">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-surface-container-lowest font-bold">Cycle 10/10 Completed • Bonus Unlocked</span>
+</div>
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile text-on-primary font-extrabold tracking-tight">
+        10+1 Smart Scheme Matured!
+      </h1>
+<p class="font-body-md text-body-md text-primary-fixed mt-1 flex items-center justify-center gap-1.5">
+<span>Folio #VF-2024-8842-AC</span>
+<span class="opacity-40">•</span>
+<span class="font-medium text-surface-container-lowest">Alexander Chen</span>
+</p>
+<!-- Celebratory Graphic Accent Strip -->
+<div class="mt-4 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-lowest/15 backdrop-blur-md text-on-primary">
+<span class="material-symbols-outlined text-[18px] text-secondary-container animate-bounce">celebration</span>
+<span class="font-label-sm text-label-sm font-semibold tracking-wide">11th Installment Fully Funded by VoltMart</span>
+</div>
+</div>
+</div>
+<!-- Main Overlapping Floating Container -->
+<div class="px-gutter -mt-5 flex flex-col gap-5 z-20">
+<!-- Maturity Capital & Bonus Spotlight Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-lg flex flex-col relative overflow-hidden">
+<div class="flex items-center justify-between pb-3 border-b-0">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Total Redeemable Value</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-xl text-headline-xl text-primary font-black tracking-tight leading-none">$550.00</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-bold">USD</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tertiary-fixed/30 text-tertiary font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">format_image_left</span>
+            Escrow Audited
+          </span>
+<span class="font-label-sm text-label-sm text-outline mt-1">Guaranteed Capital</span>
+</div>
+</div>
+<!-- Breakdown Capsules -->
+<div class="mt-4 grid grid-cols-1 gap-2.5">
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px] text-primary">savings</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Your Deposits</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">10 months × $50.00</span>
+</div>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">$500.00</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-tertiary-fixed/20">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-tertiary/15 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px] text-tertiary">card_giftcard</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-on-surface font-semibold">VoltMart 11th Month Gift</span>
+<span class="px-1.5 py-0.2 rounded-full bg-tertiary text-on-tertiary font-label-sm text-[9px] font-extrabold uppercase">100% Free</span>
+</div>
+<span class="font-body-sm text-body-sm text-tertiary">Bonus matured &amp; fully credited</span>
+</div>
+</div>
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold">+$50.00</span>
+</div>
+</div>
+</div>
+<!-- Digital Redemption Voucher Pass -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-lg overflow-hidden flex flex-col">
+<!-- Ticket Top Edge Notch Visuals -->
+<div class="p-5 pb-4 flex flex-col items-center text-center">
+<div class="w-full flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-md bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[15px]">confirmation_number</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-bold tracking-tight uppercase">Smart Pass Voucher</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/10 text-secondary font-label-sm text-label-sm font-bold">Instant Spend Ready</span>
+</div>
+<!-- QR Display Mockup -->
+<div class="p-3.5 bg-surface-container-low rounded-2xl flex flex-col items-center shadow-inner my-1">
+<!-- Stylized High-Density QR SVG -->
+<svg class="w-36 h-36" fill="none" viewbox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#FFFFFF" height="140" rx="8" width="140"></rect>
+<!-- Corner Finder 1 -->
+<rect fill="#131B2E" height="36" rx="4" width="36" x="14" y="14"></rect>
+<rect fill="#FFFFFF" height="24" rx="2" width="24" x="20" y="20"></rect>
+<rect fill="#2563EB" height="14" rx="1.5" width="14" x="25" y="25"></rect>
+<!-- Corner Finder 2 -->
+<rect fill="#131B2E" height="36" rx="4" width="36" x="90" y="14"></rect>
+<rect fill="#FFFFFF" height="24" rx="2" width="24" x="96" y="20"></rect>
+<rect fill="#2563EB" height="14" rx="1.5" width="14" x="101" y="25"></rect>
+<!-- Corner Finder 3 -->
+<rect fill="#131B2E" height="36" rx="4" width="36" x="14" y="90"></rect>
+<rect fill="#FFFFFF" height="24" rx="2" width="24" x="20" y="96"></rect>
+<rect fill="#2563EB" height="14" rx="1.5" width="14" x="25" y="101"></rect>
+<!-- Synthetic QR Pattern Blocks -->
+<rect fill="#131B2E" height="8" rx="1" width="8" x="58" y="14"></rect>
+<rect fill="#131B2E" height="8" rx="1" width="8" x="74" y="14"></rect>
+<rect fill="#131B2E" height="8" rx="1" width="16" x="58" y="30"></rect>
+<rect fill="#131B2E" height="14" rx="1" width="8" x="66" y="42"></rect>
+<rect fill="#131B2E" height="8" rx="1" width="14" x="14" y="58"></rect>
+<rect fill="#131B2E" height="16" rx="1" width="16" x="34" y="58"></rect>
+<rect fill="#2563EB" height="10" rx="1" width="10" x="58" y="62"></rect>
+<rect fill="#131B2E" height="8" rx="1" width="16" x="76" y="58"></rect>
+<rect fill="#131B2E" height="20" rx="1" width="8" x="100" y="58"></rect>
+<rect fill="#131B2E" height="10" rx="1" width="10" x="116" y="66"></rect>
+<rect fill="#131B2E" height="12" rx="1" width="12" x="58" y="80"></rect>
+<rect fill="#131B2E" height="18" rx="1" width="14" x="78" y="78"></rect>
+<rect fill="#131B2E" height="18" rx="1" width="8" x="34" y="82"></rect>
+<rect fill="#131B2E" height="8" rx="1" width="20" x="58" y="100"></rect>
+<rect fill="#2563EB" height="12" rx="1" width="12" x="86" y="104"></rect>
+<rect fill="#131B2E" height="8" rx="1" width="20" x="106" y="96"></rect>
+<rect fill="#131B2E" height="14" rx="1" width="12" x="106" y="112"></rect>
+<rect fill="#131B2E" height="10" rx="1" width="10" x="58" y="116"></rect>
+<rect fill="#131B2E" height="6" rx="1" width="16" x="76" y="122"></rect>
+</svg>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2 font-medium">Scan directly at POS Terminal</span>
+</div>
+<!-- 16-Digit Code with Interactive Copy Button -->
+<div class="w-full mt-3 flex items-center justify-between p-2.5 rounded-xl bg-surface-container">
+<div class="flex flex-col text-left pl-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">16-Digit Voucher PIN</span>
+<span class="font-headline-sm text-headline-sm text-primary font-black tracking-wider font-mono" id="voucherCode">VOLT-MAT-2024-550X</span>
+</div>
+<button class="flex items-center gap-1 px-3 py-2 rounded-full bg-surface-container-lowest text-primary font-label-md text-label-md font-bold shadow-sm active:scale-95 transition-transform" id="copyBtn" onclick="copyVoucherCode()" type="button">
+<span class="material-symbols-outlined text-[16px]" id="copyIcon">content_copy</span>
+<span id="copyText">Copy</span>
+</button>
+</div>
+</div>
+<!-- Scalloped Divider Separator -->
+<div class="relative flex items-center justify-between w-full px-2 py-1">
+<div class="w-4 h-8 rounded-r-full bg-background -ml-2 shadow-inner"></div>
+<div class="flex-1 border-t-2 border-dashed border-outline-variant/50 mx-2"></div>
+<div class="w-4 h-8 rounded-l-full bg-background -mr-2 shadow-inner"></div>
+</div>
+<!-- Store & Validity Footer -->
+<div class="p-4 bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-tertiary">event_available</span>
+<span class="font-body-sm text-body-sm font-medium">Valid for <strong class="text-on-surface">90 days</strong> (Expires Sept 30, 2024)</span>
+</div>
+<div class="flex items-center justify-between gap-2 text-on-surface-variant">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0">storefront</span>
+<span class="font-body-sm text-body-sm truncate">Downtown Flagship Hub (#HUB-042) &amp; 14 centers</span>
+</div>
+<button class="font-label-sm text-label-sm text-primary font-bold shrink-0 hover:underline" type="button">Change</button>
+</div>
+</div>
+</div>
+<!-- Redemption Modes / Action Cards -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Choose How to Claim</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-primary-fixed text-primary font-bold">3 Options</span>
+</div>
+<!-- Option 1: Primary Mobile & Appliance Catalog Browse -->
+<div class="p-4 rounded-2xl bg-surface-container-lowest shadow-md flex flex-col gap-3 relative overflow-hidden">
+<div class="flex items-start justify-between gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0 shadow-md">
+<span class="material-symbols-outlined text-on-primary text-[22px]">devices_other</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Spend on New Device</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-primary font-label-sm text-[9px] font-black uppercase tracking-wider">Top Choice</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              Zero-cash-down on smartphones, OLED TVs, and inverter appliances up to $550.
+            </p>
+</div>
+</div>
+<!-- Featured Eligible Product Preview Pill Strip -->
+<div class="flex items-center gap-2 overflow-x-auto py-1">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container text-on-surface shrink-0">
+<span class="material-symbols-outlined text-[15px] text-primary">smartphone</span>
+<span class="font-label-sm text-label-sm font-semibold">Flagship Pro 15</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container text-on-surface shrink-0">
+<span class="material-symbols-outlined text-[15px] text-primary">tv</span>
+<span class="font-label-sm text-label-sm font-semibold">4K OLED 55"</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container text-on-surface shrink-0">
+<span class="material-symbols-outlined text-[15px] text-primary">kitchen</span>
+<span class="font-label-sm text-label-sm font-semibold">Frost-Free Fridge</span>
+</div>
+</div>
+<button class="w-full h-12 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-[0_6px_16px_rgba(37,99,235,0.35)] active:scale-98 transition-all" type="button">
+<span>Browse Products with $550 Credit</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+<!-- Option 2: Counter Pickup Token -->
+<div class="p-4 rounded-2xl bg-surface-container-lowest shadow-md flex items-center justify-between gap-3 active:bg-surface-container-low transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[22px]">storefront</span>
+</div>
+<div class="flex-1 min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold block">In-Store Counter Token</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant block mt-0.5">Generate fast-lane priority token for Flagship cashiers</span>
+</div>
+<button aria-label="Generate token" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- Option 3: Scheme Rollover (+15% Booster) -->
+<div class="p-4 rounded-2xl bg-surface-container-lowest shadow-md flex flex-col gap-2.5">
+<div class="flex items-start justify-between gap-3">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary text-[22px]">autorenew</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">12+2 Mega Rollover</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-[9px] font-black uppercase">+15% Value</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              Re-invest full $550 into our premium scheme. VoltMart funds 2 full months bonus ($100 free credit).
+            </p>
+</div>
+</div>
+<button class="w-full h-10 rounded-full bg-surface-container-high text-primary font-label-md text-label-md font-bold flex items-center justify-center gap-1.5 active:bg-primary-fixed transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>Calculate 12+2 Rollover Returns</span>
+</button>
+</div>
+</div>
+<!-- Official Documents / Maturity Certificate Download -->
+<div class="p-4 rounded-2xl bg-surface-container-low flex items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">description</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Scheme Completion Certificate</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Tax Invoice #VM-INV-8842 • 142 KB PDF</span>
+</div>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm font-bold shadow-sm shrink-0 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[15px]">download</span>
+<span>Download</span>
+</button>
+</div>
+<!-- Personal Concierge Card -->
+<div class="p-4 rounded-2xl bg-surface-container-lowest shadow-md flex flex-col gap-3 mb-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="David K. Relationship Manager" class="w-11 h-11 rounded-full object-cover" data-alt="Warm smiling customer relationship manager professional headshot portrait wearing modern business casual blue blazer inside high-tech modern consumer electronics showroom with warm welcoming lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbmINakdE8ihQpaV3IipOxBGoltBOtf2mLBngLbpmtvakKFKy1wtmFtyU680IzzvAocmZUpQKKcd5mhtjPRSpHTWdwqzzAabgKizCeg75HXO5UVnrwnPmdE3fCOAhpRJe1Z-9LtGvAoUuuoVX_SLQAOz9qahpxqTpWeJFhRcFE-Jir0EyBZ0WXbpVQ3Cp3ocpXxAMaTq4ybxMGy0PAIRgjSXQUYXKRRrih-r7qE2mVzson_CQRkbBp"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-tertiary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">David K.</span>
+<span class="material-symbols-outlined text-primary text-[15px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Assigned Scheme Concierge</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed/30 text-tertiary font-label-sm text-label-sm font-semibold">Available Now</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        Have questions about store redemption or product reservations? Your manager is ready to assist.
+      </p>
+<div class="grid grid-cols-2 gap-2.5 pt-1">
+<button class="h-10 rounded-full bg-surface-container flex items-center justify-center gap-1.5 font-label-md text-label-md text-on-surface font-bold active:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">chat</span>
+<span>Live Chat</span>
+</button>
+<button class="h-10 rounded-full bg-surface-container flex items-center justify-center gap-1.5 font-label-md text-label-md text-on-surface font-bold active:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px] text-tertiary">call</span>
+<span>Call Manager</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function copyVoucherCode() {
+    const code = document.getElementById('voucherCode').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      const copyBtn = document.getElementById('copyBtn');
+      const copyText = document.getElementById('copyText');
+      const copyIcon = document.getElementById('copyIcon');
+      
+      copyText.innerText = 'Copied!';
+      copyIcon.innerText = 'check_circle';
+      copyBtn.classList.remove('text-primary');
+      copyBtn.classList.add('text-tertiary');
+      
+      setTimeout(() => {
+        copyText.innerText = 'Copy';
+        copyIcon.innerText = 'content_copy';
+        copyBtn.classList.add('text-primary');
+        copyBtn.classList.remove('text-tertiary');
+      }, 2000);
+    }).catch(err => {
+      console.log('Copy action fallback');
+    });
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe pointer-events-none px-gutter" data-active-classes="text-primary-container bg-primary-fixed/50 font-label-md"><div class="pointer-events-auto mx-auto max-w-md mb-2 rounded-full bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_10px_25px_-4px_rgba(37,99,235,0.14),0_4px_10px_-2px_rgba(15,23,42,0.06)] px-space-xs py-1.5 flex items-center justify-around"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-home" href="#"><span class="material-symbols-outlined text-[22px]">storefront</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-schemes" href="#"><span class="material-symbols-outlined text-[22px]">auto_awesome</span><span class="font-label-sm text-label-sm mt-0.5">Schemes</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95 relative" data-path="volt-mart-cart" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">shopping_bag</span><span class="absolute -top-1 -right-2 px-1 min-w-[16px] h-4 rounded-full bg-secondary-container text-white text-[10px] font-bold leading-none flex items-center justify-center ring-2 ring-surface-container-lowest">3</span></div><span class="font-label-sm text-label-sm mt-0.5">Cart</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-payments" href="#"><span class="material-symbols-outlined text-[22px]">credit_card</span><span class="font-label-sm text-label-sm mt-0.5">Payments</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-account" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-label-sm mt-0.5">Account</span></a></div></nav></body></html>

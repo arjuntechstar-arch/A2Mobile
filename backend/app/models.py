@@ -75,6 +75,14 @@ class PasswordRequest(BaseModel):
         return value
 
 
+class StrongPasswordRequest(PasswordRequest):
+    @field_validator("password", check_fields=False)
+    @classmethod
+    def password_strength(cls, value):
+        if not (any(c.isalpha() for c in value) and any(c.isdigit() for c in value) and any(not c.isalnum() for c in value)):
+            raise ValueError("Password must include letters, a number, and a special character")
+        return value
+
 class LoginRequest(PasswordRequest):
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
@@ -101,21 +109,21 @@ class CurrentUser(BaseModel):
     email_verified: bool = False
 
 
-class CreateAdminRequest(PasswordRequest):
+class CreateAdminRequest(StrongPasswordRequest):
     email: EmailStr
-    password: str = Field(min_length=12, max_length=128)
+    password: str = Field(min_length=8, max_length=72)
     role: Role = Role.ADMIN
 
 
-class RegisterRequest(PasswordRequest):
+class RegisterRequest(StrongPasswordRequest):
     name: str = Field(min_length=2, max_length=120)
     email: EmailStr
-    phone: str = Field(pattern=r"^\+[1-9]\d{7,14}$")
-    password: str = Field(min_length=12, max_length=128)
+    phone: str = Field(pattern=r"^\+91[6-9]\d{9}$")
+    password: str = Field(min_length=8, max_length=72)
 
 
 class OtpRequest(BaseModel):
-    phone: str = Field(pattern=r"^\+[1-9]\d{7,14}$")
+    phone: str = Field(pattern=r"^\+91[6-9]\d{9}$")
 
 
 class OtpVerification(OtpRequest):
@@ -193,7 +201,7 @@ class EnrollmentRequest(BaseModel):
 class ProfileUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
     name: str = Field(min_length=2, max_length=120)
-    phone: str | None = Field(default=None, pattern=r"^\+[1-9]\d{7,14}$")
+    phone: str | None = Field(default=None, pattern=r"^\+91[6-9]\d{9}$")
     address: str = Field(default="", max_length=1000)
     nominee_name: str = Field(default="", max_length=120)
     nominee_relationship: str = Field(default="", max_length=80)
@@ -218,6 +226,6 @@ class EmailRequest(BaseModel):
     email: EmailStr
 
 
-class ResetPasswordRequest(PasswordRequest):
+class ResetPasswordRequest(StrongPasswordRequest):
     token: str = Field(min_length=20, max_length=200)
-    password: str = Field(min_length=12, max_length=72)
+    password: str = Field(min_length=8, max_length=72)

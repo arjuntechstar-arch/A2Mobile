@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'api.dart';
+import 'retail_design.dart';
+import 'login_design.dart';
 import 'firebase_phone.dart';
 import 'checkout.dart';
 import 'push.dart';
@@ -49,7 +51,7 @@ class A2BrandHeader extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF2563EB), Color(0xFF06B6D4)],
+              colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -111,10 +113,18 @@ class StatusPill extends StatelessWidget {
     final s = status.toUpperCase();
     Color bg;
     Color fg;
-    if (['ACTIVE', 'COMPLETED', 'CAPTURED', 'VERIFIED', 'RESOLVED', 'SUCCESS'].contains(s)) {
+    if (['ACTIVE', 'COMPLETED', 'CAPTURED', 'VERIFIED', 'RESOLVED', 'SUCCESS']
+        .contains(s)) {
       bg = const Color(0xFFECFDF5);
       fg = const Color(0xFF059669);
-    } else if (['DUE', 'PENDING', 'OPEN', 'IN_PROGRESS', 'REQUIRES_REVIEW', 'PENDING_APPROVAL'].contains(s)) {
+    } else if ([
+      'DUE',
+      'PENDING',
+      'OPEN',
+      'IN_PROGRESS',
+      'REQUIRES_REVIEW',
+      'PENDING_APPROVAL'
+    ].contains(s)) {
       bg = const Color(0xFFFFFBEB);
       fg = const Color(0xFFD97706);
     } else {
@@ -150,10 +160,16 @@ class SchemeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        fontFamily: 'Roboto',
+        textTheme: Typography.material2021().black.apply(
+            bodyColor: const Color(0xFF0F172A),
+            displayColor: const Color(0xFF0F172A)),
+        listTileTheme:
+            const ListTileThemeData(dense: true, iconColor: Color(0xFF2563EB)),
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF2563EB),
           primary: const Color(0xFF2563EB),
-          secondary: const Color(0xFF06B6D4),
+          secondary: const Color(0xFF0D9488),
           surface: Colors.white,
         ),
         scaffoldBackgroundColor: const Color(0xFFF8FAFC),
@@ -171,7 +187,8 @@ class SchemeApp extends StatelessWidget {
         ),
         cardTheme: CardThemeData(
           color: Colors.white,
-          elevation: 0,
+          elevation: 1,
+          shadowColor: const Color(0x140F172A),
           margin: const EdgeInsets.symmetric(vertical: 6),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -207,7 +224,9 @@ class SchemeApp extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: const Color(0xFFF8FAFC),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
@@ -220,12 +239,21 @@ class SchemeApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             borderSide: const BorderSide(color: Color(0xFF2563EB), width: 1.8),
           ),
-          labelStyle: const TextStyle(color: Color(0xFF64748B), fontSize: 13.5),
+          labelStyle: const TextStyle(
+              color: Color(0xFF434655),
+              fontSize: 14,
+              fontWeight: FontWeight.w600),
+          floatingLabelStyle: const TextStyle(
+              color: Color(0xFF434655),
+              fontSize: 14,
+              fontWeight: FontWeight.w600),
+          errorMaxLines: 3,
+          prefixIconColor: const Color(0xFF004AC6),
         ),
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor: Colors.white,
           elevation: 3,
-          indicatorColor: const Color(0xFFEEF2FF),
+          indicatorColor: const Color(0xFF2563EB),
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
               return const TextStyle(
@@ -242,7 +270,7 @@ class SchemeApp extends StatelessWidget {
           }),
           iconTheme: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return const IconThemeData(color: Color(0xFF2563EB));
+              return const IconThemeData(color: Colors.white);
             }
             return const IconThemeData(color: Color(0xFF64748B));
           }),
@@ -290,18 +318,7 @@ class _SessionGateState extends State<SessionGate> {
   Widget build(BuildContext context) {
     final reset = Uri.base.queryParameters['reset_password'];
     if (reset != null) {
-      return FormPage(
-          title: 'Reset password',
-          fields: const [
-            InputField('password', 'New password (12+ characters)',
-                secret: true)
-          ],
-          submit: (values) async {
-            await _auth.request('/auth/reset-password',
-                method: 'POST', body: {'token': reset, ...values});
-          },
-          success:
-              'Password updated. Open the app without the reset link and sign in.');
+      return ResetPasswordPage(auth: _auth, token: reset);
     }
     return FutureBuilder<String?>(
         future: _session,
@@ -330,6 +347,123 @@ class _SessionGateState extends State<SessionGate> {
   }
 }
 
+class ResetPasswordPage extends StatefulWidget {
+  const ResetPasswordPage({super.key, required this.auth, required this.token});
+  final AuthService auth;
+  final String token;
+  @override
+  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
+}
+
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  final _form = GlobalKey<FormState>();
+  final _password = TextEditingController();
+  final _confirm = TextEditingController();
+  bool _busy = false, _hide = true;
+  String? _error;
+  @override
+  void dispose() {
+    _password.dispose();
+    _confirm.dispose();
+    super.dispose();
+  }
+
+  String? passwordError(String? value) {
+    final password = value ?? '';
+    if (password.length < 8) return 'Use at least 8 characters';
+    if (!RegExp(r'[A-Za-z]').hasMatch(password) ||
+        !RegExp(r'\d').hasMatch(password) ||
+        !RegExp(r'[^A-Za-z0-9]').hasMatch(password)) {
+      return 'Use letters, a number, and a special character';
+    }
+    return null;
+  }
+
+  Future<void> submit() async {
+    if (!_form.currentState!.validate()) return;
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      await widget.auth.request('/auth/reset-password',
+          method: 'POST',
+          body: {'token': widget.token, 'password': _password.text});
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute<void>(
+              builder: (_) => LoginPage(auth: widget.auth, onSignedIn: () {})),
+          (_) => false);
+    } catch (error) {
+      if (mounted) setState(() => _error = message(error));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => LoginDesign(
+        registering: false,
+        recovering: true,
+        onSignIn: () {},
+        onRegister: () {},
+        legal: const SizedBox.shrink(),
+        form: Form(
+            key: _form,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text('Set a new password',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF1558E6))),
+                  const SizedBox(height: 8),
+                  const Text(
+                      'Use 8+ characters with letters, a number, and a special character.'),
+                  const SizedBox(height: 18),
+                  TextFormField(
+                      controller: _password,
+                      obscureText: _hide,
+                      decoration: authFieldDecoration('New password',
+                          icon: Icons.lock_outline_rounded,
+                          suffix: IconButton(
+                              onPressed: () => setState(() => _hide = !_hide),
+                              icon: Icon(_hide
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined))),
+                      validator: passwordError),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                      controller: _confirm,
+                      obscureText: _hide,
+                      decoration: authFieldDecoration('Confirm new password',
+                          icon: Icons.lock_reset_rounded),
+                      validator: (value) => value == _password.text
+                          ? null
+                          : 'Passwords do not match'),
+                  if (_error != null)
+                    Padding(
+                        padding: const EdgeInsets.only(top: 14),
+                        child: Text(_error!,
+                            style: const TextStyle(color: Color(0xFFDC2626)))),
+                  const SizedBox(height: 20),
+                  FilledButton(
+                      onPressed: _busy ? null : submit,
+                      child: Text(
+                          _busy ? 'Updating password...' : 'Update password')),
+                ])),
+      );
+}
+
+InputDecoration authFieldDecoration(String label,
+        {String? hint, IconData? icon, Widget? suffix}) =>
+    InputDecoration(
+        labelText: label,
+        hintText: hint,
+        prefixIcon: icon == null ? null : Icon(icon),
+        suffixIcon: suffix);
+
 class LoginPage extends StatefulWidget {
   const LoginPage(
       {super.key,
@@ -347,7 +481,9 @@ class _LoginPageState extends State<LoginPage> {
   final _form = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  bool _hidePassword = true;
   bool _busy = false;
+  String _mode = 'signin';
 
   @override
   void dispose() {
@@ -370,103 +506,158 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(title: const A2BrandHeader()),
-      body: Center(
-          child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 480),
-              child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  child: Form(
-                      key: _form,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            const Row(
-                              children: [
-                                A2BrandHeader(),
-                                Spacer(),
-                                Icon(Icons.storefront_rounded, size: 28, color: Color(0xFF2563EB)),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            const Text('Plan your next purchase',
-                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
-                            const SizedBox(height: 4),
-                            const Text(
-                                'Choose a monthly scheme, track your contributions, and redeem your eligible store benefit.',
-                                style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.35)),
-                            const SizedBox(height: 16),
-                            const Text('Sign in',
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF0F172A))),
-                            const SizedBox(height: 12),
-                            if (widget.linkError != null)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: Text(widget.linkError!,
-                                    style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13)),
-                              ),
-                            TextFormField(
-                                controller: _email,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration:
-                                    const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.alternate_email_rounded, size: 18)),
-                                validator: (v) => v != null && v.contains('@')
-                                    ? null
-                                    : 'Enter a valid email'),
-                            const SizedBox(height: 12),
-                            TextFormField(
-                                controller: _password,
-                                obscureText: true,
-                                decoration: const InputDecoration(
-                                    labelText: 'Password', prefixIcon: Icon(Icons.lock_outline_rounded, size: 18)),
-                                validator: (v) => v != null && v.length >= 8
-                                    ? null
-                                    : 'Enter at least 8 characters'),
-                            const SizedBox(height: 16),
-                            FilledButton(
+  Widget build(BuildContext context) => LoginDesign(
+        registering: _mode == 'register',
+        recovering: _mode == 'forgot',
+        onSignIn: () => setState(() => _mode = 'signin'),
+        onRegister: () => setState(() => _mode = 'register'),
+        legal: Wrap(
+            alignment: WrapAlignment.center,
+            children: ['terms', 'privacy']
+                .map((key) => TextButton(
+                    onPressed: () => openPage(context,
+                        ContentPage(auth: widget.auth, contentKey: key)),
+                    child: Text(key == 'terms' ? 'Terms' : 'Privacy')))
+                .toList()),
+        form: _mode == 'register'
+            ? RegistrationPage(
+                auth: widget.auth,
+                embedded: true,
+                onSignIn: () => setState(() => _mode = 'signin'))
+            : _mode == 'forgot'
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                        FormPage(
+                            embedded: true,
+                            title: 'Forgot password',
+                            description:
+                                'Enter your email to receive a password reset link.',
+                            fields: [
+                              InputField('email', 'Email',
+                                  email: true, initial: _email.text)
+                            ],
+                            buttonLabel: 'Send reset link',
+                            submit: (values) => widget.auth.request(
+                                '/auth/forgot-password',
+                                method: 'POST',
+                                body: values),
+                            success:
+                                'If this account exists, a reset email has been sent.'),
+                        TextButton(
+                            onPressed: () => setState(() => _mode = 'signin'),
+                            child: const Text('Back to sign in')),
+                      ])
+                : Form(
+                    key: _form,
+                    child: AutofillGroup(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (widget.linkError != null) ...[
+                          Text(widget.linkError!,
+                              style: const TextStyle(color: Color(0xFFDC2626))),
+                          const SizedBox(height: 16),
+                        ],
+                        TextFormField(
+                            controller: _email,
+                            keyboardType: TextInputType.emailAddress,
+                            autofillHints: const [AutofillHints.username],
+                            textInputAction: TextInputAction.next,
+                            decoration: authFieldDecoration('Email',
+                                hint: 'you@example.com',
+                                icon: Icons.alternate_email_rounded),
+                            validator: (v) => v != null && v.contains('@')
+                                ? null
+                                : 'Enter a valid email'),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                            controller: _password,
+                            obscureText: _hidePassword,
+                            autofillHints: const [AutofillHints.password],
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) {
+                              if (!_busy) _submit();
+                            },
+                            decoration: authFieldDecoration('Password',
+                                hint: 'Enter your password',
+                                icon: Icons.lock_outline_rounded,
+                                suffix: IconButton(
+                                    tooltip: _hidePassword
+                                        ? 'Show password'
+                                        : 'Hide password',
+                                    onPressed: () => setState(
+                                        () => _hidePassword = !_hidePassword),
+                                    icon: Icon(_hidePassword
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined))),
+                            validator: (v) => v != null && v.length >= 8
+                                ? null
+                                : 'Enter at least 8 characters'),
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                                onPressed: () =>
+                                    setState(() => _mode = 'forgot'),
+                                child: const Text('Forgot password?'))),
+                        const SizedBox(height: 12),
+                        Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(32),
+                                gradient: const LinearGradient(colors: [
+                                  Color(0xFF2563EB),
+                                  Color(0xFF004AC6)
+                                ]),
+                                boxShadow: const [
+                                  BoxShadow(
+                                      color: Color(0x332563EB),
+                                      blurRadius: 16,
+                                      offset: Offset(0, 7))
+                                ]),
+                            child: FilledButton(
                                 onPressed: _busy ? null : _submit,
-                                child: Text(_busy ? 'Signing in…' : 'Sign in')),
-                            const SizedBox(height: 4),
-                            TextButton(
-                                onPressed: () => openPage(
-                                    context,
-                                    RegistrationPage(auth: widget.auth)),
-                                child: const Text('Create an account')),
-                            TextButton(
-                                onPressed: () => openPage(
-                                    context,
-                                    FormPage(
-                                        title: 'Forgot password',
-                                        fields: const [
-                                          InputField('email', 'Email',
-                                              email: true)
-                                        ],
-                                        submit: (values) => widget.auth.request(
-                                            '/auth/forgot-password',
-                                            method: 'POST',
-                                            body: values),
-                                        success:
-                                            'If this account exists, a reset email has been sent.')),
-                                child: const Text('Forgot password?')),
-                            Wrap(
-                                alignment: WrapAlignment.center,
-                                children: ['terms', 'privacy']
-                                    .map((key) => TextButton(
-                                        onPressed: () => openPage(
-                                            context,
-                                            ContentPage(
-                                                auth: widget.auth,
-                                                contentKey: key)),
-                                        child: Text(key == 'terms'
-                                            ? 'Terms'
-                                            : 'Privacy')))
-                                    .toList()),
-                          ]))))));
+                                style: FilledButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    foregroundColor: Colors.white,
+                                    disabledForegroundColor: Colors.white70,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 18),
+                                    shape: const StadiumBorder()),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                          child: Text(
+                                              _busy
+                                                  ? 'Signing in...'
+                                                  : 'Sign in',
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight:
+                                                      FontWeight.w700))),
+                                      const SizedBox(width: 12),
+                                      const Icon(Icons.arrow_forward_rounded,
+                                          size: 20),
+                                    ]))),
+                        const SizedBox(height: 16),
+                        const Text(
+                            'Sign in to manage your savings, payments and store benefits.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color(0xFF737686),
+                                fontSize: 12,
+                                height: 1.5)),
+                      ],
+                    ))),
+      );
 }
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key, required this.auth});
+  const RegistrationPage(
+      {super.key, required this.auth, this.embedded = false, this.onSignIn});
+  final bool embedded;
+  final VoidCallback? onSignIn;
   final AuthService auth;
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
@@ -476,95 +667,216 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final form = GlobalKey<FormState>();
   final name = TextEditingController();
   final email = TextEditingController();
-  final phone = TextEditingController();
+  final phone = TextEditingController(text: '+91');
   final password = TextEditingController();
   final emailCode = TextEditingController();
   final phoneCode = TextEditingController();
   PhoneVerification? verification;
   bool busy = false, codesRequested = false, finished = false;
+  bool hidePassword = true;
   String? error, notice;
 
   @override
   void dispose() {
-    for (final c in [name, email, phone, password, emailCode, phoneCode]) { c.dispose(); }
+    for (final c in [name, email, phone, password, emailCode, phoneCode]) {
+      c.dispose();
+    }
     super.dispose();
   }
 
   Future<void> run(Future<void> Function() work) async {
-    setState(() { busy = true; error = null; notice = null; });
-    try { await work(); }
-    catch (e) { if (mounted) setState(() => error = message(e)); }
-    finally { if (mounted) setState(() => busy = false); }
+    setState(() {
+      busy = true;
+      error = null;
+      notice = null;
+    });
+    try {
+      await work();
+    } catch (e) {
+      if (mounted) setState(() => error = message(e));
+    } finally {
+      if (mounted) setState(() => busy = false);
+    }
   }
 
   Future<void> sendCodes() async {
     if (!form.currentState!.validate()) return;
     await run(() async {
-      await widget.auth.request('/auth/registration/email', method: 'POST', body: {'email': email.text.trim()});
+      await widget.auth.request('/auth/registration/email',
+          method: 'POST', body: {'email': email.text.trim()});
       verification = PhoneVerification(widget.auth, phone.text.trim());
-      if (mounted) setState(() { codesRequested = true; notice = 'Email code sent. Request the phone code below.'; });
+      if (mounted) {
+        setState(() {
+          codesRequested = true;
+          notice = 'Email code sent. Request the phone code below.';
+        });
+      }
     });
   }
 
   Future<void> create() async {
-    if (emailCode.text.trim().length != 8 || phoneCode.text.trim().length != 6) {
-      setState(() => error = 'Enter the 8-character email code and 6-digit phone code.');
+    if (emailCode.text.trim().length != 8 ||
+        phoneCode.text.trim().length != 6) {
+      setState(() =>
+          error = 'Enter the 8-character email code and 6-digit phone code.');
       return;
     }
     await run(() async {
       final token = await verification!.confirmToken(phoneCode.text.trim());
       await widget.auth.request('/auth/register', method: 'POST', body: {
-        'name': name.text.trim(), 'email': email.text.trim(), 'phone': phone.text.trim(),
-        'password': password.text, 'email_code': emailCode.text.trim(), 'firebase_id_token': token,
+        'name': name.text.trim(),
+        'email': email.text.trim(),
+        'phone': phone.text.trim(),
+        'password': password.text,
+        'email_code': emailCode.text.trim(),
+        'firebase_id_token': token,
       });
-      if (mounted) setState(() { finished = true; notice = 'Account created. Both contacts are verified. Return to sign in.'; });
+      if (mounted) {
+        setState(() {
+          finished = true;
+          notice =
+              'Account created. Both contacts are verified. Return to sign in.';
+        });
+      }
     });
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Create account')),
-    body: Center(child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 480),
-      child: ListView(padding: const EdgeInsets.all(20), children: [
-        if (!finished) ...[
-        const Text('Verify your email and phone before creating your account. Google processes your phone number for verification and abuse prevention.'),
+  Widget build(BuildContext context) {
+    final content =
+        Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      const Text('Create account',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700)),
+      const SizedBox(height: 16),
+      if (!finished) ...[
+        const Text(
+            'Verify your email and phone before creating your account. Google processes your phone number for verification and abuse prevention.'),
         const SizedBox(height: 16),
-        Form(key: form, child: Column(children: [
-          TextFormField(controller: name, enabled: !codesRequested && !busy, decoration: const InputDecoration(labelText: 'Full name'), validator: const InputField('name','Name', minLength: 2).validate),
-          const SizedBox(height: 20),
-          TextFormField(controller: email, enabled: !codesRequested && !busy, decoration: const InputDecoration(labelText: 'Email'), validator: const InputField('email','Email', email: true).validate),
-          const SizedBox(height: 20),
-          TextFormField(controller: phone, enabled: !codesRequested && !busy, decoration: const InputDecoration(labelText: 'Phone with country code'), validator: const InputField('phone','Phone', phone: true).validate),
-          const SizedBox(height: 20),
-          TextFormField(controller: password, enabled: !codesRequested && !busy, obscureText: true, decoration: const InputDecoration(labelText: 'Password (12+ characters)'), validator: const InputField('password','Password', secret: true, minLength: 12).validate),
-        ])),
-        ],
+        Form(
+            key: form,
+            child: Column(children: [
+              TextFormField(
+                  controller: name,
+                  enabled: !codesRequested && !busy,
+                  decoration: authFieldDecoration('Full name',
+                      hint: 'Enter your full name', icon: Icons.person_outline),
+                  validator:
+                      const InputField('name', 'Name', minLength: 2).validate),
+              const SizedBox(height: 16),
+              TextFormField(
+                  controller: email,
+                  enabled: !codesRequested && !busy,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: authFieldDecoration('Email',
+                      hint: 'you@example.com',
+                      icon: Icons.alternate_email_rounded),
+                  validator:
+                      const InputField('email', 'Email', email: true).validate),
+              const SizedBox(height: 16),
+              TextFormField(
+                  controller: phone,
+                  enabled: !codesRequested && !busy,
+                  keyboardType: TextInputType.phone,
+                  decoration: authFieldDecoration('Indian mobile number',
+                      hint: '+919876543210', icon: Icons.phone_outlined),
+                  validator:
+                      const InputField('phone', 'Phone', phone: true).validate),
+              const SizedBox(height: 16),
+              TextFormField(
+                  controller: password,
+                  enabled: !codesRequested && !busy,
+                  obscureText: hidePassword,
+                  decoration: authFieldDecoration('Password',
+                      hint: 'Enter your password',
+                      icon: Icons.lock_outline_rounded,
+                      suffix: IconButton(
+                          tooltip:
+                              hidePassword ? 'Show password' : 'Hide password',
+                          onPressed: codesRequested || busy
+                              ? null
+                              : () =>
+                                  setState(() => hidePassword = !hidePassword),
+                          icon: Icon(hidePassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined))),
+                  validator: const InputField('password', 'Password',
+                          secret: true, minLength: 8)
+                      .validate),
+              const SizedBox(height: 8),
+              const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      'Use 8+ characters with letters, a number, and a special character.',
+                      style:
+                          TextStyle(fontSize: 12, color: Color(0xFF434655)))),
+            ])),
+      ],
+      const SizedBox(height: 16),
+      if (!codesRequested)
+        FilledButton(
+            onPressed: busy ? null : sendCodes,
+            child: const Text('Send email verification code')),
+      if (codesRequested && !finished) ...[
+        TextFormField(
+            controller: emailCode,
+            decoration:
+                const InputDecoration(labelText: 'Email code (8 characters)')),
+        TextButton(
+            onPressed: busy
+                ? null
+                : () => run(() async {
+                      await widget.auth.request('/auth/registration/email',
+                          method: 'POST', body: {'email': email.text.trim()});
+                      if (mounted) {
+                        setState(() => notice = 'New email code sent.');
+                      }
+                    }),
+            child: const Text('Resend email code')),
+        FilledButton(
+            onPressed: busy
+                ? null
+                : () => run(() async {
+                      await verification!.send();
+                      if (mounted) setState(() => notice = 'Phone code sent.');
+                    }),
+            child: const Text('Send phone verification code')),
+        TextFormField(
+            controller: phoneCode,
+            keyboardType: TextInputType.number,
+            decoration:
+                const InputDecoration(labelText: 'Phone OTP (6 digits)')),
         const SizedBox(height: 16),
-        if (!codesRequested) FilledButton(onPressed: busy ? null : sendCodes, child: const Text('Send email verification code')),
-        if (codesRequested && !finished) ...[
-          TextFormField(controller: emailCode, decoration: const InputDecoration(labelText: 'Email code (8 characters)')),
-          TextButton(onPressed: busy ? null : () => run(() async {
-            await widget.auth.request('/auth/registration/email', method: 'POST', body: {'email': email.text.trim()});
-            if (mounted) setState(() => notice = 'New email code sent.');
-          }), child: const Text('Resend email code')),
-          FilledButton(onPressed: busy ? null : () => run(() async {
-            await verification!.send();
-            if (mounted) setState(() => notice = 'Phone code sent.');
-          }), child: const Text('Send phone verification code')),
-          TextFormField(controller: phoneCode, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Phone OTP (6 digits)')),
-          const SizedBox(height: 16),
-          FilledButton(onPressed: busy ? null : create, child: const Text('Verify and create account')),
-          TextButton(onPressed: busy ? null : () => setState(() { codesRequested = false; verification = null; emailCode.clear(); phoneCode.clear(); }), child: const Text('Edit contact details')),
-        ],
-        if (busy) const LinearProgressIndicator(),
-        if (error != null) Text(error!, style: const TextStyle(color: Colors.red)),
-        if (notice != null) Text(notice!),
-        if (finished) ...[
-          const SizedBox(height: 20),
-          FilledButton(onPressed: () => Navigator.pop(context), child: const Text('Return to sign in')),
-        ],
-      ]))),
-  );
+        FilledButton(
+            onPressed: busy ? null : create,
+            child: const Text('Verify and create account')),
+        TextButton(
+            onPressed: busy
+                ? null
+                : () => setState(() {
+                      codesRequested = false;
+                      verification = null;
+                      emailCode.clear();
+                      phoneCode.clear();
+                    }),
+            child: const Text('Edit contact details')),
+      ],
+      if (busy) const LinearProgressIndicator(),
+      if (error != null)
+        Text(error!, style: const TextStyle(color: Colors.red)),
+      if (notice != null) Text(notice!),
+      if (finished) ...[
+        const SizedBox(height: 20),
+        FilledButton(
+            onPressed: widget.onSignIn ?? () => Navigator.pop(context),
+            child: const Text('Return to sign in')),
+      ],
+    ]);
+    if (widget.embedded) return content;
+    return Scaffold(
+        appBar: AppBar(title: const Text('Create account')),
+        body: SingleChildScrollView(
+            padding: const EdgeInsets.all(20), child: content));
+  }
 }
 
 class InputField {
@@ -586,7 +898,7 @@ class InputField {
     if (value.isEmpty) return optional ? null : 'This field is required';
     if (value.length < minLength) return 'Enter at least $minLength characters';
     if (phone && !RegExp(r'^\+[1-9]\d{7,14}$').hasMatch(value)) {
-      return 'Include + and country code, with digits only';
+      return 'Enter a valid Indian mobile number after +91';
     }
     if (email && !RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value)) {
       return 'Enter a valid email address';
@@ -603,7 +915,9 @@ class FormPage extends StatefulWidget {
       required this.submit,
       this.success = 'Saved successfully.',
       this.description,
+      this.embedded = false,
       this.buttonLabel = 'Submit'});
+  final bool embedded;
   final String title, success, buttonLabel;
   final String? description;
   final List<InputField> fields;
@@ -656,78 +970,110 @@ class _FormPageState extends State<FormPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: Center(
-          child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 640),
-              child: ListView(padding: const EdgeInsets.all(20), children: [
-                if (widget.description != null)
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEEF2FF),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xFFC7D2FE)),
-                    ),
-                    child: Text(
-                      widget.description!,
-                      style: const TextStyle(fontSize: 13, color: Color(0xFF3730A3), height: 1.4),
-                    ),
-                  ),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Form(
-                        key: _form,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              for (final f in widget.fields)
-                                Padding(
-                                    padding: const EdgeInsets.only(bottom: 14),
-                                    child: TextFormField(
-                                        controller: _inputs[f.key],
-                                        decoration: InputDecoration(labelText: f.label),
-                                        obscureText: f.secret,
-                                        maxLines: f.multiline ? 4 : 1,
-                                        keyboardType: f.email
-                                            ? TextInputType.emailAddress
-                                            : TextInputType.text,
-                                        validator: f.validate)),
-                              if (_error != null)
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  margin: const EdgeInsets.only(bottom: 14),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFEF2F2),
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: const Color(0xFFFECACA)),
-                                  ),
-                                  child: Text(_error!,
-                                      style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13)),
-                                ),
-                              if (_result != null)
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  margin: const EdgeInsets.only(bottom: 14),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFECFDF5),
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: const Color(0xFFA7F3D0)),
-                                  ),
-                                  child: Text(_result!,
-                                      style: const TextStyle(color: Color(0xFF065F46), fontSize: 13)),
-                                ),
-                              const SizedBox(height: 6),
-                              FilledButton(
-                                  onPressed: _busy ? null : submit,
-                                  child: Text(_busy ? 'Please wait…' : widget.buttonLabel))
-                            ])),
-                  ),
-                ),
-              ]))));
+  Widget build(BuildContext context) {
+    final content =
+        Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      if (widget.embedded) ...[
+        Text(widget.title,
+            style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1558E6))),
+        const SizedBox(height: 16),
+      ],
+      if (widget.description != null)
+        Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: const Color(0xFFEEF2FF),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFFC7D2FE)),
+          ),
+          child: Text(
+            widget.description!,
+            style: const TextStyle(
+                fontSize: 13, color: Color(0xFF3730A3), height: 1.4),
+          ),
+        ),
+      Card(
+        margin: widget.embedded ? EdgeInsets.zero : null,
+        elevation: widget.embedded ? 0 : null,
+        color: widget.embedded ? Colors.transparent : null,
+        shape: widget.embedded ? const RoundedRectangleBorder() : null,
+        child: Padding(
+          padding: widget.embedded ? EdgeInsets.zero : const EdgeInsets.all(20),
+          child: Form(
+              key: _form,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final f in widget.fields)
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: TextFormField(
+                              controller: _inputs[f.key],
+                              decoration: InputDecoration(labelText: f.label),
+                              obscureText: f.secret,
+                              maxLines: f.multiline ? 4 : 1,
+                              keyboardType: f.email
+                                  ? TextInputType.emailAddress
+                                  : TextInputType.text,
+                              validator: f.validate)),
+                    if (_error != null)
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        margin: const EdgeInsets.only(bottom: 14),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEF2F2),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: const Color(0xFFFECACA)),
+                        ),
+                        child: Text(_error!,
+                            style: const TextStyle(
+                                color: Color(0xFFDC2626), fontSize: 13)),
+                      ),
+                    if (_result != null)
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        margin: const EdgeInsets.only(bottom: 14),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFECFDF5),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: const Color(0xFFA7F3D0)),
+                        ),
+                        child: Text(_result!,
+                            style: const TextStyle(
+                                color: Color(0xFF065F46), fontSize: 13)),
+                      ),
+                    const SizedBox(height: 6),
+                    FilledButton(
+                        style: widget.embedded
+                            ? FilledButton.styleFrom(
+                                minimumSize: const Size.fromHeight(52),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 16),
+                                textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    height: 1.25,
+                                    fontWeight: FontWeight.w700))
+                            : null,
+                        onPressed: _busy ? null : submit,
+                        child:
+                            Text(_busy ? 'Please wait…' : widget.buttonLabel))
+                  ])),
+        ),
+      ),
+    ]);
+    if (widget.embedded) return content;
+    return Scaffold(
+        appBar: AppBar(title: Text(widget.title)),
+        body: Center(
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 640),
+                child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20), child: content))));
+  }
 }
 
 class DataView extends StatefulWidget {
@@ -796,31 +1142,63 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _tab = Uri.base.queryParameters.containsKey('notifications') ? 3 : 0;
+  int _tab = 0;
+  int _unread = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshNotifications();
+    if (Uri.base.queryParameters.containsKey('notifications')) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _openNotifications();
+      });
+    }
+  }
+
+  Future<void> _refreshNotifications() async {
+    try {
+      final items = await widget.auth.request('/notifications') as List;
+      if (mounted) {
+        setState(
+            () => _unread = items.where((item) => item['read'] != true).length);
+      }
+    } catch (_) {
+      // The inbox has its own retry action if notifications cannot be loaded.
+    }
+  }
+
+  Future<void> _openNotifications() async {
+    await openPage(context, NotificationsPage(auth: widget.auth));
+    if (mounted) await _refreshNotifications();
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const A2BrandHeader(),
         actions: [
           IconButton(
-              onPressed: () async {
-                try {
-                  await widget.auth.logout();
-                } finally {
-                  if (mounted) widget.onSignedOut();
-                }
-              },
-              icon: const Icon(Icons.logout_rounded),
-              tooltip: 'Sign out'),
+            tooltip: 'Notifications',
+            onPressed: _openNotifications,
+            icon: Badge(
+              isLabelVisible: _unread > 0,
+              backgroundColor: const Color(0xFF2563EB),
+              child: const Icon(Icons.notifications_outlined),
+            ),
+          ),
           const SizedBox(width: 8),
         ],
       ),
       body: IndexedStack(index: _tab, children: [
-        Dashboard(auth: widget.auth, email: widget.email),
+        Dashboard(
+            auth: widget.auth,
+            email: widget.email,
+            onBrowse: () => setState(() => _tab = 1),
+            onPayments: () => setState(() => _tab = 2)),
         SchemesPage(auth: widget.auth),
         PaymentsPage(auth: widget.auth),
-        NotificationsPage(auth: widget.auth),
-        ProfilePage(auth: widget.auth),
+        ProfilePage(auth: widget.auth, onSignedOut: widget.onSignedOut),
       ]),
       bottomNavigationBar: NavigationBar(
           selectedIndex: _tab,
@@ -839,225 +1217,638 @@ class _HomePageState extends State<HomePage> {
                 selectedIcon: Icon(Icons.account_balance_wallet_rounded),
                 label: 'Payments'),
             NavigationDestination(
-                icon: Icon(Icons.notifications_outlined),
-                selectedIcon: Icon(Icons.notifications_rounded),
-                label: 'Notifications'),
-            NavigationDestination(
                 icon: Icon(Icons.person_outline_rounded),
                 selectedIcon: Icon(Icons.person_rounded),
                 label: 'Profile')
           ]));
 }
 
+String notificationDate(dynamic value) {
+  final parsed = DateTime.tryParse(value.toString());
+  if (parsed == null) return '';
+  final date = parsed.toUtc().add(const Duration(hours: 5, minutes: 30));
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
+  final hour = date.hour % 12 == 0 ? 12 : date.hour % 12;
+  final minute = date.minute.toString().padLeft(2, '0');
+  return '${date.day.toString().padLeft(2, '0')}-${months[date.month - 1]}-${date.year} '
+      '$hour:$minute ${date.hour < 12 ? 'AM' : 'PM'}';
+}
+
+class SchemePromotionCard extends StatelessWidget {
+  const SchemePromotionCard(
+      {super.key,
+      required this.scheme,
+      required this.onTap,
+      this.imageAsset = 'assets/images/retail-products.png'});
+  final String imageAsset;
+  final Map<String, dynamic> scheme;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+      builder: (context, constraints) => ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            child: Stack(children: [
+              Positioned.fill(
+                  child: Image.asset(imageAsset,
+                      fit: BoxFit.cover, alignment: Alignment.centerRight)),
+              Positioned.fill(
+                  child: DecoratedBox(
+                      decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  const Color(0xFF071A40).withValues(alpha: .88),
+                  const Color(0xFF071A40).withValues(alpha: .52),
+                  const Color(0xFF071A40).withValues(alpha: .02),
+                ], stops: const [
+                  0,
+                  .6,
+                  1
+                ]),
+              ))),
+              Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      20, 22, constraints.maxWidth * .28, 22),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('MOBILES · ELECTRONICS · APPLIANCES',
+                          style: TextStyle(
+                              color: Color(0xFFBDD7FF),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: .7)),
+                      const SizedBox(height: 12),
+                      Text(scheme['name'] ?? 'Savings scheme',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              height: 1.15,
+                              fontWeight: FontWeight.w800)),
+                      const SizedBox(height: 14),
+                      Text(money(scheme['monthly_amount_paise']),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800)),
+                      const Text('per month',
+                          style: TextStyle(
+                              color: Color(0xFFDCE8FF), fontSize: 12)),
+                      const SizedBox(height: 5),
+                      Text('${scheme['installment_count']} installments',
+                          style: const TextStyle(
+                              color: Color(0xFFDCE8FF), fontSize: 13)),
+                      const SizedBox(height: 9),
+                      Text('Shop benefit: ${money(scheme['benefit_paise'])}',
+                          style: const TextStyle(
+                              color: Color(0xFFB8E8FF),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 18),
+                      FilledButton(
+                          onPressed: onTap,
+                          style: FilledButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: const Color(0xFF15366D)),
+                          child: const Text('View scheme')),
+                    ],
+                  )),
+            ]),
+          ));
+}
+
+class BannerCarousel extends StatefulWidget {
+  const BannerCarousel({super.key, required this.auth});
+  final AuthService auth;
+  @override
+  State<BannerCarousel> createState() => _BannerCarouselState();
+}
+
+class _BannerCarouselState extends State<BannerCarousel> {
+  late Future<dynamic> _banner;
+  final _controller = PageController();
+  final Map<String, double> _ratios = {};
+  final List<(ImageStream, ImageStreamListener)> _imageListeners = [];
+  int _index = 0;
+
+  String imageUrl(String path) => path.startsWith('http')
+      ? path
+      : '${apiBaseUrl.replaceFirst('/api', '')}$path';
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  void _clearImages() {
+    for (final (stream, listener) in _imageListeners) {
+      stream.removeListener(listener);
+    }
+    _imageListeners.clear();
+    _ratios.clear();
+  }
+
+  void _load() {
+    _clearImages();
+    _index = 0;
+    _banner = widget.auth.request('/banner').then((banner) {
+      if (!mounted) return banner;
+      for (final slide in banner['slides'] as List? ?? []) {
+        final url = imageUrl(slide['image'].toString());
+        final stream = NetworkImage(url).resolve(ImageConfiguration.empty);
+        final listener = ImageStreamListener((info, synchronousCall) {
+          if (mounted) {
+            setState(() => _ratios[url] = info.image.width / info.image.height);
+          }
+        }, onError: (error, stackTrace) {});
+        _imageListeners.add((stream, listener));
+        stream.addListener(listener);
+      }
+      return banner;
+    });
+  }
+
+  @override
+  void didUpdateWidget(BannerCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.auth != widget.auth) _load();
+  }
+
+  @override
+  void dispose() {
+    _clearImages();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<dynamic>(
+        future: _banner,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const SizedBox.shrink();
+          final banner = Map<String, dynamic>.from(snapshot.data as Map);
+          if (banner['mode'] == 'images') {
+            final slides = List<Map<String, dynamic>>.from(
+                (banner['slides'] as List? ?? [])
+                    .map((item) => Map<String, dynamic>.from(item as Map)));
+            if (slides.isEmpty) return const SizedBox.shrink();
+            final selected = _index.clamp(0, slides.length - 1);
+            final ratio =
+                _ratios[imageUrl(slides[selected]['image'].toString())] ?? 2;
+            return Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 960),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    LayoutBuilder(
+                        builder: (context, constraints) => AnimatedContainer(
+                              key: const ValueKey('banner-image-section'),
+                              duration: const Duration(milliseconds: 280),
+                              curve: Curves.easeOutCubic,
+                              height: (constraints.maxWidth / ratio)
+                                  .clamp(100, 520)
+                                  .toDouble(),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: const Color(0xFF15366D)
+                                            .withValues(alpha: .10),
+                                        blurRadius: 16,
+                                        offset: const Offset(0, 6))
+                                  ]),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: PageView.builder(
+                                    key: const ValueKey(
+                                        'uploaded-banner-carousel'),
+                                    controller: _controller,
+                                    itemCount: slides.length,
+                                    onPageChanged: (index) =>
+                                        setState(() => _index = index),
+                                    itemBuilder: (context, index) {
+                                      final slide = slides[index];
+                                      final body =
+                                          (slide['body'] ?? '').toString();
+                                      return Stack(
+                                          fit: StackFit.expand,
+                                          children: [
+                                            Image.network(
+                                                imageUrl(
+                                                    slide['image'].toString()),
+                                                fit: BoxFit.contain,
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    const Center(
+                                                        child: Icon(Icons
+                                                            .broken_image_outlined))),
+                                            if (body.isNotEmpty)
+                                              Align(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  child: Container(
+                                                      width: double.infinity,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              16),
+                                                      decoration: const BoxDecoration(
+                                                          gradient: LinearGradient(
+                                                              colors: [
+                                                            Color(0x000F172A),
+                                                            Color(0xCC0F172A)
+                                                          ],
+                                                              begin: Alignment
+                                                                  .topCenter,
+                                                              end: Alignment
+                                                                  .bottomCenter)),
+                                                      child: Text(body,
+                                                          maxLines: 3,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: const TextStyle(
+                                                              color: Colors
+                                                                  .white)))),
+                                          ]);
+                                    },
+                                  )),
+                            )),
+                    if (slides.length > 1)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 2),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30),
+                              border:
+                                  Border.all(color: const Color(0xFFE5EAF5))),
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
+                            for (var index = 0; index < slides.length; index++)
+                              Semantics(
+                                  selected: selected == index,
+                                  button: true,
+                                  label:
+                                      'Show banner ${index + 1} of ${slides.length}',
+                                  child: InkWell(
+                                    key: ValueKey('banner-indicator-$index'),
+                                    borderRadius: BorderRadius.circular(24),
+                                    onTap: () => _controller.animateToPage(
+                                        index,
+                                        duration:
+                                            const Duration(milliseconds: 350),
+                                        curve: Curves.easeOutCubic),
+                                    child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4, vertical: 12),
+                                        child: AnimatedContainer(
+                                          duration:
+                                              const Duration(milliseconds: 250),
+                                          width: selected == index ? 28 : 7,
+                                          height: 7,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              gradient: selected == index
+                                                  ? const LinearGradient(
+                                                      colors: [
+                                                          Color(0xFF2563EB),
+                                                          Color(0xFF06B6D4)
+                                                        ])
+                                                  : null,
+                                              color: selected == index
+                                                  ? null
+                                                  : const Color(0xFFD7E0F3)),
+                                        )),
+                                  )),
+                            const SizedBox(width: 8),
+                            Text('${selected + 1}/${slides.length}',
+                                key: const ValueKey('banner-slide-count'),
+                                style: const TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF64748B))),
+                            const SizedBox(width: 4),
+                          ]),
+                        ),
+                      ),
+                  ]),
+                ));
+          }
+          final title = (banner['title'] ?? '').toString();
+          final body = (banner['body'] ?? '').toString();
+          if (title.isEmpty && body.isEmpty) return const SizedBox.shrink();
+          return Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                    colors: [Color(0xFF2563EB), Color(0xFF06B6D4)]),
+                borderRadius: BorderRadius.circular(20)),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              if (title.isNotEmpty)
+                Text(title,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20)),
+              if (body.isNotEmpty)
+                Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Text(body,
+                        style: const TextStyle(color: Colors.white))),
+            ]),
+          );
+        },
+      );
+}
+
+const schemeProductImages = [
+  'assets/images/scheme-mobile.png',
+  'assets/images/scheme-tv.png',
+  'assets/images/scheme-appliances.png',
+  'assets/images/scheme-kitchen.png',
+  'assets/images/retail-products.png',
+];
+
 class Dashboard extends StatelessWidget {
-  const Dashboard({super.key, required this.auth, required this.email});
+  const Dashboard(
+      {super.key,
+      required this.auth,
+      required this.email,
+      required this.onBrowse,
+      required this.onPayments});
+  final VoidCallback onBrowse, onPayments;
   final AuthService auth;
   final String email;
 
   @override
-  Widget build(BuildContext context) => Column(children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEEF2FF),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                alignment: Alignment.center,
-                child: const Icon(Icons.person_rounded, color: Color(0xFF2563EB), size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Signed in as', style: TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
-                    Text(
-                      'Signed in as $email',
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0F172A)),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-            child: DataView(
-                auth: auth,
-                path: '/dashboard',
-                builder: (data, reload) =>
-                    ListView(padding: const EdgeInsets.all(16), children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Your schemes',
-                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
-                                Text('Active savings and installment status',
-                                    style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
-                              ],
-                            ),
-                            IconButton(
-                                onPressed: reload,
-                                icon: const Icon(Icons.refresh_rounded))
-                          ]),
-                      const SizedBox(height: 12),
-                      if ((data['enrollments'] as List).isEmpty)
-                        Container(
-                          padding: const EdgeInsets.all(32),
-                          margin: const EdgeInsets.only(top: 8),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: const Color(0xFFE2E8F0)),
-                          ),
-                          child: const Column(
-                            children: [
-                              Icon(Icons.savings_outlined, size: 48, color: Color(0xFF94A3B8)),
-                              SizedBox(height: 12),
-                              Text(
-                                'No enrollments yet. Verify your profile, then choose a published scheme.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Color(0xFF64748B), fontSize: 14, height: 1.4),
-                              ),
-                            ],
-                          ),
-                        ),
-                      for (final e in data['enrollments'])
-                        Card(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              e['terms']['name'],
-                                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
-                                            ),
-                                          ),
-                                          StatusPill(status: e['status']),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 16),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: LinearProgressIndicator(
-                                          value: (e['paid_installments'] as num) /
-                                              (e['terms']['installment_count'] as num),
-                                          minHeight: 8,
-                                          backgroundColor: const Color(0xFFF1F5F9),
-                                          color: const Color(0xFF2563EB),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 14),
-                                      Container(
-                                        padding: const EdgeInsets.all(12),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFF8FAFC),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                const Text('Installments', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
-                                                const SizedBox(height: 2),
-                                                Text(
-                                                  '${e['paid_installments']} / ${e['terms']['installment_count']}',
-                                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                const Text('Total Paid', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
-                                                const SizedBox(height: 2),
-                                                Text(
-                                                  money(e['paid_paise']),
-                                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Color(0xFF2563EB)),
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                const Text('Shop Benefit', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
-                                                const SizedBox(height: 2),
-                                                Text(
-                                                  money(e['terms']['benefit_paise']),
-                                                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Color(0xFF059669)),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      if (e['next_due'] != null) ...[
-                                        const SizedBox(height: 12),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFFFFBEB),
-                                            borderRadius: BorderRadius.circular(8),
-                                            border: Border.all(color: const Color(0xFFFDE68A)),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const Icon(Icons.schedule_rounded, size: 16, color: Color(0xFFD97706)),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Text(
-                                                  'Next due: ${money(e['next_due']['amount_paise'])} on ${dueDate(e['next_due']['due_date'], Map<String, dynamic>.from(e['terms']))}',
-                                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF92400E)),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                      const SizedBox(height: 14),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: FilledButton.tonal(
-                                            onPressed: () async {
-                                              await openPage(
-                                                  context,
-                                                  EnrollmentPage(
-                                                      auth: auth,
-                                                      enrollment: Map<String,
-                                                          dynamic>.from(e)));
-                                              reload();
-                                            },
-                                            child:
-                                                const Text('View installments')),
-                                      )
-                                    ])))
-                    ])))
+  Widget build(BuildContext context) =>
+      ListView(padding: const EdgeInsets.all(16), children: [
+        BannerCarousel(auth: auth),
+        const SizedBox(height: 20),
+        ActiveSchemeCard(auth: auth, onBrowse: onBrowse),
+        const SizedBox(height: 24),
+        Wrap(spacing: 10, runSpacing: 16, children: [
+          RetailShortcut(
+              label: 'Find a plan',
+              icon: Icons.savings_outlined,
+              onTap: onBrowse),
+          RetailShortcut(
+              label: 'My payments',
+              icon: Icons.receipt_long_outlined,
+              onTap: onPayments),
+          RetailShortcut(
+              label: 'Redemptions',
+              icon: Icons.card_giftcard_rounded,
+              onTap: () => openPage(context, RedemptionsPage(auth: auth))),
+          RetailShortcut(
+              label: 'Get help',
+              icon: Icons.support_agent_rounded,
+              onTap: () => openPage(context, SupportPage(auth: auth))),
+        ]),
       ]);
+}
+
+class ActiveSchemeCard extends StatefulWidget {
+  const ActiveSchemeCard(
+      {super.key, required this.auth, required this.onBrowse});
+  final AuthService auth;
+  final VoidCallback onBrowse;
+  @override
+  State<ActiveSchemeCard> createState() => _ActiveSchemeCardState();
+}
+
+class _ActiveSchemeCardState extends State<ActiveSchemeCard> {
+  String? _selectedId;
+  List<Map<String, dynamic>> _enrollments = [];
+  bool _refreshing = false, _loaded = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
+  @override
+  void didUpdateWidget(ActiveSchemeCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.auth != widget.auth) {
+      _enrollments = [];
+      _selectedId = null;
+      _loaded = false;
+      _refreshing = false;
+      _refresh();
+    }
+  }
+
+  Future<void> _refresh() async {
+    if (_refreshing) return;
+    final auth = widget.auth;
+    setState(() {
+      _refreshing = true;
+      _error = null;
+    });
+    try {
+      final data = await auth.request('/dashboard');
+      if (!mounted || auth != widget.auth) return;
+      setState(() {
+        _enrollments = List<Map<String, dynamic>>.from(
+            (data['enrollments'] as List)
+                .map((item) => Map<String, dynamic>.from(item)));
+        final active =
+            _enrollments.where((item) => item['status'] == 'ACTIVE').toList();
+        if (!active.any((item) => item['id'].toString() == _selectedId)) {
+          _selectedId = active.isEmpty ? null : active.first['id'].toString();
+        }
+        _loaded = true;
+        _refreshing = false;
+      });
+    } catch (error) {
+      if (!mounted || auth != widget.auth) return;
+      setState(() {
+        _error = message(error);
+        _refreshing = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final active =
+        _enrollments.where((item) => item['status'] == 'ACTIVE').toList();
+    final enrollment = active.isEmpty
+        ? null
+        : active.firstWhere((item) => item['id'] == _selectedId,
+            orElse: () => active.first);
+    return Card(
+      key: const ValueKey('active-scheme-card'),
+      margin: EdgeInsets.zero,
+      child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(children: [
+                const Icon(Icons.savings_outlined, color: Color(0xFF4F70BE)),
+                const SizedBox(width: 10),
+                const Expanded(
+                    child: Text('Your active scheme',
+                        style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF15366D)))),
+                IconButton(
+                    tooltip: 'Refresh active scheme',
+                    onPressed: _refreshing ? null : _refresh,
+                    icon: _refreshing
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Icon(Icons.refresh_rounded)),
+              ]),
+              if (_error != null) ...[
+                const SizedBox(height: 12),
+                Text(_error!, style: const TextStyle(color: Color(0xFFB91C1C))),
+                TextButton(
+                    onPressed: _refreshing ? null : _refresh,
+                    child: const Text('Try again')),
+              ],
+              if (!_loaded && _refreshing) ...[
+                const SizedBox(height: 12),
+                const Text('Loading your enrolled schemes…'),
+              ] else if (_loaded && enrollment == null) ...[
+                const SizedBox(height: 12),
+                const Text(
+                    'You have no active scheme. Choose a published scheme to start saving.',
+                    style: TextStyle(color: Color(0xFF64748B), height: 1.5)),
+                const SizedBox(height: 16),
+                FilledButton(
+                    onPressed: widget.onBrowse,
+                    child: const Text('Explore schemes')),
+              ] else if (enrollment != null) ...[
+                if (active.length > 1)
+                  DropdownButton<String>(
+                    isExpanded: true,
+                    value: enrollment['id'].toString(),
+                    items: active
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item['id'].toString(),
+                              child: Text(item['terms']['name'],
+                                  overflow: TextOverflow.ellipsis),
+                            ))
+                        .toList(),
+                    onChanged: (value) => setState(() => _selectedId = value),
+                  )
+                else ...[
+                  const SizedBox(height: 12),
+                  Text(enrollment['terms']['name'],
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w700)),
+                ],
+                const SizedBox(height: 20),
+                const Text('Total saved',
+                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
+                const SizedBox(height: 4),
+                Text(money(enrollment['paid_paise']),
+                    style: const TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF0F172A),
+                        letterSpacing: -.8)),
+                const SizedBox(height: 12),
+                Text(
+                    "${enrollment['paid_installments']} of ${enrollment['terms']['installment_count']} installments",
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF475569))),
+                const SizedBox(height: 10),
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: LinearProgressIndicator(
+                        minHeight: 8,
+                        value:
+                            (enrollment['terms']['installment_count'] as num) >
+                                    0
+                                ? ((enrollment['paid_installments'] as num) /
+                                        (enrollment['terms']
+                                            ['installment_count'] as num))
+                                    .clamp(0, 1)
+                                    .toDouble()
+                                : 0,
+                        backgroundColor: const Color(0xFFE9EFFF),
+                        color: const Color(0xFF2563EB))),
+                const SizedBox(height: 16),
+                Wrap(spacing: 28, runSpacing: 12, children: [
+                  _metric('Shop benefit',
+                      money(enrollment['terms']['benefit_paise'])),
+                ]),
+                if (enrollment['next_due'] != null) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          color: const Color(0xFFEFF6FF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Text(
+                          'Next payment: ${money(enrollment['next_due']['amount_paise'])} on '
+                          '${dueDate(enrollment['next_due']['due_date'], Map<String, dynamic>.from(enrollment['terms']))}',
+                          style: const TextStyle(
+                              color: Color(0xFF1D4ED8),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600))),
+                ],
+                const SizedBox(height: 16),
+                SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                        onPressed: () async {
+                          await openPage(
+                              context,
+                              EnrollmentPage(
+                                  auth: widget.auth, enrollment: enrollment));
+                          if (mounted) _refresh();
+                        },
+                        child: const Text('View installments'))),
+              ],
+            ],
+          )),
+    );
+  }
+
+  Widget _metric(String label, String value) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label,
+              style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+          const SizedBox(height: 4),
+          Text(value,
+              style:
+                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+        ],
+      );
 }
 
 class SchemesPage extends StatelessWidget {
@@ -1071,16 +1862,21 @@ class SchemesPage extends StatelessWidget {
       builder: (data, reload) =>
           ListView(padding: const EdgeInsets.all(20), children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Column(
+              const Expanded(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Available schemes',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF0F172A))),
                   Text('Choose an A2Mobile scheme to start saving',
                       style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
                 ],
-              ),
-              IconButton(onPressed: reload, icon: const Icon(Icons.refresh_rounded))
+              )),
+              IconButton(
+                  onPressed: reload, icon: const Icon(Icons.refresh_rounded))
             ]),
             const SizedBox(height: 16),
             if ((data as List).isEmpty)
@@ -1094,7 +1890,8 @@ class SchemesPage extends StatelessWidget {
                 ),
                 child: const Column(
                   children: [
-                    Icon(Icons.inventory_2_outlined, size: 48, color: Color(0xFF94A3B8)),
+                    Icon(Icons.inventory_2_outlined,
+                        size: 48, color: Color(0xFF94A3B8)),
                     SizedBox(height: 12),
                     Text(
                       'The store has not published any schemes yet.',
@@ -1104,89 +1901,19 @@ class SchemesPage extends StatelessWidget {
                   ],
                 ),
               ),
-            for (final scheme in data)
-              Card(
-                  margin: const EdgeInsets.only(bottom: 14),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () => openPage(
-                        context,
-                        SchemeDetails(
-                            auth: auth,
-                            scheme: Map<String, dynamic>.from(scheme))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFEEF2FF),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: const Text(
-                                  'A2Mobile Scheme',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF2563EB),
-                                  ),
-                                ),
-                              ),
-                              const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Color(0xFF94A3B8)),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            scheme['name'],
-                            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                money(scheme['monthly_amount_paise']),
-                                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: Color(0xFF2563EB)),
-                              ),
-                              const Text(
-                                ' / month',
-                                style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
-                              ),
-                              const Spacer(),
-                              Text(
-                                '${scheme['installment_count']} installments',
-                                style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFECFDF5),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.card_giftcard_rounded, size: 16, color: Color(0xFF059669)),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Shop benefit: ${money(scheme['benefit_paise'])}',
-                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF065F46)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ))
+            for (var index = 0; index < data.length; index++) ...[
+              SchemePromotionCard(
+                imageAsset:
+                    schemeProductImages[index % schemeProductImages.length],
+                scheme: Map<String, dynamic>.from(data[index]),
+                onTap: () => openPage(
+                    context,
+                    SchemeDetails(
+                        auth: auth,
+                        scheme: Map<String, dynamic>.from(data[index]))),
+              ),
+              const SizedBox(height: 18),
+            ],
           ]));
 }
 
@@ -1232,7 +1959,8 @@ class _SchemeDetailsState extends State<SchemeDetails> {
   Widget build(BuildContext context) {
     final s = widget.scheme;
     final p = s['policy'];
-    final eligibleTotal = s['monthly_amount_paise'] * s['installment_count'] + s['benefit_paise'];
+    final eligibleTotal =
+        s['monthly_amount_paise'] * s['installment_count'] + s['benefit_paise'];
     return Scaffold(
         appBar: AppBar(title: Text(s['name'])),
         body: ListView(padding: const EdgeInsets.all(20), children: [
@@ -1243,13 +1971,24 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('Plan Summary',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF64748B), letterSpacing: 0.5)),
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF64748B),
+                          letterSpacing: 0.5)),
                   const SizedBox(height: 8),
                   Text('${money(s['monthly_amount_paise'])} per month',
-                      style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: Color(0xFF2563EB))),
+                      style: const TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFF2563EB))),
                   const SizedBox(height: 4),
-                  Text('${s['installment_count']} installments • bonus ${money(s['benefit_paise'])}',
-                      style: const TextStyle(fontSize: 14, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
+                  Text(
+                      '${s['installment_count']} installments • bonus ${money(s['benefit_paise'])}',
+                      style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF64748B),
+                          fontWeight: FontWeight.w500)),
                   const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.all(14),
@@ -1262,9 +2001,15 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Eligible purchase value:',
-                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF065F46))),
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF065F46))),
                         Text(money(eligibleTotal),
-                            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900, color: Color(0xFF059669))),
+                            style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w900,
+                                color: Color(0xFF059669))),
                       ],
                     ),
                   ),
@@ -1279,19 +2024,37 @@ class _SchemeDetailsState extends State<SchemeDetails> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Terms · version ${s['version']}',
-                      style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                  Text('Terms Â· version ${s['version']}',
+                      style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF0F172A))),
                   const SizedBox(height: 12),
-                  Text(p['terms_text'], style: const TextStyle(fontSize: 13.5, color: Color(0xFF334155), height: 1.5)),
+                  Text(p['terms_text'],
+                      style: const TextStyle(
+                          fontSize: 13.5,
+                          color: Color(0xFF334155),
+                          height: 1.5)),
                   const SizedBox(height: 16),
                   const Divider(),
                   const SizedBox(height: 12),
-                  _ruleRow('Due Rule', p['due_rule'] == 'ANNIVERSARY' ? 'Joining-day anniversary' : 'Day ${p['due_day']} of each month'),
+                  _ruleRow(
+                      'Due Rule',
+                      p['due_rule'] == 'ANNIVERSARY'
+                          ? 'Joining-day anniversary'
+                          : 'Day ${p['due_day']} of each month'),
                   _ruleRow('Grace Period', '${p['grace_days']} days'),
-                  _ruleRow('Late Payments', p['late_payments_allowed'] ? 'Allowed' : 'Not allowed'),
-                  _ruleRow('Cancellation', p['cancellation_allowed'] ? 'Allowed with approval' : 'Not allowed'),
-                  _ruleRow('Refund Deduction', money(p['refund_deduction_paise'])),
-                  _ruleRow('Redemption Validity', '${p['redemption_valid_days']} days'),
+                  _ruleRow('Late Payments',
+                      p['late_payments_allowed'] ? 'Allowed' : 'Not allowed'),
+                  _ruleRow(
+                      'Cancellation',
+                      p['cancellation_allowed']
+                          ? 'Allowed with approval'
+                          : 'Not allowed'),
+                  _ruleRow(
+                      'Refund Deduction', money(p['refund_deduction_paise'])),
+                  _ruleRow('Redemption Validity',
+                      '${p['redemption_valid_days']} days'),
                 ],
               ),
             ),
@@ -1306,12 +2069,14 @@ class _SchemeDetailsState extends State<SchemeDetails> {
             ),
             child: const Row(
               children: [
-                Icon(Icons.info_outline_rounded, color: Color(0xFF2563EB), size: 20),
+                Icon(Icons.info_outline_rounded,
+                    color: Color(0xFF2563EB), size: 20),
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     'Verify your email in Profile before joining. Complete phone verification and KYC if requested when you enroll.',
-                    style: TextStyle(fontSize: 12.5, color: Color(0xFF1E40AF), height: 1.4),
+                    style: TextStyle(
+                        fontSize: 12.5, color: Color(0xFF1E40AF), height: 1.4),
                   ),
                 ),
               ],
@@ -1339,8 +2104,13 @@ class _SchemeDetailsState extends State<SchemeDetails> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 13, color: Color(0xFF64748B))),
-          Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0F172A))),
+          Text(label,
+              style: const TextStyle(fontSize: 13, color: Color(0xFF64748B))),
+          Text(value,
+              style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF0F172A))),
         ],
       ),
     );
@@ -1397,25 +2167,32 @@ class _EnrollmentPageState extends State<EnrollmentPage> {
           builder: (data, reload) =>
               ListView(padding: const EdgeInsets.all(20), children: [
                 const Text('Installments schedule',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF0F172A))),
                 const SizedBox(height: 12),
                 for (final i in data)
                   Card(
                       margin: const EdgeInsets.only(bottom: 10),
                       child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 6),
                           title: Text(
-                            'Installment ${i['number']} · ${money(i['amount_paise'])}',
-                            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                            'Installment ${i['number']} Â· ${money(i['amount_paise'])}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 15),
                           ),
                           subtitle: Text(
-                            '${dueDate(i['due_date'], Map<String, dynamic>.from(widget.enrollment['terms']))} · ${i['status']}',
-                            style: const TextStyle(fontSize: 12.5, color: Color(0xFF64748B)),
+                            '${dueDate(i['due_date'], Map<String, dynamic>.from(widget.enrollment['terms']))} Â· ${i['status']}',
+                            style: const TextStyle(
+                                fontSize: 12.5, color: Color(0xFF64748B)),
                           ),
                           trailing: ['DUE', 'OVERDUE'].contains(i['status'])
                               ? FilledButton(
                                   style: FilledButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 8),
                                   ),
                                   onPressed:
                                       _busy ? null : () => pay(i, reload),
@@ -1475,15 +2252,29 @@ class PaymentsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Payment history',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF0F172A))),
                   Text('All your scheme installment receipts',
                       style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
                 ],
               ),
-              IconButton(onPressed: reload, icon: const Icon(Icons.refresh_rounded))
+              IconButton(
+                  onPressed: reload, icon: const Icon(Icons.refresh_rounded))
             ]),
             const SizedBox(height: 16),
-            if ((data as List).isEmpty)
+            RetailBanner(
+                eyebrow: 'Recent payment total',
+                title: money((data as List).fold<num>(
+                    0,
+                    (total, payment) =>
+                        total + (payment['amount_paise'] as num? ?? 0))),
+                description:
+                    '${data.length} most recent payments shown. Open a transaction below to view its receipt.',
+                icon: Icons.account_balance_wallet_outlined),
+            const SizedBox(height: 24),
+            if (data.isEmpty)
               Container(
                 padding: const EdgeInsets.all(32),
                 alignment: Alignment.center,
@@ -1494,7 +2285,8 @@ class PaymentsPage extends StatelessWidget {
                 ),
                 child: const Column(
                   children: [
-                    Icon(Icons.receipt_long_outlined, size: 48, color: Color(0xFF94A3B8)),
+                    Icon(Icons.receipt_long_outlined,
+                        size: 48, color: Color(0xFF94A3B8)),
                     SizedBox(height: 12),
                     Text(
                       'No reconciled payments yet.',
@@ -1508,7 +2300,8 @@ class PaymentsPage extends StatelessWidget {
               Card(
                   margin: const EdgeInsets.only(bottom: 12),
                   child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       leading: Container(
                         width: 44,
                         height: 44,
@@ -1517,22 +2310,28 @@ class PaymentsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         alignment: Alignment.center,
-                        child: const Icon(Icons.receipt_outlined, color: Color(0xFF2563EB)),
+                        child: const Icon(Icons.receipt_outlined,
+                            color: Color(0xFF2563EB)),
                       ),
                       title: Text(
                         money(p['amount_paise']),
-                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17, color: Color(0xFF0F172A)),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 17,
+                            color: Color(0xFF0F172A)),
                       ),
                       subtitle: Text(
                         'Installment ${p['installment_number']}',
-                        style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                        style: const TextStyle(
+                            fontSize: 13, color: Color(0xFF64748B)),
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           StatusPill(status: p['status']),
                           const SizedBox(width: 8),
-                          const Icon(Icons.chevron_right_rounded, color: Color(0xFF94A3B8)),
+                          const Icon(Icons.chevron_right_rounded,
+                              color: Color(0xFF94A3B8)),
                         ],
                       ),
                       onTap: () => openPage(context,
@@ -1569,22 +2368,29 @@ class ReceiptPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Center(child: A2BrandHeader(subtitle: 'Official Contribution Receipt')),
+                      const Center(
+                          child: A2BrandHeader(
+                              subtitle: 'Official Contribution Receipt')),
                       const SizedBox(height: 20),
                       const Divider(),
                       const SizedBox(height: 16),
                       _receiptRow('Receipt ID', '${data['id']}'),
                       _receiptRow('Payment ID', '${data['payment_id']}'),
                       _receiptRow('Enrollment ID', '${data['enrollment_id']}'),
-                      _receiptRow('Installment', '#${data['installment_number']}'),
-                      _receiptRow('Amount', money(data['amount_paise']), isHighlight: true),
+                      _receiptRow(
+                          'Installment', '#${data['installment_number']}'),
+                      _receiptRow('Amount', money(data['amount_paise']),
+                          isHighlight: true),
                       _receiptRow('Issued At', '${data['issued_at']}'),
                       const SizedBox(height: 16),
                       const Divider(),
                       const SizedBox(height: 12),
                       const Text(
                         'Note: This contribution receipt is not a product tax invoice. Store purchase invoice will be issued upon redemption.',
-                        style: TextStyle(fontSize: 12, color: Color(0xFF64748B), fontStyle: FontStyle.italic),
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF64748B),
+                            fontStyle: FontStyle.italic),
                       ),
                     ],
                   ),
@@ -1610,7 +2416,11 @@ class ReceiptPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF64748B),
+                  fontWeight: FontWeight.w500)),
           const SizedBox(width: 16),
           Flexible(
             child: Text(
@@ -1619,7 +2429,9 @@ class ReceiptPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: isHighlight ? 16 : 13,
                 fontWeight: isHighlight ? FontWeight.w800 : FontWeight.w600,
-                color: isHighlight ? const Color(0xFF2563EB) : const Color(0xFF0F172A),
+                color: isHighlight
+                    ? const Color(0xFF2563EB)
+                    : const Color(0xFF0F172A),
               ),
             ),
           ),
@@ -1634,123 +2446,173 @@ class NotificationsPage extends StatelessWidget {
   final AuthService auth;
 
   @override
-  Widget build(BuildContext context) => DataView(
-      auth: auth,
-      path: '/notifications',
-      builder: (data, reload) =>
-          ListView(padding: const EdgeInsets.all(20), children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Notifications',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
-                  Text('Updates on your installments and schemes',
-                      style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
-                ],
-              ),
-              IconButton(onPressed: reload, icon: const Icon(Icons.refresh_rounded))
-            ]),
-            const SizedBox(height: 16),
-            if ((data as List).isEmpty)
-              Container(
-                padding: const EdgeInsets.all(32),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
-                ),
-                child: const Column(
-                  children: [
-                    Icon(Icons.notifications_none_rounded, size: 48, color: Color(0xFF94A3B8)),
-                    SizedBox(height: 12),
-                    Text(
-                      'You have no notifications.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Color(0xFF64748B), fontSize: 14),
+  Widget build(BuildContext context) => Scaffold(
+      appBar: AppBar(title: const A2BrandHeader(subtitle: 'Notifications')),
+      body: DataView(
+          auth: auth,
+          path: '/notifications',
+          builder: (data, reload) =>
+              ListView(padding: const EdgeInsets.all(20), children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Latest updates',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF0F172A))),
+                          Text('Updates on your installments and schemes',
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xFF64748B))),
+                        ],
+                      )),
+                      IconButton(
+                          onPressed: reload,
+                          icon: const Icon(Icons.refresh_rounded))
+                    ]),
+                const SizedBox(height: 16),
+                if ((data as List).isEmpty)
+                  Container(
+                    padding: const EdgeInsets.all(32),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
                     ),
-                  ],
-                ),
-              ),
-            for (final n in data)
-              Card(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      leading: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: n['read'] == true ? const Color(0xFFF1F5F9) : const Color(0xFFEEF2FF),
-                          borderRadius: BorderRadius.circular(20),
+                    child: const Column(
+                      children: [
+                        Icon(Icons.notifications_none_rounded,
+                            size: 48, color: Color(0xFF94A3B8)),
+                        SizedBox(height: 12),
+                        Text(
+                          'You have no notifications.',
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(color: Color(0xFF64748B), fontSize: 14),
                         ),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          n['read'] == true
-                              ? Icons.notifications_none_rounded
-                              : Icons.notifications_active_rounded,
-                          color: n['read'] == true ? const Color(0xFF94A3B8) : const Color(0xFF2563EB),
-                          size: 20,
-                        ),
-                      ),
-                      title: Text(
-                        n['title'],
-                        style: TextStyle(
-                          fontWeight: n['read'] == true ? FontWeight.w600 : FontWeight.w800,
-                          fontSize: 15,
-                        ),
-                      ),
-                      subtitle: Text(
-                        n['body'],
-                        style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
-                      ),
-                      onTap: () async {
-                        try {
-                          await auth.request(
-                              '/notifications/${Uri.encodeComponent(n['id'])}/read',
-                              method: 'PATCH');
-                          reload();
-                          final route = n['route'] as String? ?? '';
-                          if (route.startsWith('/enrollments/')) {
-                            final e = await auth.request(route);
-                            if (context.mounted) {
-                              await openPage(
-                                  context,
-                                  EnrollmentPage(
-                                      auth: auth,
-                                      enrollment:
-                                          Map<String, dynamic>.from(e)));
+                      ],
+                    ),
+                  ),
+                for (final n in data)
+                  Card(
+                      color: Colors.white,
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          trailing: n['read'] == true
+                              ? null
+                              : const Badge(backgroundColor: Color(0xFF2563EB)),
+                          leading: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: n['read'] == true
+                                  ? const Color(0xFFF1F5F9)
+                                  : const Color(0xFFEEF2FF),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              n['read'] == true
+                                  ? Icons.notifications_none_rounded
+                                  : Icons.notifications_active_rounded,
+                              color: n['read'] == true
+                                  ? const Color(0xFF94A3B8)
+                                  : const Color(0xFF2563EB),
+                              size: 20,
+                            ),
+                          ),
+                          title: Text(
+                            n['title'],
+                            style: TextStyle(
+                              fontWeight: n['read'] == true
+                                  ? FontWeight.w600
+                                  : FontWeight.w800,
+                              fontSize: 15,
+                              color: const Color(0xFF0F172A),
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 6),
+                              Text(n['body'] ?? '',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      height: 1.5,
+                                      color: Color(0xFF334155))),
+                              if (n['created_at'] != null) ...[
+                                const SizedBox(height: 10),
+                                Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        notificationDate(n['created_at']),
+                                        style: const TextStyle(
+                                            fontSize: 11,
+                                            color: Color(0xFF4F70BE)))),
+                              ],
+                            ],
+                          ),
+                          onTap: () async {
+                            try {
+                              await auth.request(
+                                  '/notifications/${Uri.encodeComponent(n['id'])}/read',
+                                  method: 'PATCH');
+                              reload();
+                              final route = n['route'] as String? ?? '';
+                              if (route.startsWith('/enrollments/')) {
+                                final e = await auth.request(route);
+                                if (context.mounted) {
+                                  await openPage(
+                                      context,
+                                      EnrollmentPage(
+                                          auth: auth,
+                                          enrollment:
+                                              Map<String, dynamic>.from(e)));
+                                }
+                              } else if (route.startsWith('/payments/')) {
+                                if (context.mounted) {
+                                  await openPage(
+                                      context,
+                                      ReceiptPage(
+                                          auth: auth,
+                                          paymentId: route.split('/').last));
+                                }
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                showMessage(context, message(e));
+                              }
                             }
-                          } else if (route.startsWith('/payments/')) {
-                            if (context.mounted) {
-                              await openPage(
-                                  context,
-                                  ReceiptPage(
-                                      auth: auth,
-                                      paymentId: route.split('/').last));
-                            }
-                          }
-                        } catch (e) {
-                          if (context.mounted) showMessage(context, message(e));
-                        }
-                      }))
-          ]));
+                          }))
+              ])));
 }
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key, required this.auth});
+  const ProfilePage({super.key, required this.auth, this.onSignedOut});
   final AuthService auth;
+  final VoidCallback? onSignedOut;
 
   @override
   Widget build(BuildContext context) => DataView(
       auth: auth,
       path: '/me',
       builder: (data, reload) {
-        final displayName = (data['name'] == null || data['name'] == '') ? data['email'] : data['name'];
-        final initial = (displayName.isNotEmpty ? displayName[0] : 'U').toUpperCase();
+        final displayName = (data['name'] == null || data['name'] == '')
+            ? data['email']
+            : data['name'];
+        final initial =
+            (displayName.isNotEmpty ? displayName[0] : 'U').toUpperCase();
         return ListView(padding: const EdgeInsets.all(20), children: [
           Card(
+            key: const ValueKey('profile-identity'),
+            color: const Color(0xFFE9EFFF),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Row(
@@ -1769,7 +2631,10 @@ class ProfilePage extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       initial,
-                      style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w800),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -1777,19 +2642,30 @@ class ProfilePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const Text('Profile settings',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF4F70BE),
+                                fontWeight: FontWeight.w600)),
+                        const SizedBox(height: 6),
                         Text(
                           displayName,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
+                          style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF0F172A)),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           data['email'],
-                          style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                          style: const TextStyle(
+                              fontSize: 13, color: Color(0xFF64748B)),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           data['phone'] ?? 'No phone saved',
-                          style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+                          style: const TextStyle(
+                              fontSize: 12, color: Color(0xFF94A3B8)),
                         ),
                       ],
                     ),
@@ -1802,27 +2678,39 @@ class ProfilePage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 4, bottom: 8),
             child: Text('VERIFICATION & IDENTITY',
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B), letterSpacing: 0.8)),
+                style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF64748B),
+                    letterSpacing: 0.8)),
           ),
           Card(
             child: Column(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.phone_iphone_rounded, color: Color(0xFF2563EB)),
+                  leading: const Icon(Icons.phone_iphone_rounded,
+                      color: Color(0xFF2563EB)),
                   title: const Text('Phone verification'),
-                  subtitle: Text(data['phone_verified'] == true ? 'Verified' : 'Verification required'),
+                  subtitle: Text(data['phone_verified'] == true
+                      ? 'Verified'
+                      : 'Verification required'),
                   trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: () => openPage(context, VerificationPage(auth: auth, phone: data['phone'] ?? '')),
+                  onTap: () => openPage(context,
+                      VerificationPage(auth: auth, phone: data['phone'] ?? '')),
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: const Icon(Icons.mail_outline_rounded, color: Color(0xFF2563EB)),
+                  leading: const Icon(Icons.mail_outline_rounded,
+                      color: Color(0xFF2563EB)),
                   title: const Text('Email verification'),
-                  subtitle: Text(data['email_verified'] == true ? 'Verified' : 'Verification required'),
+                  subtitle: Text(data['email_verified'] == true
+                      ? 'Verified'
+                      : 'Verification required'),
                   trailing: TextButton(
                     onPressed: () async {
                       try {
-                        await auth.request('/auth/send-email-verification', method: 'POST');
+                        await auth.request('/auth/send-email-verification',
+                            method: 'POST');
                         if (context.mounted) {
                           showMessage(context, 'Verification email sent.');
                         }
@@ -1835,14 +2723,16 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: const Icon(Icons.verified_user_outlined, color: Color(0xFF2563EB)),
+                  leading: const Icon(Icons.verified_user_outlined,
+                      color: Color(0xFF2563EB)),
                   title: const Text('KYC verification'),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () => openPage(context, KycPage(auth: auth)),
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: const Icon(Icons.badge_outlined, color: Color(0xFF2563EB)),
+                  leading: const Icon(Icons.badge_outlined,
+                      color: Color(0xFF2563EB)),
                   title: const Text('DigiLocker identity verification'),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () => openPage(context, IdentityPage(auth: auth)),
@@ -1854,13 +2744,18 @@ class ProfilePage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 4, bottom: 8),
             child: Text('ACCOUNT & PREFERENCES',
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B), letterSpacing: 0.8)),
+                style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF64748B),
+                    letterSpacing: 0.8)),
           ),
           Card(
             child: Column(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.edit_outlined, color: Color(0xFF2563EB)),
+                  leading:
+                      const Icon(Icons.edit_outlined, color: Color(0xFF2563EB)),
                   title: const Text('Edit profile'),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () async {
@@ -1870,13 +2765,24 @@ class ProfilePage extends StatelessWidget {
                       FormPage(
                         title: 'Profile',
                         fields: [
-                          InputField('name', 'Full name', initial: data['name']),
-                          InputField('phone', 'Phone with country code', initial: data['phone'] ?? ''),
-                          InputField('address', 'Address', initial: profile['address'] ?? '', multiline: true, optional: true),
-                          InputField('nominee_name', 'Nominee name', initial: profile['nominee_name'] ?? '', optional: true),
-                          InputField('nominee_relationship', 'Nominee relationship', initial: profile['nominee_relationship'] ?? '', optional: true)
+                          InputField('name', 'Full name',
+                              initial: data['name']),
+                          InputField('phone', 'Phone with country code',
+                              initial: data['phone'] ?? ''),
+                          InputField('address', 'Address',
+                              initial: profile['address'] ?? '',
+                              multiline: true,
+                              optional: true),
+                          InputField('nominee_name', 'Nominee name',
+                              initial: profile['nominee_name'] ?? '',
+                              optional: true),
+                          InputField(
+                              'nominee_relationship', 'Nominee relationship',
+                              initial: profile['nominee_relationship'] ?? '',
+                              optional: true)
                         ],
-                        submit: (values) => auth.request('/me', method: 'PATCH', body: values),
+                        submit: (values) =>
+                            auth.request('/me', method: 'PATCH', body: values),
                       ),
                     );
                     reload();
@@ -1884,7 +2790,16 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: const Icon(Icons.notifications_active_outlined, color: Color(0xFF2563EB)),
+                  leading: const Icon(Icons.notifications_outlined,
+                      color: Color(0xFF2563EB)),
+                  title: const Text('Notifications'),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () => openPage(context, NotificationsPage(auth: auth)),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.notifications_active_outlined,
+                      color: Color(0xFF2563EB)),
                   title: const Text('Enable push notifications'),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () async {
@@ -1900,18 +2815,37 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: const Icon(Icons.redeem_rounded, color: Color(0xFF2563EB)),
+                  leading: const Icon(Icons.redeem_rounded,
+                      color: Color(0xFF2563EB)),
                   title: const Text('Redemptions'),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () => openPage(context, RedemptionsPage(auth: auth)),
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: const Icon(Icons.support_agent_rounded, color: Color(0xFF2563EB)),
+                  leading: const Icon(Icons.support_agent_rounded,
+                      color: Color(0xFF2563EB)),
                   title: const Text('Support'),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () => openPage(context, SupportPage(auth: auth)),
                 ),
+                if (onSignedOut != null) ...[
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.logout_rounded,
+                        color: Color(0xFF64748B)),
+                    title: const Text('Sign out'),
+                    onTap: () async {
+                      try {
+                        await auth.logout();
+                      } catch (e) {
+                        if (context.mounted) showMessage(context, message(e));
+                      } finally {
+                        if (context.mounted) onSignedOut!();
+                      }
+                    },
+                  ),
+                ],
               ],
             ),
           ),
@@ -1919,7 +2853,11 @@ class ProfilePage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(left: 4, bottom: 8),
             child: Text('ABOUT & POLICIES',
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B), letterSpacing: 0.8)),
+                style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF64748B),
+                    letterSpacing: 0.8)),
           ),
           Card(
             child: Column(
@@ -1943,7 +2881,8 @@ class ProfilePage extends StatelessWidget {
                       'privacy': 'Privacy policy'
                     }[key]!),
                     trailing: const Icon(Icons.chevron_right_rounded),
-                    onTap: () => openPage(context, ContentPage(auth: auth, contentKey: key)),
+                    onTap: () => openPage(
+                        context, ContentPage(auth: auth, contentKey: key)),
                   ),
                   if (key != 'privacy') const Divider(height: 1),
                 ],
@@ -1988,11 +2927,15 @@ class _VerificationPageState extends State<VerificationPage> {
           ),
           child: Column(
             children: [
-              const Icon(Icons.phone_android_rounded, size: 48, color: Color(0xFF2563EB)),
+              const Icon(Icons.phone_android_rounded,
+                  size: 48, color: Color(0xFF2563EB)),
               const SizedBox(height: 12),
               Text(
                 'Verification for ${widget.phone}',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF0F172A)),
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF0F172A)),
               ),
               const SizedBox(height: 6),
               const Text(
@@ -2002,15 +2945,23 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
               const SizedBox(height: 16),
               FilledButton.icon(
-                  onPressed: sending ? null : () async {
-                    setState(() => sending = true);
-                    try {
-                      await verification.send();
-                      if (context.mounted) showMessage(context, 'Code sent.');
-                    } catch (e) {
-                      if (context.mounted) showMessage(context, message(e));
-                    } finally { if (mounted) setState(() => sending = false); }
-                  },
+                  onPressed: sending
+                      ? null
+                      : () async {
+                          setState(() => sending = true);
+                          try {
+                            await verification.send();
+                            if (context.mounted) {
+                              showMessage(context, 'Code sent.');
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              showMessage(context, message(e));
+                            }
+                          } finally {
+                            if (mounted) setState(() => sending = false);
+                          }
+                        },
                   icon: const Icon(Icons.send_rounded, size: 18),
                   label: const Text('Send verification code')),
             ],
@@ -2046,14 +2997,21 @@ class KycPage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Current Status', style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600)),
+                            const Text('Current Status',
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFF64748B),
+                                    fontWeight: FontWeight.w600)),
                             StatusPill(status: '${data['status']}'),
                           ],
                         ),
                         if (data['pan_last4'] != null) ...[
                           const SizedBox(height: 12),
                           Text('PAN ending with ${data['pan_last4']}',
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF0F172A))),
                         ],
                       ],
                     ),
@@ -2070,12 +3028,16 @@ class KycPage extends StatelessWidget {
                   child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.shield_outlined, color: Color(0xFF2563EB), size: 22),
+                      Icon(Icons.shield_outlined,
+                          color: Color(0xFF2563EB), size: 22),
                       SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           'With your consent, your PAN and legal name are sent securely to our verification provider. The full PAN is not stored by this application.',
-                          style: TextStyle(fontSize: 13, color: Color(0xFF1E40AF), height: 1.4),
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF1E40AF),
+                              height: 1.4),
                         ),
                       ),
                     ],
@@ -2140,12 +3102,14 @@ class RedemptionsPage extends StatelessWidget {
                     ),
                     child: const Column(
                       children: [
-                        Icon(Icons.redeem_outlined, size: 48, color: Color(0xFF94A3B8)),
+                        Icon(Icons.redeem_outlined,
+                            size: 48, color: Color(0xFF94A3B8)),
                         SizedBox(height: 12),
                         Text(
                           'No redemptions yet. Request one from a completed enrollment.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Color(0xFF64748B), fontSize: 14),
+                          style:
+                              TextStyle(color: Color(0xFF64748B), fontSize: 14),
                         ),
                       ],
                     ),
@@ -2159,11 +3123,15 @@ class RedemptionsPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       money(r['eligible_value_paise']),
-                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF0F172A)),
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w800,
+                                          color: Color(0xFF0F172A)),
                                     ),
                                     StatusPill(status: r['status']),
                                   ],
@@ -2171,7 +3139,10 @@ class RedemptionsPage extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 SelectableText(
                                   'Reference: ${r['id']}',
-                                  style: const TextStyle(fontSize: 12.5, color: Color(0xFF64748B), fontFamily: 'monospace'),
+                                  style: const TextStyle(
+                                      fontSize: 12.5,
+                                      color: Color(0xFF64748B),
+                                      fontFamily: 'monospace'),
                                 ),
                                 if (r['status'] == 'PENDING') ...[
                                   const SizedBox(height: 16),
@@ -2232,8 +3203,13 @@ class SupportPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Support tickets',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
-                        IconButton(onPressed: reload, icon: const Icon(Icons.refresh_rounded)),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF0F172A))),
+                        IconButton(
+                            onPressed: reload,
+                            icon: const Icon(Icons.refresh_rounded)),
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -2248,12 +3224,14 @@ class SupportPage extends StatelessWidget {
                         ),
                         child: const Column(
                           children: [
-                            Icon(Icons.support_agent_outlined, size: 48, color: Color(0xFF94A3B8)),
+                            Icon(Icons.support_agent_outlined,
+                                size: 48, color: Color(0xFF94A3B8)),
                             SizedBox(height: 12),
                             Text(
                               'No support tickets.',
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Color(0xFF64748B), fontSize: 14),
+                              style: TextStyle(
+                                  color: Color(0xFF64748B), fontSize: 14),
                             ),
                           ],
                         ),
@@ -2267,35 +3245,54 @@ class SupportPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           child: Text(t['subject'],
-                                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: Color(0xFF0F172A))),
                                         ),
                                         StatusPill(status: t['status']),
                                       ],
                                     ),
                                     const SizedBox(height: 8),
-                                    Text(t['message'], style: const TextStyle(fontSize: 14, color: Color(0xFF334155), height: 1.4)),
+                                    Text(t['message'],
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xFF334155),
+                                            height: 1.4)),
                                     for (final reply in t['replies'] ?? [])
                                       Container(
-                                          margin: const EdgeInsets.only(top: 12),
+                                          margin:
+                                              const EdgeInsets.only(top: 12),
                                           padding: const EdgeInsets.all(12),
                                           decoration: BoxDecoration(
                                             color: const Color(0xFFF1F5F9),
-                                            borderRadius: BorderRadius.circular(8),
-                                            border: Border.all(color: const Color(0xFFE2E8F0)),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                                color: const Color(0xFFE2E8F0)),
                                           ),
                                           child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              const Icon(Icons.store_mall_directory_rounded, size: 18, color: Color(0xFF2563EB)),
+                                              const Icon(
+                                                  Icons
+                                                      .store_mall_directory_rounded,
+                                                  size: 18,
+                                                  color: Color(0xFF2563EB)),
                                               const SizedBox(width: 8),
                                               Expanded(
                                                 child: Text(
                                                     'Store reply: ${reply['message']}',
-                                                    style: const TextStyle(fontSize: 13, color: Color(0xFF1E293B))),
+                                                    style: const TextStyle(
+                                                        fontSize: 13,
+                                                        color:
+                                                            Color(0xFF1E293B))),
                                               ),
                                             ],
                                           ))
@@ -2323,13 +3320,19 @@ class ContentPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(data['title'],
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFF0F172A))),
                         const SizedBox(height: 16),
                         const Divider(),
                         const SizedBox(height: 16),
                         SelectableText(
                           data['body'],
-                          style: const TextStyle(fontSize: 14, color: Color(0xFF334155), height: 1.6),
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF334155),
+                              height: 1.6),
                         ),
                       ],
                     ),
@@ -2355,8 +3358,14 @@ class RecordsPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF0F172A))),
-                    IconButton(onPressed: reload, icon: const Icon(Icons.refresh_rounded)),
+                    Text(title,
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF0F172A))),
+                    IconButton(
+                        onPressed: reload,
+                        icon: const Icon(Icons.refresh_rounded)),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -2369,18 +3378,23 @@ class RecordsPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: const Color(0xFFE2E8F0)),
                     ),
-                    child: const Text('No records.', style: TextStyle(color: Color(0xFF64748B))),
+                    child: const Text('No records.',
+                        style: TextStyle(color: Color(0xFF64748B))),
                   ),
                 for (final r in data)
                   Card(
                       margin: const EdgeInsets.only(bottom: 10),
                       child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           title: Text(
                             money(r['amount_paise']),
-                            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w800, fontSize: 16),
                           ),
-                          subtitle: Text(r['reason'] ?? '', style: const TextStyle(fontSize: 13, color: Color(0xFF64748B))),
+                          subtitle: Text(r['reason'] ?? '',
+                              style: const TextStyle(
+                                  fontSize: 13, color: Color(0xFF64748B))),
                           trailing: StatusPill(status: '${r['status']}'))),
               ])));
 }
@@ -2407,14 +3421,20 @@ class IdentityPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text('Verification Status',
-                                style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600)),
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFF64748B),
+                                    fontWeight: FontWeight.w600)),
                             StatusPill(status: '${data['status']}'),
                           ],
                         ),
                         const SizedBox(height: 16),
                         const Text(
                           'Authorize the provider to retrieve your PAN from DigiLocker and match it to your verified PAN. This app does not retain the downloaded document.',
-                          style: TextStyle(fontSize: 13.5, color: Color(0xFF334155), height: 1.5),
+                          style: TextStyle(
+                              fontSize: 13.5,
+                              color: Color(0xFF334155),
+                              height: 1.5),
                         ),
                       ],
                     ),

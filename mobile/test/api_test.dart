@@ -8,11 +8,11 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test('validation errors identify fields without echoing submitted values', () {
     final message = apiErrorMessage([
-      {'loc': ['body', 'password'], 'msg': 'String should have at least 12 characters', 'input': 'private-password'},
+      {'loc': ['body', 'password'], 'msg': 'String should have at least 8 characters', 'input': 'private-password'},
       {'loc': ['body', 'phone'], 'msg': 'String should match pattern', 'input': 'private-phone'},
     ]);
-    expect(message, contains('password: String should have at least 12 characters'));
-    expect(message, contains('Phone: include + and country code'));
+    expect(message, contains('password: String should have at least 8 characters'));
+    expect(message, contains('Phone: enter a valid Indian mobile number, for example +919876543210'));
     expect(message, isNot(contains('private-password')));
     expect(message, isNot(contains('private-phone')));
   });

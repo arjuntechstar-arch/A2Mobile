@@ -8,3 +8,7 @@ dist/
 .idea/
 .vscode/
 build/
+artifacts/ui-review/
+
+# Runtime banner uploads remain local to this installation.
+backend/uploads/

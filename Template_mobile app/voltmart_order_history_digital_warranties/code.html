@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-low": "#f2f3ff", "surface-container-lowest": "#ffffff", "on-primary-container": "#eeefff", "secondary-fixed": "#ffdbd1", "primary-container": "#2563eb", "on-surface-variant": "#434655", "surface-tint": "#0053db", "on-tertiary": "#ffffff", "tertiary-fixed": "#6ffbbe", "on-error": "#ffffff", "inverse-surface": "#283044", "error": "#ba1a1a", "on-background": "#131b2e", "on-tertiary-container": "#bdffdb", "outline-variant": "#c3c6d7", "on-primary": "#ffffff", "error-container": "#ffdad6", "surface-variant": "#dae2fd", "primary": "#004ac6", "secondary-container": "#fe5824", "tertiary": "#006242", "on-tertiary-fixed-variant": "#005236", "secondary": "#b02f00", "tertiary-fixed-dim": "#4edea3", "secondary-fixed-dim": "#ffb5a0", "primary-fixed": "#dbe1ff", "primary-fixed-dim": "#b4c5ff", "inverse-primary": "#b4c5ff", "surface-bright": "#faf8ff", "outline": "#737686", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#003ea8", "background": "#faf8ff", "surface-dim": "#d2d9f4", "on-primary-fixed": "#00174b", "surface-container": "#eaedff", "on-secondary-container": "#531100", "on-surface": "#131b2e", "surface-container-high": "#e2e7ff", "on-error-container": "#93000a", "on-secondary-fixed": "#3b0900", "surface": "#faf8ff", "inverse-on-surface": "#eef0ff", "on-secondary-fixed-variant": "#862200", "tertiary-container": "#007d55", "surface-container-highest": "#dae2fd", "on-tertiary-fixed": "#002113" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xs": "0.25rem", "gutter": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-xl": "2rem", "space-md": "1rem", "margin": "1rem" }, "fontFamily": { "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Inter"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-md": ["Inter"], "label-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "headline-xl": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, "fontSize": { "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "700"}], "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "700"}], "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "700"}], "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "800"}], "headline-lg-mobile": ["22px", {"lineHeight": "30px", "fontWeight": "700"}], "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-xl": ["36px", {"lineHeight": "44px", "fontWeight": "800"}], "headline-xl-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}], "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;min-height:100%;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="VoltMart Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1Uldbor9CrrNUe81244s_Xec7H0VxIoaLLApwGSx4bMZdWojJhD2KCxR6T4ZMPZO7z36PnzKd_mnwBrqFlL9RFJdVCREqB_hLyRyraVEgl-gPabNSj3LJ-VY8o29ITSWCu9pu6no5cAJIdLJQVVUgU_a1mjOdrjXISUvdYw1aJ4jVd2zHY-b-H4Uu5P6Yrpti1h7oCgnP0vRlCkbz7XbHfStf5_VCHX2aXy9j2XYxJiRz-f4ynBWLxiWA"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">VoltMart</span><span class="text-xs text-on-surface-variant font-body-sm text-body-sm leading-none">•</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Retail</span></div><button class="flex items-center gap-1 text-left min-h-[24px] focus:outline-none" type="button"><span class="font-label-md text-label-md text-on-surface truncate">Downtown Flagship Hub</span><span class="material-symbols-outlined text-[16px] text-primary shrink-0">arrow_drop_down</span></button></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Notifications" class="w-11 h-11 relative flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary active:bg-surface-container-high transition-colors focus:outline-none" type="button"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-secondary-container ring-2 ring-surface"></span></button><button aria-label="Customer Account" class="w-11 h-11 flex items-center justify-center rounded-full p-0.5 focus:outline-none active:scale-95 transition-transform" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwuTddeus_W4dNvVH5Ncv3NblDJ52Cqa9aBSEdyS9OH-_FZCSNfyHOBlVOKodxEBb8zNmVsV24siXXyMideH8hvFAQ27nOMPjRJheuADpc05YB4D1UzBC9xN95MVK9iaGSlkE0SymVnAX0MsUqEUttsX3CEnq6MH-0nQRMjUPBKHIZXyyKHf_MWUGwW4-dCFquC3sGTeMs76yIqzVCXMOCMmLYtq5o5pHIzrFQUZo0p7TzbVAOONPA"/></button></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Segment State Management Container -->
+<div class="px-gutter pt-space-xs pb-space-sm flex flex-col gap-space-md">
+<!-- Top Contextual App Bar Header -->
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<button aria-label="Navigate Back" class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface shadow-sm active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">VoltMart Post-Purchase Hub</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface truncate">Orders &amp; Warranties</h1>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<button aria-label="Contact VoltCare Concierge" class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center active:scale-95 transition-transform relative" type="button">
+<span class="material-symbols-outlined text-[22px]">support_agent</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-tertiary"></span>
+</button>
+</div>
+</div>
+<!-- Live Search & Filter Bar -->
+<div class="flex items-center gap-space-sm">
+<div class="flex-1 h-12 rounded-full bg-surface-container-lowest shadow-sm flex items-center px-4 gap-space-sm">
+<span class="material-symbols-outlined text-outline text-[20px]">search</span>
+<input class="w-full bg-transparent text-on-surface placeholder:text-outline text-body-md font-body-md outline-none" placeholder="Search by Order ID, Model, or Warranty..." type="text"/>
+</div>
+<button aria-label="Filter Orders" class="w-12 h-12 rounded-full bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface-variant active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+<!-- Segmented Tab Selector (Horizontal Scroll with Pill Badges) -->
+<div class="-mx-gutter px-gutter overflow-x-auto flex gap-space-xs items-center py-1">
+<button class="shrink-0 px-4 py-2 rounded-full bg-primary-container text-on-primary font-label-md text-label-md shadow-sm transition-all flex items-center gap-1.5" id="tab-btn-active" onclick="switchTab('active')" type="button">
+<span>Active &amp; Deliveries</span>
+<span class="w-5 h-5 rounded-full bg-white/20 text-white font-label-sm text-label-sm flex items-center justify-center">1</span>
+</button>
+<button class="shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm transition-all flex items-center gap-1.5" id="tab-btn-warranties" onclick="switchTab('warranties')" type="button">
+<span>Digital Warranties</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm">3</span>
+</button>
+<button class="shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm transition-all flex items-center gap-1.5" id="tab-btn-past" onclick="switchTab('past')" type="button">
+<span>Past Purchases</span>
+<span class="px-1.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">4</span>
+</button>
+<button class="shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm transition-all flex items-center gap-1.5" id="tab-btn-schemes" onclick="switchTab('schemes')" type="button">
+<span>Scheme Redemptions</span>
+</button>
+</div>
+<!-- TAB 1 CONTENT: Active Express Delivery -->
+<div class="flex flex-col gap-space-md" id="panel-active">
+<!-- Section Heading with Live Pulse -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container animate-ping"></span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Express Dispatch in Flight</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wide">Live GPS</span>
+</div>
+<!-- Active Order Card -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-md flex flex-col gap-space-md relative overflow-hidden">
+<!-- Top Urgency Accent Bar -->
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase font-bold tracking-wider">Order Reference</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">#VM-ORD-998241</span>
+</div>
+<div class="px-3 py-1 rounded-full bg-secondary-container text-white flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px] animate-pulse">local_shipping</span>
+<span class="font-label-sm text-label-sm font-bold tracking-wide">2-Hr Express In-Transit</span>
+</div>
+</div>
+<!-- Product Block -->
+<div class="flex gap-space-md items-start">
+<div class="w-20 h-20 rounded-xl bg-surface-container-low p-2 shrink-0 flex items-center justify-center relative overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="High-end ultra-slim Samsung 65-inch Neo QLED 4K Smart Television angled modern display with minimal bezels studio lighting soft reflections vibrant screen colors electric cobalt highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkVVXnPm-KPNaKUshL1S51sxtachbR9w7kD373DcnawLtWBzluJ_jPBwPU3tFLmXGqNIU8bBShGE0XFryPUQTF8vm_B5KQlrjVBvCWvZcrlUuK6QyX89xvZZ1BZ1YOR-1yYv-J40NdgS1-Y0QbhkX_oAbM4PYqhK0kTFMmsygS5efJwyGfYc9qdJmlGlpj6_w1MqXj7xbMechqQgWJJ_i0cd4dxGYWJ_zUHspdyjFtOQgQhUUbtmQV"/>
+<div class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-primary-container text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px]">verified</span>
+</div>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wider">Smart Entertainment</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2">Samsung 65" Neo QLED 4K Smart TV</h2>
+<div class="mt-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-[16px]">verified_user</span>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">+ 2-Year VoltCare Protection</span>
+</div>
+</div>
+</div>
+<!-- Dispatch Step Timeline Preview -->
+<div class="bg-surface-container-low rounded-xl p-3 flex flex-col gap-2">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">engineering</span>
+<span class="font-label-md text-label-md text-on-surface">Tech Lead: Marcus Vance</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold">18 Mins Away</span>
+</div>
+<!-- Progress bar -->
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden relative">
+<div class="h-full bg-primary-container rounded-full w-3/4"></div>
+</div>
+<span class="text-on-surface-variant font-body-sm text-body-sm">Calibrating delivery route via Downtown Hub • Unit sanitized &amp; packed</span>
+</div>
+<!-- Pricing & Savings Breakdown -->
+<div class="flex flex-col gap-1 pt-1">
+<div class="flex items-baseline justify-between">
+<span class="text-body-md font-body-md text-on-surface-variant">Net Paid via VoltPay</span>
+<div class="flex items-baseline gap-1.5">
+<span class="font-headline-md text-headline-md text-primary font-bold">$494.44</span>
+<span class="text-body-sm font-body-sm text-outline line-through">$1,044.44</span>
+</div>
+</div>
+<div class="px-2.5 py-1 rounded-lg bg-surface-container-highest flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-primary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">confirmation_number</span>
+              Scheme Voucher: #VOLT-MAT-2024-550X
+            </span>
+<span class="font-label-sm text-label-sm text-tertiary font-extrabold">Saved $550.00</span>
+</div>
+</div>
+<!-- Action CTAs -->
+<div class="grid grid-cols-2 gap-space-sm pt-space-xs">
+<button class="w-full py-3 px-3 rounded-full bg-primary-container text-on-primary font-label-md text-label-md shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">near_me</span>
+<span>Track Live</span>
+</button>
+<button class="w-full py-3 px-3 rounded-full bg-surface-container-high text-primary font-label-md text-label-md flex items-center justify-center gap-1.5 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span>Invoice (PDF)</span>
+</button>
+</div>
+</div>
+</div>
+<!-- TAB 2 CONTENT: Digital Appliance Warranties -->
+<div class="flex flex-col gap-space-md" id="panel-warranties">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Registered Digital Passes</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Paperless guarantee tied to your device serials</span>
+</div>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-highest text-primary font-label-sm text-label-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">add_circle</span>
+<span>Claim Serial</span>
+</button>
+</div>
+<!-- Warranty Card 1: Samsung Neo QLED -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low p-1.5 flex items-center justify-center shrink-0">
+<img class="w-full h-full object-contain" data-alt="Modern ultra-crisp Samsung Neo QLED television panel display close up clean slate background studio product lighting vibrant blue and orange hues" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsaMzz7-HW3oIl8LM3L-5J6l2WUnQCgLJQIE0K39ayPlnySS2013C1F0S6-zjUXx7HpfkG-csK9Eh1Q2a7tpleDnAZj9ZIZmP-G3YtJpujbgv5MCw55bUzWp6R1Y69hvzxexZZbUZ4vVW3DPBAmUefap-NCib8WB5xg8EXNncDmCbUxzHZDyh19BXjrvOs4ynKqAQtfKs5gVmLj0T1_-lJj7zE1L1nWV4WaurR5sOiIY_ANg4zwK6L"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-outline">Serial: SN-SAMS-65Q-8820A</span>
+<h3 class="font-label-lg text-label-lg text-on-surface truncate">Samsung 65" Neo QLED 4K</h3>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+            Active
+          </span>
+</div>
+<!-- Coverage Pills -->
+<div class="p-3 rounded-xl bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Coverage Scope</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">2-Yr Comprehensive VoltCare</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded-md bg-surface-container-lowest text-on-surface-variant text-[11px] font-medium">Panel Replacement</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container-lowest text-on-surface-variant text-[11px] font-medium">Circuitry &amp; Motherboard</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container-lowest text-on-surface-variant text-[11px] font-medium">Free At-Home Tech</span>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1 text-tertiary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>729 Days Remaining</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">Valid until Nov 2026</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<button class="w-full py-2.5 px-2 rounded-full bg-secondary-container text-white font-label-sm text-label-sm font-bold flex items-center justify-center gap-1 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[16px]">build</span>
+<span>Book Free Service</span>
+</button>
+<button class="w-full py-2.5 px-2 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-bold flex items-center justify-center gap-1 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[16px]">workspace_premium</span>
+<span>Certificate (PDF)</span>
+</button>
+</div>
+</div>
+<!-- Warranty Card 2: LG Refrigerator -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-low p-1.5 flex items-center justify-center shrink-0">
+<img class="w-full h-full object-contain" data-alt="Modern stainless steel LG French Door refrigerator standing on clean white studio floor sleek brushed steel textures blue accent glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhfTb9LfxWO_5OjZlsqZIbiuELm_T5ns3wx4rouhN9wRvM0WgxKLuaplaZjM4ksiH5re7_VWyjsdAQdcw2j9q9zOTbLo6twDgNdRO2IZkugvmPwtLAAccIrni45WpwQFYT84wDtcwnz6fiEBVzBGoquv2Ig61v2-X2Mudo4xRvmrtKnwuT-mSx9HEqgnfap-g_Kx_t71YWemAVGjY6jvennVpPMpUa-NxAOKv_uVa1BXnN5WaneWSw"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-outline">Order #VM-ORD-881203</span>
+<h3 class="font-label-lg text-label-lg text-on-surface truncate">LG Inverter Dual Cool 450L</h3>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-highest text-primary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+            10-Yr Plan
+          </span>
+</div>
+<div class="p-3 rounded-xl bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Coverage Scope</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Smart Inverter Compressor</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Includes free bi-annual condenser gas top-ups &amp; motor replacement.</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>8 Yrs 4 Mos Remaining</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">Matures Sep 2033</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<button class="w-full py-2.5 px-2 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-bold flex items-center justify-center gap-1 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[16px]">hvac</span>
+<span>Request Maintenance</span>
+</button>
+<button class="w-full py-2.5 px-2 rounded-full bg-surface-container-lowest text-on-surface font-label-sm text-label-sm font-bold flex items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[16px]">qr_code_2</span>
+<span>Digital Pass</span>
+</button>
+</div>
+</div>
+</div>
+<!-- TAB 3 CONTENT: Past Completed Purchases -->
+<div class="flex flex-col gap-space-md" id="panel-past">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Delivered Appliances &amp; Gear</span>
+<button class="font-label-sm text-label-sm text-primary font-bold flex items-center gap-1" type="button">
+<span>Sort by Date</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+<!-- Past Item 1: LG Refrigerator -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">Delivered &amp; Verified</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">Sep 14, 2023</span>
+</div>
+<div class="flex gap-space-sm items-center">
+<div class="w-14 h-14 rounded-xl bg-surface-container-low p-1 shrink-0 flex items-center justify-center">
+<img class="w-full h-full object-contain" data-alt="LG 450 Liter Frost Free Double Door Refrigerator sleek titanium silver surface kitchen environment warm soft ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTmbdQC-HEaRCF5l_lSMflGRSSIWEURNvqz3-h5eazLsC8jaRJXpJtRf0fdN-lXF7TtNOtBSiXoWAaE4WqrQKcqK_Cq6NGY9Dv_xksZaQ5Fo_1qBXlcYWINrTw_cDb05wSuoV9gwfxpWUeX9LKAcev6mJj-lyKrNYuKF7SAsScpx2CbB5KCOgZwpZrVKhLxBCdwmsgexUGo-8VdQscQWfKkOv442GOapQSBXsBDraAndjM_Mn8iY_T"/>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<h4 class="font-label-lg text-label-lg text-on-surface truncate">LG 450L Frost-Free Double Door Fridge</h4>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Order #VM-ORD-881203</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-label-md text-label-md text-primary font-bold">$780.00</span>
+<span class="font-label-sm text-label-sm text-tertiary bg-surface-container-highest px-2 py-0.5 rounded-full">Scheme Applied -$400</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<button class="text-primary font-label-sm text-label-sm font-bold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+<span>Reorder Consumables</span>
+</button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-bold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">receipt</span>
+<span>Tax Invoice</span>
+</button>
+</div>
+</div>
+<!-- Past Item 2: Dyson V12 -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-outline text-[18px]">task_alt</span>
+<span class="font-label-sm text-label-sm text-outline font-bold">Completed</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline">Feb 02, 2023</span>
+</div>
+<div class="flex gap-space-sm items-center">
+<div class="w-14 h-14 rounded-xl bg-surface-container-low p-1 shrink-0 flex items-center justify-center">
+<img class="w-full h-full object-contain" data-alt="Dyson V12 Cordless stick vacuum cleaner with bright yellow and nickel accents resting against a minimalist slate gray studio wall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQYCw5SRTm_bpq3ZluxIDlDNpZY6bBL-6KmW-ENoGtr2AoMBTNVCp7YO8-qByDgF5-wSq07S1Q6eacKVHEpHcCVR0s2dPyBZsQqrFTJM0ucQVUAg80I3DQNNZ_wA8wJrq60gt7QdufIGIO12UiWigEi1E06r868A7NPdi5TwRunfpsNM-VWBkBwdtVqx6NICAC63P9tfB_dJe_M2UbFDS1jbdYlyphNajbiahVyeqmMRajy62QKqbu"/>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<h4 class="font-label-lg text-label-lg text-on-surface truncate">Dyson V12 Cordless Stick Vacuum</h4>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Order #VM-ORD-772194</span>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-label-md text-label-md text-primary font-bold">$549.00</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Paid in Full</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<button class="text-primary font-label-sm text-label-sm font-bold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">stars</span>
+<span>Write Spec Review</span>
+</button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-bold flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">receipt</span>
+<span>Tax Invoice</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Download Consolidated Folio / Tax Center Banner -->
+<div class="w-full bg-surface-container-highest rounded-xl p-space-md flex flex-col gap-space-sm relative overflow-hidden">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0">
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wider">Tax &amp; Scheme Ledger</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Annual Consolidated Folio</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Need all your appliance serial numbers, certified invoices, and scheme audit vouchers for annual taxes?</p>
+</div>
+</div>
+<div class="pt-1">
+<button class="w-full py-3 px-4 rounded-full bg-primary-container text-on-primary font-label-md text-label-md shadow-sm flex items-center justify-center gap-2 active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[18px]">download_for_offline</span>
+<span>Download Consolidated Folio (PDF)</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function switchTab(tabKey) {
+    const tabs = ['active', 'warranties', 'past', 'schemes'];
+    
+    tabs.forEach(key => {
+      const btn = document.getElementById(`tab-btn-${key}`);
+      const panel = document.getElementById(`panel-${key}`);
+      
+      if (key === tabKey) {
+        if (btn) {
+          btn.className = "shrink-0 px-4 py-2 rounded-full bg-primary-container text-on-primary font-label-md text-label-md shadow-sm transition-all flex items-center gap-1.5";
+        }
+        if (panel) {
+          panel.classList.remove('hidden');
+          panel.classList.add('flex');
+        }
+      } else {
+        if (btn) {
+          btn.className = "shrink-0 px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm transition-all flex items-center gap-1.5";
+        }
+        if (panel) {
+          // Keep all panels visible for continuous scrolling context if user taps past tab, or toggle visibility smoothly
+        }
+      }
+    });
+
+    if (tabKey === 'warranties') {
+      const warrantPanel = document.getElementById('panel-warranties');
+      if (warrantPanel) {
+        warrantPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else if (tabKey === 'past') {
+      const pastPanel = document.getElementById('panel-past');
+      if (pastPanel) {
+        pastPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else if (tabKey === 'active') {
+      const activePanel = document.getElementById('panel-active');
+      if (activePanel) {
+        activePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe pointer-events-none px-gutter" data-active-classes="text-primary-container bg-primary-fixed/50 font-label-md"><div class="pointer-events-auto mx-auto max-w-md mb-2 rounded-full bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_10px_25px_-4px_rgba(37,99,235,0.14),0_4px_10px_-2px_rgba(15,23,42,0.06)] px-space-xs py-1.5 flex items-center justify-around"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-home" href="#"><span class="material-symbols-outlined text-[22px]">storefront</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-schemes" href="#"><span class="material-symbols-outlined text-[22px]">auto_awesome</span><span class="font-label-sm text-label-sm mt-0.5">Schemes</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95 relative" data-path="volt-mart-cart" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">shopping_bag</span><span class="absolute -top-1 -right-2 px-1 min-w-[16px] h-4 rounded-full bg-secondary-container text-white text-[10px] font-bold leading-none flex items-center justify-center ring-2 ring-surface-container-lowest">3</span></div><span class="font-label-sm text-label-sm mt-0.5">Cart</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-payments" href="#"><span class="material-symbols-outlined text-[22px]">credit_card</span><span class="font-label-sm text-label-sm mt-0.5">Payments</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-account" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-label-sm mt-0.5">Account</span></a></div></nav></body></html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container-highest": "#dae2fd", "primary-fixed": "#dbe1ff", "tertiary-container": "#007d55", "outline-variant": "#c3c6d7", "on-secondary": "#ffffff", "error": "#ba1a1a", "surface-container": "#eaedff", "tertiary": "#006242", "on-primary-container": "#eeefff", "on-primary": "#ffffff", "surface-dim": "#d2d9f4", "surface-container-low": "#f2f3ff", "on-primary-fixed": "#00174b", "inverse-on-surface": "#eef0ff", "secondary-fixed": "#ffdbd1", "on-surface": "#131b2e", "secondary-fixed-dim": "#ffb5a0", "on-secondary-container": "#531100", "surface-container-high": "#e2e7ff", "error-container": "#ffdad6", "on-tertiary-container": "#bdffdb", "on-background": "#131b2e", "secondary": "#b02f00", "on-secondary-fixed": "#3b0900", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#003ea8", "on-secondary-fixed-variant": "#862200", "surface-container-lowest": "#ffffff", "on-error": "#ffffff", "primary-fixed-dim": "#b4c5ff", "surface-tint": "#0053db", "tertiary-fixed": "#6ffbbe", "on-tertiary-fixed": "#002113", "background": "#faf8ff", "surface-variant": "#dae2fd", "inverse-surface": "#283044", "outline": "#737686", "inverse-primary": "#b4c5ff", "tertiary-fixed-dim": "#4edea3", "surface": "#faf8ff", "secondary-container": "#fe5824", "surface-bright": "#faf8ff", "on-error-container": "#93000a", "primary-container": "#2563eb", "primary": "#004ac6", "on-tertiary-fixed-variant": "#005236", "on-surface-variant": "#434655" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "gutter": "1rem", "space-md": "1rem", "space-lg": "1.5rem", "margin": "1rem", "space-xl": "2rem", "space-xs": "0.25rem" }, fontFamily: { "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "body-md": ["Inter"], "body-sm": ["Inter"], "headline-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-xl": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-lg": ["Inter"] }, fontSize: { "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "label-sm": ["10px", { "lineHeight": "14px", "fontWeight": "800" }], "headline-xl-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "800" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "700" }], "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "700" }], "headline-xl": ["36px", { "lineHeight": "44px", "fontWeight": "800" }], "headline-lg-mobile": ["22px", { "lineHeight": "30px", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0 flex-1"><button aria-label="Back" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="Brand logo. - Primary color: #2563eb
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1WcPVjGbcR6ECILVStccczYUb407PlDcyar4VAX-t3XLyh_XKSwmA_adIvw8VylBHRvjajuggglM-lvNhK5DIpGBqPaCdbtwp_FXd8yordskjfprvNqmJ1x0Iz7SuqDuHDhskUT5haF0IorGu0aBYAXcbNfvn1MeTAU1N_kmuHdmVk0p-QEWoskgIUUdIkGJ29lTGONqZTa0v92MBCE_TfRDyXSOFS8a_SOq9pzqPN7hhXjB2xA7fdm9gE"/><div class="flex flex-col min-w-0 pl-1"><span class="font-label-md text-label-md text-on-surface truncate">REC-SETTLE-992817.pdf</span><div class="flex items-center gap-space-xs"><span class="font-body-sm text-body-sm text-on-surface-variant truncate">Settlement Viewer</span><span class="font-label-sm text-label-sm text-primary bg-primary-fixed/60 px-1.5 py-0.5 rounded-full shrink-0">Page 1 of 4</span></div></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Share document" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">share</span></button><button aria-label="Print document" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">print</span></button><button aria-label="Download document" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">download</span></button><img alt="Profile" class="w-8 h-8 rounded-full object-cover shrink-0 ml-1" src="https://lh3.googleusercontent.com/aida/AEtjO1VTo_XdDt-_vTMRNHUh0fXP1xkmKJf0yWQivqamMAUJhcioj0NBEllXoplhuMm0gEPA-IciW8K8F32IdoWLZ2rOQ8brX2ogVg-BzR6nXafK3YRyO38qPdRR3ory_G99g_VUo8E_h93_XQLTNIo-rqZAEOYy_wNYd7znVmV2VVJc8Dwx2ODtGuU5lT7G9vTN4ZjxIrkrCQrKsCN_hvAkUnTyh1uY1ZSdvR93UQbAy5jF2vSK3HoF6Hef8w"/></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Interactive Viewport Wrapper -->
+<div class="w-full px-gutter py-space-sm flex flex-col gap-space-sm items-center">
+<!-- Document Meta & Trust Verification Ribbon -->
+<div class="w-full max-w-xl flex flex-wrap items-center justify-between gap-space-xs bg-surface-container-low px-space-md py-space-xs rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+          DigiLocker Verified
+        </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-highest text-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+          Tamper-Proof Escrow
+        </span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">SHA-256 Validated</span>
+<span class="inline-block w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+</div>
+</div>
+<!-- Quick Floating View Toolbar (Page indicator & Instant Scale Control) -->
+<div class="w-full max-w-xl flex items-center justify-between px-space-md py-1.5 bg-surface-container-lowest/90 backdrop-blur-md rounded-full shadow-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">description</span>
+<span class="font-label-md text-label-md text-on-surface">Page 1 of 1</span>
+<span class="text-on-surface-variant font-body-sm text-body-sm">(Single Page Record)</span>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Zoom Out Document" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:bg-surface-container-high transition-colors" id="btn-zoom-out" type="button">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<button aria-label="Reset Zoom" class="px-2 py-0.5 rounded-full text-on-surface font-label-sm text-label-sm hover:bg-surface-container transition-colors" id="btn-zoom-reset" type="button">
+<span id="zoom-indicator">100%</span>
+</button>
+<button aria-label="Zoom In Document" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:bg-surface-container-high transition-colors" id="btn-zoom-in" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+<!-- The Authentic Digital PDF Sheet Viewport -->
+<div class="w-full max-w-xl overflow-x-auto pb-4 transition-transform duration-200 ease-out origin-top" id="pdf-viewport">
+<div class="w-full bg-surface-container-lowest text-on-surface rounded-xl p-space-md sm:p-space-lg shadow-[0_12px_36px_rgba(0,0,0,0.08)] relative overflow-hidden flex flex-col gap-space-md select-none">
+<!-- Faint Bank Security Watermark Background Pattern -->
+<div class="absolute inset-0 pointer-events-none opacity-[0.035] flex items-center justify-center rotate-[-32deg]">
+<span class="font-headline-xl text-[64px] tracking-widest text-on-surface uppercase font-black whitespace-nowrap">
+            ESCROW SETTLED • NON-NEGOTIABLE
+          </span>
+</div>
+<!-- Top Header & Seal -->
+<div class="relative z-10 flex flex-col gap-space-sm pb-space-sm bg-surface-container-low/40 p-space-sm rounded-lg">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-primary tracking-tight">VoltMart</span>
+<span class="bg-primary/10 text-primary font-label-sm text-label-sm px-1.5 py-0.5 rounded">Financial Services</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">VoltMart Retail &amp; Financial Services Ltd.</span>
+<span class="font-label-sm text-label-sm text-outline">CIN: L65990MH2018PLC309112 • Regulatory License #AX-891</span>
+</div>
+<!-- Official Seal Emblem -->
+<div class="shrink-0 flex flex-col items-center justify-center bg-tertiary/10 p-2 rounded-xl text-tertiary">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-sm text-[8px] uppercase tracking-tighter font-extrabold text-center leading-none mt-1">ESCROW CLEARED<br/>&amp; AUDITED</span>
+</div>
+</div>
+<!-- Document Title Banner -->
+<div class="mt-1 pt-2 bg-surface-container-lowest p- space-sm px-3 py-2 rounded-lg shadow-sm flex flex-col">
+<h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight uppercase">
+              Official Escrow Settlement Certificate &amp; Discharge Voucher
+            </h1>
+<div class="flex flex-wrap items-center justify-between gap-1 mt-1 text-on-surface-variant">
+<span class="font-label-sm text-label-sm">Ref: <strong class="text-on-surface">#REC-SETTLE-992817</strong></span>
+<span class="font-body-sm text-body-sm">Issue Date: Nov 07, 2024, 02:14 PM UTC</span>
+</div>
+</div>
+</div>
+<!-- DigiLocker QR Verification Strip -->
+<div class="relative z-10 bg-surface-container-high/50 p-space-sm rounded-lg flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<!-- Simulated High-Precision QR Block -->
+<div class="w-14 h-14 bg-surface-container-lowest p-1 rounded-md shrink-0 flex items-center justify-center shadow-sm">
+<svg aria-label="Cryptographic Verification QR Code" class="w-full h-full text-on-surface fill-current" viewbox="0 0 24 24">
+<path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 2h2v4h-2v-4zm-4-2h4v2h-4v-2zm4-2h4v2h-4v-2zm-2 6h4v2h-4v-2zm-4 0h2v2h-2v-2zm0-4h2v2h-2v-2zm-6-4h2v2H8v-2zm2 2h2v2h-2v-2zm-4 4h2v2H6v-2zm2-2h2v2H8v-2zm4-4h2v2h-2v-2z"></path>
+</svg>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface">Cryptographic Signature Validated</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                Scan via authorized scanner or DigiLocker Public Registry app to audit on-chain cryptographic settlement digest.
+              </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-tertiary shrink-0 text-[24px]">qr_code_scanner</span>
+</div>
+<!-- Section 1: Beneficiary & Folio Information -->
+<div class="relative z-10 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 pb-1">
+<span class="material-symbols-outlined text-primary text-[18px]">person</span>
+<span class="font-headline-sm text-[15px] text-on-surface">1. Beneficiary &amp; Folio Registration Details</span>
+</div>
+<div class="grid grid-cols-2 gap-2 bg-surface-container-low/60 p-space-sm rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Folio Number</span>
+<span class="font-label-md text-label-md text-on-surface">#VF-2024-8842-AC</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Scheme Title</span>
+<span class="font-body-md text-body-md text-on-surface truncate">VoltFlex 10+1 Smart Recurring Savings</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Customer Name</span>
+<span class="font-label-md text-label-md text-on-surface">Alexander Chen</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Linked Identity</span>
+<span class="font-body-md text-body-md text-on-surface">Aadhaar e-KYC (•••• 4829)</span>
+</div>
+<div class="flex flex-col col-span-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Servicing Store Unit</span>
+<span class="font-body-md text-body-md text-on-surface">Downtown Flagship Hub (#HUB-042)</span>
+</div>
+</div>
+</div>
+<!-- Section 2: Settlement Financial Ledger Table -->
+<div class="relative z-10 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 pb-1">
+<span class="material-symbols-outlined text-primary text-[18px]">account_balance_wallet</span>
+<span class="font-headline-sm text-[15px] text-on-surface">2. Financial Settlement Audit Ledger</span>
+</div>
+<div class="flex flex-col bg-surface-container-low/70 rounded-lg overflow-hidden">
+<!-- Row 1 -->
+<div class="flex items-center justify-between p-2.5">
+<div class="flex flex-col pr-2">
+<span class="font-body-md text-body-md text-on-surface">Total Deposited Principal</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">6 Cumulative Cycles @ $50.00 / month</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-right shrink-0">$300.00</span>
+</div>
+<!-- Row 2 -->
+<div class="flex items-center justify-between p-2.5 bg-surface-container-lowest/50">
+<div class="flex flex-col pr-2">
+<span class="font-body-md text-body-md text-on-surface">Premature Exit Deduction</span>
+<span class="font-body-sm text-body-sm text-tertiary">Consumer Protection Waiver Applied</span>
+</div>
+<span class="font-label-md text-label-md text-tertiary text-right shrink-0">$0.00</span>
+</div>
+<!-- Row 3 -->
+<div class="flex items-center justify-between p-2.5">
+<div class="flex flex-col pr-2">
+<span class="font-body-md text-body-md text-on-surface">Trustee &amp; Escrow Admin Fee</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Complimentary Customer Grace Exit</span>
+</div>
+<span class="font-label-md text-label-md text-tertiary text-right shrink-0">$0.00</span>
+</div>
+<!-- Row 4: Net Highlighted Settlement -->
+<div class="flex items-center justify-between p-3 bg-primary-fixed/40">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-primary-fixed">Net Settlement Released</span>
+<span class="font-label-sm text-label-sm text-on-primary-fixed-variant">Discharged to Linked Bank Account</span>
+</div>
+<div class="text-right">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">$300.00 <span class="font-label-md text-label-md text-on-surface-variant">USD</span></span>
+</div>
+</div>
+</div>
+<!-- Policy Note Callout -->
+<div class="flex items-start gap-2 p-2 rounded-lg bg-surface-container text-on-surface-variant text-body-sm font-body-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary mt-0.5 shrink-0">info</span>
+<span>
+<strong>Note on Bonus Incentive:</strong> 11th Month Store Credit Bonus ($50.00) forfeited per Section 4.2 of Scheme Agreement due to premature closure prior to cycle 10 maturity.
+            </span>
+</div>
+</div>
+<!-- Section 3: Bank Credit Wire Confirmation -->
+<div class="relative z-10 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 pb-1">
+<span class="material-symbols-outlined text-primary text-[18px]">send_money</span>
+<span class="font-headline-sm text-[15px] text-on-surface">3. Electronic Bank Wire Clearing Certificate</span>
+</div>
+<div class="bg-surface-container-low/60 p-space-sm rounded-lg flex flex-col gap-2">
+<div class="grid grid-cols-2 gap-2">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Target Account</span>
+<span class="font-label-md text-label-md text-on-surface">Chase Premier Savings (•••• 9241)</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Clearing Network</span>
+<span class="font-body-md text-body-md text-on-surface">FedNow / Instant Wire</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Bank UTR Reference</span>
+<span class="font-label-md text-label-md text-primary font-mono truncate">CMS992817402891CH</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Clearing Timestamp</span>
+<span class="font-body-md text-body-md text-on-surface">07-NOV-2024 14:14:08 EST</span>
+</div>
+</div>
+<div class="pt-1.5 flex items-center justify-between gap-1 text-on-surface-variant font-body-sm text-body-sm">
+<span>Independent Trustee:</span>
+<span class="font-label-md text-label-md text-on-surface text-right">Axis Trustee Services Limited (#ESC-2024-8842-AXS)</span>
+</div>
+</div>
+</div>
+<!-- Section 4: Legal & Regulatory Discharge Signature -->
+<div class="relative z-10 flex flex-col gap-2 pt-2">
+<!-- Mandate Revocation Pill -->
+<div class="p-2.5 rounded-lg bg-surface-container-high/60 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">AutoPay Mandate Revocation Acknowledged</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                NPCI / NACH e-Mandate #CH-99410 cancelled permanently. No subsequent recurring charges authorized.
+              </span>
+</div>
+</div>
+<!-- Signatures & Official Cryptographic Seal -->
+<div class="flex items-end justify-between gap- space-sm pt-4">
+<div class="flex flex-col gap-1 max-w-[200px]">
+<!-- Digital Signature Simulation -->
+<div class="h-9 w-32 flex items-center justify-start text-primary opacity-85 select-none">
+<svg class="w-full h-full stroke-current fill-none stroke-[2]" viewbox="0 0 160 40">
+<path d="M5 25 C 25 10, 35 35, 55 18 C 75 5, 80 30, 105 14 C 120 5, 135 28, 150 12 M45 28 C 65 32, 95 30, 140 26" stroke-linecap="round"></path>
+</svg>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Director of Escrow Operations</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">VoltMart Retail Financial Services Ltd.</span>
+<span class="font-label-sm text-label-sm text-outline">Digitally Signed on 2024-11-07 14:14:12 UTC</span>
+</div>
+<!-- Official Stamp Graphic Badge -->
+<div class="flex flex-col items-center justify-center p-2 rounded-lg bg-tertiary-container/30 text-tertiary text-center">
+<span class="material-symbols-outlined text-[26px]">verified</span>
+<span class="font-label-sm text-[9px] uppercase font-bold tracking-tight">AUDITED &amp; SETTLED</span>
+<span class="font-label-sm text-[8px] text-tertiary">AXIS TRUSTEE REGISTRY</span>
+</div>
+</div>
+</div>
+<!-- Security Footer Hash -->
+<div class="relative z-10 pt-2 flex flex-col items-center justify-center text-center gap-0.5">
+<span class="font-label-sm text-[9px] text-outline font-mono uppercase tracking-wider">
+            Doc Hash: e8f50c7bb09c4882194f1c97f1fbc7308cf2b826f7c5e7b233a8258
+          </span>
+<span class="font-body-sm text-[10px] text-on-surface-variant">
+            This voucher represents a complete and unconditional discharge of claims under Folio #VF-2024-8842-AC.
+          </span>
+</div>
+</div>
+</div>
+<!-- Floating Document Action Hub -->
+<div class="w-full max-w-xl flex flex-col gap-space-sm pt-2">
+<!-- Quick Primary Actions -->
+<div class="flex items-center gap-space-sm">
+<button class="flex-1 h-12 rounded-full bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-[0_6px_16px_rgba(37,99,235,0.3)] active:scale-[0.98] transition-transform" id="btn-download" type="button">
+<span class="material-symbols-outlined text-[20px]">download</span>
+          Download PDF (340 KB)
+        </button>
+<button aria-label="Print Document" class="h-12 w-12 rounded-full bg-surface-container-high text-on-surface font-label-md flex items-center justify-center hover:bg-surface-container-highest active:scale-95 transition-all" id="btn-print" type="button">
+<span class="material-symbols-outlined text-[20px]">print</span>
+</button>
+<button aria-label="Share Receipt" class="h-12 w-12 rounded-full bg-surface-container-high text-on-surface font-label-md flex items-center justify-center hover:bg-surface-container-highest active:scale-95 transition-all" id="btn-share" type="button">
+<span class="material-symbols-outlined text-[20px]">share</span>
+</button>
+</div>
+<!-- Secondary Cloud Storage Quick-Save Row -->
+<div class="grid grid-cols-2 gap-space-sm">
+<button class="h-10 px-space-md rounded-xl bg-surface-container text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center justify-center gap-2 active:bg-surface-container-high transition-colors" id="btn-gdrive" type="button">
+<span class="material-symbols-outlined text-primary text-[18px]">add_to_drive</span>
+          Save to Google Drive
+        </button>
+<button class="h-10 px-space-md rounded-xl bg-surface-container text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center justify-center gap-2 active:bg-surface-container-high transition-colors" id="btn-files" type="button">
+<span class="material-symbols-outlined text-primary text-[18px]">folder_shared</span>
+          Export to Apple Files
+        </button>
+</div>
+<!-- Instant Toast Feedback Container -->
+<div class="hidden transition-all duration-300 w-full p-2.5 rounded-lg bg-inverse-surface text-inverse-on-surface flex items-center justify-between gap-2 shadow-lg" id="toast-notification">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md" id="toast-text">Action successful</span>
+</div>
+<button class="text-inverse-on-surface/80 hover:text-inverse-on-surface" onclick="document.getElementById('toast-notification').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function initPDFViewer() {
+    let zoomLevel = 100;
+    const viewport = document.getElementById('pdf-viewport');
+    const zoomText = document.getElementById('zoom-indicator');
+    const btnIn = document.getElementById('btn-zoom-in');
+    const btnOut = document.getElementById('btn-zoom-out');
+    const btnReset = document.getElementById('btn-zoom-reset');
+    const toast = document.getElementById('toast-notification');
+    const toastText = document.getElementById('toast-text');
+
+    function showToast(msg) {
+      if (!toast || !toastText) return;
+      toastText.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    function applyZoom() {
+      if (!viewport || !zoomText) return;
+      zoomText.textContent = zoomLevel + '%';
+      if (zoomLevel === 100) {
+        viewport.style.transform = 'none';
+      } else {
+        viewport.style.transform = 'scale(' + (zoomLevel / 100) + ')';
+      }
+    }
+
+    if (btnIn) {
+      btnIn.addEventListener('click', () => {
+        if (zoomLevel < 140) {
+          zoomLevel += 10;
+          applyZoom();
+        }
+      });
+    }
+
+    if (btnOut) {
+      btnOut.addEventListener('click', () => {
+        if (zoomLevel > 80) {
+          zoomLevel -= 10;
+          applyZoom();
+        }
+      });
+    }
+
+    if (btnReset) {
+      btnReset.addEventListener('click', () => {
+        zoomLevel = 100;
+        applyZoom();
+      });
+    }
+
+    // Action handlers for simulated mobile OS interactions
+    const btnDownload = document.getElementById('btn-download');
+    if (btnDownload) {
+      btnDownload.addEventListener('click', () => {
+        showToast('Settlement voucher downloaded (340 KB) to device');
+      });
+    }
+
+    const btnPrint = document.getElementById('btn-print');
+    if (btnPrint) {
+      btnPrint.addEventListener('click', () => {
+        showToast('Connecting to AirPrint spooler...');
+      });
+    }
+
+    const btnShare = document.getElementById('btn-share');
+    if (btnShare) {
+      btnShare.addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: 'Settlement Receipt #REC-SETTLE-992817',
+            text: 'DigiLocker Escrow Discharge Voucher for VoltFlex Folio #VF-2024-8842-AC',
+            url: window.location.href,
+          }).catch(() => {
+            showToast('Ready for secure sharing');
+          });
+        } else {
+          showToast('Share link copied to clipboard');
+        }
+      });
+    }
+
+    const btnGdrive = document.getElementById('btn-gdrive');
+    if (btnGdrive) {
+      btnGdrive.addEventListener('click', () => {
+        showToast('Saved to Google Drive / VoltMart Financials');
+      });
+    }
+
+    const btnFiles = document.getElementById('btn-files');
+    if (btnFiles) {
+      btnFiles.addEventListener('click', () => {
+        showToast('Saved to On My iPhone > Downloads');
+      });
+    }
+  })();
+</script></main><aside class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-8px_30px_rgba(15,23,42,0.06)]"><div class="h-14 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-xs"><button aria-label="Previous page" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">chevron_left</span></button><span class="font-label-md text-label-md text-on-surface min-w-[56px] text-center">1 / 4</span><button aria-label="Next page" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button></div><div class="flex items-center gap-space-xs"><button aria-label="Zoom out" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">zoom_out</span></button><span class="font-label-md text-label-md text-on-surface-variant px-1">100%</span><button aria-label="Zoom in" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">zoom_in</span></button><button aria-label="Fit to width" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors ml-1" type="button"><span class="material-symbols-outlined text-[20px]">fit_screen</span></button></div></div></aside></body></html>

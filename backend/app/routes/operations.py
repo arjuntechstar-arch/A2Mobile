@@ -1,3 +1,6 @@
+import base64
+import binascii
+from pathlib import Path
 from uuid import uuid4
 from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -290,8 +293,47 @@ def resources(
         .skip(skip)
         .limit(limit)
     )
+    items = [view(x) for x in cursor]
+    customer_resources = {
+        "enrollments",
+        "installments",
+        "kyc",
+        "payments",
+        "orders",
+        "overdue",
+        "completed",
+        "redemptions",
+        "refunds",
+        "support",
+        "notifications",
+    }
+    customer_ids = (
+        {item["user_id"] for item in items if item.get("user_id")}
+        if resource in customer_resources
+        else set()
+    )
+    customer_names = (
+        {
+            str(customer["_id"]): customer.get("name")
+            or customer.get("email")
+            or "Customer"
+            for customer in db(request).users.find(
+                {"_id": {"$in": [identifier(value) for value in customer_ids]}},
+                {"name": 1, "email": 1},
+            )
+        }
+        if customer_ids
+        else {}
+    )
+    for item in items:
+        if resource in customer_resources and item.get("user_id"):
+            item["customer_name"] = customer_names.get(
+                str(item["user_id"]), "Unavailable customer"
+            )
+        if isinstance(item.get("terms"), dict) and item["terms"].get("name"):
+            item["scheme_name"] = item["terms"]["name"]
     return {
-        "items": [view(x) for x in cursor],
+        "items": items,
         "total": db(request)[collection].count_documents(query),
         "skip": skip,
         "limit": limit,
@@ -451,6 +493,109 @@ def create_store(
     return view(item)
 
 
+class BannerSlide(BaseModel):
+    title: str = Field(default="", max_length=120)
+    body: str = Field(default="", max_length=500)
+    # A 5 MB upload expands to about 7 MB when encoded as a data URL.
+    image: str = Field(default="", max_length=4 * ((5 * 1024 * 1024 + 2) // 3) + 32)
+
+
+class BannerInput(BaseModel):
+    mode: Literal["content", "images"] = "content"
+    title: str = Field(default="", max_length=120)
+    body: str = Field(default="", max_length=500)
+    slides: list[BannerSlide] = Field(default_factory=list, max_length=8)
+    active: bool = True
+
+
+def _save_banner_image(data_url: str, request: Request) -> str:
+    prefix, separator, encoded = data_url.partition(",")
+    allowed = {
+        "data:image/jpeg;base64": ".jpg",
+        "data:image/png;base64": ".png",
+        "data:image/webp;base64": ".webp",
+    }
+    if not separator or prefix not in allowed:
+        raise HTTPException(400, "Use a PNG, JPEG, or WebP banner image")
+    try:
+        binary = base64.b64decode(encoded, validate=True)
+    except (ValueError, binascii.Error):
+        raise HTTPException(400, "Banner image is invalid")
+    if not binary or len(binary) > 5 * 1024 * 1024:
+        raise HTTPException(400, "Banner images must be smaller than 5 MB")
+    valid_image = (
+        (prefix == "data:image/jpeg;base64" and binary.startswith(b"\xff\xd8\xff"))
+        or (
+            prefix == "data:image/png;base64"
+            and binary.startswith(b"\x89PNG\r\n\x1a\n")
+        )
+        or (
+            prefix == "data:image/webp;base64"
+            and binary.startswith(b"RIFF")
+            and binary[8:12] == b"WEBP"
+        )
+    )
+    if not valid_image:
+        raise HTTPException(400, "Banner image data is invalid")
+    directory = Path(request.app.state.settings.upload_directory) / "banners"
+    directory.mkdir(parents=True, exist_ok=True)
+    filename = f"{uuid4()}{allowed[prefix]}"
+    (directory / filename).write_bytes(binary)
+    return f"/uploads/banners/{filename}"
+
+
+@router.put("/admin/banner")
+def update_banner(
+    payload: BannerInput,
+    request: Request,
+    user=Depends(require_permission("settings:manage")),
+):
+    if payload.mode == "content" and not (
+        payload.title.strip() or payload.body.strip()
+    ):
+        raise HTTPException(422, "Banner content needs a title or message")
+    slides = []
+    if payload.mode == "images":
+        if not payload.slides:
+            raise HTTPException(422, "Add at least one banner image")
+        for slide in payload.slides:
+            image = (
+                _save_banner_image(slide.image, request)
+                if slide.image.startswith("data:image/")
+                else slide.image
+            )
+            if not image.startswith("/uploads/banners/"):
+                raise HTTPException(400, "Banner image is invalid")
+            slides.append(
+                {
+                    "title": slide.title.strip(),
+                    "body": slide.body.strip(),
+                    "image": image,
+                }
+            )
+    item = {
+        "_id": "banner",
+        "mode": payload.mode,
+        "title": payload.title.strip(),
+        "body": payload.body.strip(),
+        "slides": slides,
+        "active": payload.active,
+        "updated_at": utcnow(),
+    }
+    db(request).settings.replace_one({"_id": "banner"}, item, upsert=True)
+    return view(item)
+
+
+@router.get("/banner")
+def public_banner(request: Request):
+    item = db(request).settings.find_one({"_id": "banner", "active": True})
+    return (
+        view(item)
+        if item
+        else {"mode": "content", "title": "", "body": "", "slides": []}
+    )
+
+
 class ContentInput(BaseModel):
     title: str = Field(min_length=2, max_length=200)
     body: str = Field(min_length=1, max_length=20000)
@@ -459,7 +604,7 @@ class ContentInput(BaseModel):
 
 @router.put("/admin/content/{key}")
 def content(
-    key: Literal["faq", "terms", "privacy", "contact", "banner"],
+    key: Literal["faq", "terms", "privacy", "contact"],
     payload: ContentInput,
     request: Request,
     user=Depends(require_permission("settings:manage")),
@@ -474,7 +619,7 @@ def content(
 
 @router.get("/content/{key}")
 def public_content(
-    key: Literal["faq", "terms", "privacy", "contact", "banner"], request: Request
+    key: Literal["faq", "terms", "privacy", "contact"], request: Request
 ):
     item = db(request).settings.find_one({"_id": key, "active": True})
     if not item:

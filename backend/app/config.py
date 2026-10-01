@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     email_smtp_port: int = 587
     email_smtp_username: str = ""
     email_smtp_password: str = ""
+    upload_directory: str = "uploads"
     email_from: str = ""
     public_app_url: str = "http://localhost:5174"
     cashfree_client_id: str = ""

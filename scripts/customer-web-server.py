@@ -1,4 +1,5 @@
 """Local POC server: built customer app and explicitly allowed customer API routes."""
+import argparse
 import re
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -8,6 +9,7 @@ import httpx
 WEB_ROOT = Path(__file__).resolve().parents[1] / 'mobile' / 'build' / 'web'
 RULES = {
     'GET': [r'/api/app-config', r'/api/auth/me', r'/api/me', r'/api/dashboard',
+            r'/api/banner', r'/uploads/banners/[0-9a-f-]+\.(?:png|jpg|webp)',
             r'/api/schemes(?:/[^/]+)?', r'/api/enrollments(?:/[^/]+(?:/installments)?)?',
             r'/api/payments(?:/[^/]+/receipt)?', r'/api/notifications',
             r'/api/content/[^/]+', r'/api/support/tickets', r'/api/kyc/status',
@@ -65,7 +67,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         path = urlsplit(self.path).path
-        if path.startswith('/api/'):
+        if path.startswith(('/api/', '/uploads/')):
             self.proxy()
         elif path in ('/docs', '/redoc', '/openapi.json'):
             self.send_error(404)
@@ -78,6 +80,10 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Serve the locally built customer web app.')
+    parser.add_argument('--host', default='127.0.0.1', choices=('127.0.0.1', '0.0.0.0'))
+    parser.add_argument('--port', default=5174, type=int)
+    args = parser.parse_args()
     if not (WEB_ROOT / 'index.html').is_file():
         raise SystemExit('Build the Flutter web app with API_BASE_URL=/api first.')
-    ThreadingHTTPServer(('127.0.0.1', 5174), Handler).serve_forever()
+    ThreadingHTTPServer((args.host, args.port), Handler).serve_forever()

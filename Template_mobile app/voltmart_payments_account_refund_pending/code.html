@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-low": "#f2f3ff", "surface-container-lowest": "#ffffff", "on-primary-container": "#eeefff", "secondary-fixed": "#ffdbd1", "primary-container": "#2563eb", "on-surface-variant": "#434655", "surface-tint": "#0053db", "on-tertiary": "#ffffff", "tertiary-fixed": "#6ffbbe", "on-error": "#ffffff", "inverse-surface": "#283044", "error": "#ba1a1a", "on-background": "#131b2e", "on-tertiary-container": "#bdffdb", "outline-variant": "#c3c6d7", "on-primary": "#ffffff", "error-container": "#ffdad6", "surface-variant": "#dae2fd", "primary": "#004ac6", "secondary-container": "#fe5824", "tertiary": "#006242", "on-tertiary-fixed-variant": "#005236", "secondary": "#b02f00", "tertiary-fixed-dim": "#4edea3", "secondary-fixed-dim": "#ffb5a0", "primary-fixed": "#dbe1ff", "primary-fixed-dim": "#b4c5ff", "inverse-primary": "#b4c5ff", "surface-bright": "#faf8ff", "outline": "#737686", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#003ea8", "background": "#faf8ff", "surface-dim": "#d2d9f4", "on-primary-fixed": "#00174b", "surface-container": "#eaedff", "on-secondary-container": "#531100", "on-surface": "#131b2e", "surface-container-high": "#e2e7ff", "on-error-container": "#93000a", "on-secondary-fixed": "#3b0900", "surface": "#faf8ff", "inverse-on-surface": "#eef0ff", "on-secondary-fixed-variant": "#862200", "tertiary-container": "#007d55", "surface-container-highest": "#dae2fd", "on-tertiary-fixed": "#002113" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xs": "0.25rem", "gutter": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-xl": "2rem", "space-md": "1rem", "margin": "1rem" }, "fontFamily": { "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Inter"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-md": ["Inter"], "label-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "headline-xl": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, "fontSize": { "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "700"}], "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "700"}], "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "700"}], "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "800"}], "headline-lg-mobile": ["22px", {"lineHeight": "30px", "fontWeight": "700"}], "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-xl": ["36px", {"lineHeight": "44px", "fontWeight": "800"}], "headline-xl-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}], "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;min-height:100%;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="VoltMart Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1Uldbor9CrrNUe81244s_Xec7H0VxIoaLLApwGSx4bMZdWojJhD2KCxR6T4ZMPZO7z36PnzKd_mnwBrqFlL9RFJdVCREqB_hLyRyraVEgl-gPabNSj3LJ-VY8o29ITSWCu9pu6no5cAJIdLJQVVUgU_a1mjOdrjXISUvdYw1aJ4jVd2zHY-b-H4Uu5P6Yrpti1h7oCgnP0vRlCkbz7XbHfStf5_VCHX2aXy9j2XYxJiRz-f4ynBWLxiWA"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">VoltMart</span><span class="text-xs text-on-surface-variant font-body-sm text-body-sm leading-none">•</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Payments</span></div><button class="flex items-center gap-1 text-left min-h-[24px] focus:outline-none"><span class="font-label-md text-label-md text-on-surface truncate">Downtown Flagship Hub</span><span class="material-symbols-outlined text-[16px] text-primary shrink-0">arrow_drop_down</span></button></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Notifications" class="w-11 h-11 relative flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary active:bg-surface-container-high transition-colors focus:outline-none"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-secondary-container ring-2 ring-surface"></span></button><button aria-label="Customer Account" class="w-11 h-11 flex items-center justify-center rounded-full p-0.5 focus:outline-none active:scale-95 transition-transform"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwuTddeus_W4dNvVH5Ncv3NblDJ52Cqa9aBSEdyS9OH-_FZCSNfyHOBlVOKodxEBb8zNmVsV24siXXyMideH8hvFAQ27nOMPjRJheuADpc05YB4D1UzBC9xN95MVK9iaGSlkE0SymVnAX0MsUqEUttsX3CEnq6MH-0nQRMjUPBKHIZXyyKHf_MWUGwW4-dCFquC3sGTeMs76yIqzVCXMOCMmLYtq5o5pHIzrFQUZo0p7TzbVAOONPA"/></button></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 bg-surface min-h-screen"><div class="flex flex-col w-full px-gutter space-y-space-md">
+<!-- Subheader & Profile Verification Context -->
+<div class="flex flex-col space-y-space-xs mt-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">Billing &amp; Mandates</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+          Verified KYC
+        </span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Folio #VF-8842-AC</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+      Alexander Chen • Priority Smart Saver Hub
+    </p>
+</div>
+<!-- Segmented Filter Tabs -->
+<div class="flex p-1 rounded-full bg-surface-container-low shadow-sm">
+<button class="flex-1 py-2 px-3 rounded-full text-center font-label-md text-label-md text-on-surface-variant transition-all active:scale-95" id="tab-mandates" onclick="switchTab('mandates')">
+      Active Mandates (0)
+    </button>
+<button class="flex-1 py-2 px-3 rounded-full text-center font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1.5" id="tab-refunds" onclick="switchTab('refunds')">
+<span>Refunds &amp; Ledger</span>
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
+</button>
+</div>
+<!-- Primary Prominent Refund Status Card -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-md space-y-space-md relative overflow-hidden">
+<!-- Ambient Accent Glow -->
+<div class="absolute -top-16 -right-16 w-36 h-36 rounded-full bg-secondary-fixed/40 blur-2xl pointer-events-none"></div>
+<!-- Header Badge -->
+<div class="flex items-center justify-between relative z-10">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] animate-spin" style="animation-duration: 4s;">schedule</span>
+        REFUND IN TRANSIT • 24–48 HRS
+      </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Premature Exit</span>
+</div>
+<!-- Refund Sum & Beneficiary Details -->
+<div class="relative z-10 space-y-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant">Net Principal Refund</span>
+<div class="flex items-baseline gap-2">
+<h2 class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface tracking-tight font-extrabold">$300.00</h2>
+<span class="font-label-sm text-label-sm text-tertiary font-bold px-2 py-0.5 rounded-full bg-tertiary-fixed/40">100% Principal Intact</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">account_balance</span>
+        Dispatched to <span class="font-label-md text-label-md text-on-surface">Chase Premier Savings •••• 9241</span>
+</p>
+<div class="text-on-surface-variant font-body-sm text-body-sm pt-0.5">
+        VoltFlex 10+1 Club Scheme (ID: #VF-2024-8842-AC)
+      </div>
+</div>
+<!-- Visual Escrow Transit Progress Pill -->
+<div class="p-3 rounded-lg bg-surface-container-low space-y-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-tertiary flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+          Escrow Released
+        </span>
+<span class="text-on-surface-variant">Bank Credit Pending</span>
+</div>
+<!-- Mini Progress bar -->
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-700" style="width: 68%;"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-right">
+        Estimated clearance: <span class="font-label-md text-label-md text-on-surface">Tomorrow, 5:00 PM</span>
+</p>
+</div>
+<!-- Actions Area inside Card -->
+<div class="flex flex-col gap-2 pt-1">
+<button class="w-full py-3 px-4 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm flex items-center justify-center gap-2 active:scale-95 transition-transform" onclick="handleTrackRefund()">
+<span>Track Live Clearing Status</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="w-full py-2.5 px-4 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center justify-center gap-2 active:scale-95 transition-transform" onclick="downloadReceipt()">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span>Download Cancellation Notice (PDF)</span>
+</button>
+</div>
+</div>
+<!-- In-Store Delight Conversion Banner -->
+<div class="rounded-xl bg-gradient-to-br from-surface-container-highest via-surface-container to-surface-container-low p-space-md shadow-sm space-y-3 relative overflow-hidden">
+<div class="flex items-start justify-between">
+<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+        Instant Store Swap
+      </div>
+<span class="font-headline-sm text-headline-sm text-secondary font-extrabold">+$15 Extra</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Skip the bank delay?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+        Convert your <span class="font-label-md text-label-md text-on-surface">$300.00</span> pending refund into an immediate in-store voucher for Downtown Flagship Hub and collect an instant <span class="font-label-md text-label-md text-secondary">+5% shopping bonus ($315.00 total)</span>.
+      </p>
+</div>
+<button class="w-full py-2.5 px-4 rounded-full bg-secondary text-on-secondary font-label-lg text-label-lg shadow-sm flex items-center justify-center gap-1.5 active:scale-95 transition-transform" onclick="claimVoucher()">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span>Claim $315 Store Voucher Now</span>
+</button>
+</div>
+<!-- AutoPay Mandate Status Card -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm space-y-3">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">sync_disabled</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">AutoPay Mandate</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Chase e-Mandate #CH-99410</p>
+</div>
+</div>
+<!-- Inactive switch indicator -->
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold">
+        Revoked
+      </div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+      Electronic debit authorization was permanently revoked on <span class="font-label-md text-label-md text-on-surface">Nov 6, 2024</span>. No recurring deductions of $50/mo will be executed.
+    </p>
+<div class="flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-tertiary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-md text-label-md">0 active debit authorizations on this wallet</span>
+</div>
+</div>
+<!-- Schedule / Ledger Section -->
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between px-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Ledger &amp; Installments</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">6 of 10 Cycles Completed</span>
+</div>
+<div class="rounded-xl bg-surface-container-lowest shadow-sm divide-y-0 overflow-hidden">
+<!-- Item: Pending Refund Today -->
+<div class="p-space-md flex items-start justify-between gap-space-sm bg-surface-container-low/60">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[20px]">currency_exchange</span>
+</div>
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface">Premature Withdrawal Refund</span>
+<span class="px-1.5 py-0.2 rounded bg-secondary-fixed text-secondary font-label-sm text-label-sm">Processing</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Today, Nov 6, 2024 • Tier 2 100% Capital Safety</p>
+<span class="font-body-sm text-body-sm text-tertiary font-medium block">$0.00 exit penalty applied</span>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="font-headline-sm text-headline-sm text-secondary font-bold">+$300.00</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant">ACH Credit</span>
+</div>
+</div>
+<!-- Item: Cancelled Upcoming Installment -->
+<div class="p-space-md flex items-center justify-between gap-space-sm opacity-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-outline shrink-0">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</div>
+<div>
+<span class="font-label-md text-label-md text-on-surface line-through">Cycle #7 Auto-Debit</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Scheduled: Nov 25, 2024</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-on-surface line-through">$50.00</span>
+<span class="block font-label-sm text-label-sm text-error font-bold">Voided</span>
+</div>
+</div>
+<!-- Item: Past Paid Installment 6 -->
+<div class="p-space-md flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div>
+<span class="font-label-md text-label-md text-on-surface">Installment #6</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Oct 25, 2024 • Chase UPI AutoPay</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">$50.00</span>
+<span class="block font-label-sm text-label-sm text-tertiary font-bold">Settled</span>
+</div>
+</div>
+<!-- Item: Past Paid Installment 5 -->
+<div class="p-space-md flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div>
+<span class="font-label-md text-label-md text-on-surface">Installment #5</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sep 25, 2024 • Chase UPI AutoPay</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">$50.00</span>
+<span class="block font-label-sm text-label-sm text-tertiary font-bold">Settled</span>
+</div>
+</div>
+<!-- Item: Past Paid Installment 4 -->
+<div class="p-space-md flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div>
+<span class="font-label-md text-label-md text-on-surface">Installment #4</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Aug 25, 2024 • Chase UPI AutoPay</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">$50.00</span>
+<span class="block font-label-sm text-label-sm text-tertiary font-bold">Settled</span>
+</div>
+</div>
+<!-- Expand All History Accordion Trigger -->
+<button class="w-full py-3 px-space-md bg-surface-container-low text-primary font-label-md text-label-md text-center flex items-center justify-center gap-1 active:bg-surface-container-high transition-colors" onclick="toggleAllReceipts(this)">
+<span>View All 6 Paid Cycles &amp; Invoices</span>
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+<!-- Reassurance & Support Card -->
+<div class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm space-y-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">support_agent</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Need help with your refund?</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">VoltFlex Concierge is available 24/7</p>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 py-2.5 px-3 rounded-full bg-surface-container-low text-primary font-label-md text-label-md flex items-center justify-center gap-1.5 active:scale-95 transition-transform" onclick="openChat()">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+<span>Chat Concierge</span>
+</button>
+<button class="flex-1 py-2.5 px-3 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md flex items-center justify-center gap-1.5 active:scale-95 transition-transform" onclick="callHelpline()">
+<span class="material-symbols-outlined text-[18px]">call</span>
+<span>Call Hub Desk</span>
+</button>
+</div>
+</div>
+<!-- Bottom Notification Toast (Micro-interaction mock) -->
+<div class="fixed bottom-24 left-4 right-4 z-50 transform translate-y-32 opacity-0 transition-all duration-300 pointer-events-none" id="toast">
+<div class="mx-auto max-w-sm rounded-full bg-inverse-surface text-inverse-on-surface px-4 py-3 shadow-lg flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed text-[20px]">check_circle</span>
+<span class="font-label-md text-label-md" id="toast-message">Status refreshed</span>
+</div>
+<span class="font-label-sm text-label-sm text-surface-variant">Just now</span>
+</div>
+</div>
+</div>
+<script>
+  function showToast(text) {
+    const toast = document.getElementById('toast');
+    const msg = document.getElementById('toast-message');
+    if (toast && msg) {
+      msg.textContent = text;
+      toast.classList.remove('translate-y-32', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-32', 'opacity-0');
+      }, 2600);
+    }
+  }
+
+  function handleTrackRefund() {
+    showToast('Connecting to NPCI / Chase Live Tracking...');
+  }
+
+  function downloadReceipt() {
+    showToast('Downloading Cancellation Receipt #CR-8842.pdf');
+  }
+
+  function claimVoucher() {
+    showToast('Voucher code $315 added to Downtown Flagship Hub!');
+  }
+
+  function openChat() {
+    showToast('VoltFlex Concierge initiated...');
+  }
+
+  function callHelpline() {
+    showToast('Dialing Downtown Flagship Concierge (+1 800-VOLTMART)');
+  }
+
+  function toggleAllReceipts(btn) {
+    showToast('Showing all 6 reconciled ledger cycles');
+  }
+
+  function switchTab(type) {
+    const tabMandates = document.getElementById('tab-mandates');
+    const tabRefunds = document.getElementById('tab-refunds');
+    
+    if (type === 'mandates') {
+      tabMandates.className = 'flex-1 py-2 px-3 rounded-full text-center font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm transition-all active:scale-95';
+      tabRefunds.className = 'flex-1 py-2 px-3 rounded-full text-center font-label-md text-label-md text-on-surface-variant transition-all active:scale-95 flex items-center justify-center gap-1.5';
+      showToast('No active AutoPay mandates currently running.');
+    } else {
+      tabRefunds.className = 'flex-1 py-2 px-3 rounded-full text-center font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1.5';
+      tabMandates.className = 'flex-1 py-2 px-3 rounded-full text-center font-label-md text-label-md text-on-surface-variant transition-all active:scale-95';
+    }
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe pointer-events-none px-gutter" data-active-classes="text-primary-container bg-primary-fixed/50 font-label-md"><div class="pointer-events-auto mx-auto max-w-md mb-2 rounded-full bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_10px_25px_-4px_rgba(37,99,235,0.14),0_4px_10px_-2px_rgba(15,23,42,0.06)] px-space-sm py-1.5 flex items-center justify-around"><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] px-space-sm py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">storefront</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] px-space-sm py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="schemes" href="#"><span class="material-symbols-outlined text-[22px]">auto_awesome</span><span class="font-label-sm text-label-sm mt-0.5">Schemes</span></a><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] px-space-sm py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="payments" href="#"><span class="material-symbols-outlined text-[22px]">credit_card</span><span class="font-label-sm text-label-sm mt-0.5">Payments</span></a><a class="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] px-space-sm py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="account" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-label-sm mt-0.5">Account</span></a></div></nav></body></html>

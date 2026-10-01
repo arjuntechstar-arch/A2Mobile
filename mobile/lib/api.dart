@@ -27,7 +27,7 @@ String apiErrorMessage(dynamic detail) {
           ? location.last.toString()
           : 'Field';
       messages.add(field == 'phone'
-          ? 'Phone: include + and country code, followed by digits only (for example +919876543210).'
+          ? 'Phone: enter a valid Indian mobile number, for example +919876543210.'
           : '$field: ${error['msg']}');
     }
     if (messages.isNotEmpty) return messages.join('\n');

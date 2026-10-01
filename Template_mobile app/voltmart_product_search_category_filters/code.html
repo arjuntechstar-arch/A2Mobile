@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-low": "#f2f3ff", "surface-container-lowest": "#ffffff", "on-primary-container": "#eeefff", "secondary-fixed": "#ffdbd1", "primary-container": "#2563eb", "on-surface-variant": "#434655", "surface-tint": "#0053db", "on-tertiary": "#ffffff", "tertiary-fixed": "#6ffbbe", "on-error": "#ffffff", "inverse-surface": "#283044", "error": "#ba1a1a", "on-background": "#131b2e", "on-tertiary-container": "#bdffdb", "outline-variant": "#c3c6d7", "on-primary": "#ffffff", "error-container": "#ffdad6", "surface-variant": "#dae2fd", "primary": "#004ac6", "secondary-container": "#fe5824", "tertiary": "#006242", "on-tertiary-fixed-variant": "#005236", "secondary": "#b02f00", "tertiary-fixed-dim": "#4edea3", "secondary-fixed-dim": "#ffb5a0", "primary-fixed": "#dbe1ff", "primary-fixed-dim": "#b4c5ff", "inverse-primary": "#b4c5ff", "surface-bright": "#faf8ff", "outline": "#737686", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#003ea8", "background": "#faf8ff", "surface-dim": "#d2d9f4", "on-primary-fixed": "#00174b", "surface-container": "#eaedff", "on-secondary-container": "#531100", "on-surface": "#131b2e", "surface-container-high": "#e2e7ff", "on-error-container": "#93000a", "on-secondary-fixed": "#3b0900", "surface": "#faf8ff", "inverse-on-surface": "#eef0ff", "on-secondary-fixed-variant": "#862200", "tertiary-container": "#007d55", "surface-container-highest": "#dae2fd", "on-tertiary-fixed": "#002113" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xs": "0.25rem", "gutter": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-xl": "2rem", "space-md": "1rem", "margin": "1rem" }, "fontFamily": { "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Inter"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-md": ["Inter"], "label-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "headline-xl": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, "fontSize": { "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "700"}], "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "700"}], "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "700"}], "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "800"}], "headline-lg-mobile": ["22px", {"lineHeight": "30px", "fontWeight": "700"}], "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-xl": ["36px", {"lineHeight": "44px", "fontWeight": "800"}], "headline-xl-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}], "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;min-height:100%;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="VoltMart Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1Uldbor9CrrNUe81244s_Xec7H0VxIoaLLApwGSx4bMZdWojJhD2KCxR6T4ZMPZO7z36PnzKd_mnwBrqFlL9RFJdVCREqB_hLyRyraVEgl-gPabNSj3LJ-VY8o29ITSWCu9pu6no5cAJIdLJQVVUgU_a1mjOdrjXISUvdYw1aJ4jVd2zHY-b-H4Uu5P6Yrpti1h7oCgnP0vRlCkbz7XbHfStf5_VCHX2aXy9j2XYxJiRz-f4ynBWLxiWA"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">VoltMart</span><span class="text-xs text-on-surface-variant font-body-sm text-body-sm leading-none">•</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Retail</span></div><button class="flex items-center gap-1 text-left min-h-[24px] focus:outline-none" type="button"><span class="font-label-md text-label-md text-on-surface truncate">Downtown Flagship Hub</span><span class="material-symbols-outlined text-[16px] text-primary shrink-0">arrow_drop_down</span></button></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Notifications" class="w-11 h-11 relative flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary active:bg-surface-container-high transition-colors focus:outline-none" type="button"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-secondary-container ring-2 ring-surface"></span></button><button aria-label="Customer Account" class="w-11 h-11 flex items-center justify-center rounded-full p-0.5 focus:outline-none active:scale-95 transition-transform" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwuTddeus_W4dNvVH5Ncv3NblDJ52Cqa9aBSEdyS9OH-_FZCSNfyHOBlVOKodxEBb8zNmVsV24siXXyMideH8hvFAQ27nOMPjRJheuADpc05YB4D1UzBC9xN95MVK9iaGSlkE0SymVnAX0MsUqEUttsX3CEnq6MH-0nQRMjUPBKHIZXyyKHf_MWUGwW4-dCFquC3sGTeMs76yIqzVCXMOCMmLYtq5o5pHIzrFQUZo0p7TzbVAOONPA"/></button></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Search & App Action Bar -->
+<section class="px-gutter pt-2 pb-3">
+<div class="flex items-center gap-space-sm">
+<div class="relative flex-1 flex items-center bg-surface-container-high rounded-full shadow-sm">
+<span class="material-symbols-outlined text-[20px] text-primary ml-3 mr-2 shrink-0">search</span>
+<input aria-label="Search electronics" class="w-full bg-transparent py-2.5 text-body-md font-body-md text-on-surface focus:outline-none placeholder:text-outline" type="text" value="Smart TVs 4K &amp; OLED"/>
+<button aria-label="Clear search" class="p-1.5 text-outline hover:text-on-surface focus:outline-none transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+</button>
+<button aria-label="Voice search" class="p-1.5 mr-2 text-primary focus:outline-none active:scale-90 transition-transform" type="button">
+<span class="material-symbols-outlined text-[20px]">mic</span>
+</button>
+</div>
+<button aria-label="Shopping Cart" class="relative w-11 h-11 flex items-center justify-center rounded-full bg-surface-container-lowest shadow-sm active:scale-95 transition-transform shrink-0" type="button">
+<span class="material-symbols-outlined text-[22px] text-on-surface">shopping_cart</span>
+<span class="absolute 1 top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-secondary-container text-on-secondary font-label-sm text-label-sm leading-none flex items-center justify-center">2</span>
+</button>
+</div>
+</section>
+<!-- Horizontally Scrollable Active Filters -->
+<section class="w-full overflow-x-auto no-scrollbar py-1">
+<div class="flex items-center gap-2 px-gutter min-w-max">
+<!-- Filter Trigger with Badge -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-lowest shadow-sm active:scale-95 transition-all text-on-surface font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">tune</span>
+<span>Filter &amp; Sort</span>
+<span class="w-4 h-4 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center leading-none">3</span>
+</button>
+<!-- Active: Scheme Eligible -->
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary-container text-on-primary shadow-sm active:scale-95 transition-all font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[16px]">check</span>
+<span>Scheme: 10+1</span>
+</button>
+<!-- Active: Screen Size -->
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-on-primary shadow-sm active:scale-95 transition-all font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[16px]">check</span>
+<span>Size: 65" &amp; Above</span>
+</button>
+<!-- In Stock Flagship Hub Toggle -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-tertiary-container text-on-tertiary shadow-sm active:scale-95 transition-all font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[16px]">store</span>
+<span>Flagship In-Stock</span>
+</button>
+<!-- Brand Filter -->
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-lowest shadow-sm active:scale-95 transition-all text-on-surface-variant font-label-md text-label-md" type="button">
+<span>Brand: Samsung, Sony...</span>
+<span class="material-symbols-outlined text-[16px]">keyboard_arrow_down</span>
+</button>
+<!-- Price Range -->
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-lowest shadow-sm active:scale-95 transition-all text-on-surface-variant font-label-md text-label-md" type="button">
+<span>$800 - $2,000</span>
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</section>
+<!-- Scheme Savings Callout Banner -->
+<section class="px-gutter pt-3 pb-1">
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary p-3.5 shadow-md flex items-center justify-between gap-3">
+<div class="flex items-start gap-2.5">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest/20 backdrop-blur-md flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px] text-tertiary-fixed">savings</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md uppercase tracking-wider text-tertiary-fixed">VoltFlex Savings</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span class="font-label-sm text-label-sm text-on-primary-container">Extra Bonus</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-primary-container leading-tight mt-0.5">
+            Use matured voucher or activate <strong class="text-on-primary">10+1</strong> to save up to $200 extra store credit today!
+          </p>
+</div>
+</div>
+<button class="shrink-0 px-2.5 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm shadow-sm active:scale-95 transition-all flex items-center gap-0.5" type="button">
+<span>Details</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Results Count & Sorting Bar -->
+<section class="px-gutter pt-3 pb-2 flex items-center justify-between gap-2">
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface">18 Smart TVs</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Downtown Hub</span>
+</div>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface font-label-md text-label-md shadow-sm active:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">swap_vert</span>
+<span class="truncate max-w-[130px]">Best Match (Scheme Max)</span>
+<span class="material-symbols-outlined text-[14px]">expand_more</span>
+</button>
+</section>
+<!-- Product Results Grid -->
+<section class="px-gutter py-2 grid grid-cols-1 gap-3.5">
+<!-- Product 1: Samsung Neo QLED -->
+<div class="relative flex flex-col bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm active:shadow-md transition-all">
+<div class="flex gap-3">
+<!-- Image & Badges -->
+<div class="relative w-32 h-32 rounded-xl bg-surface-container-low flex items-center justify-center p-2 shrink-0 overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="A premium 65-inch ultra slim Samsung Neo QLED television showcasing vibrant 4k colors of cosmic nebulae in a warm modern retail showroom environment with sleek ambient blue lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnFVhgpqQ_ByRhFCKwZf5aYSxSOrO_BjPitPpGctQOaRnHmjayTLXckrSKf6VLif4wdtbW5FrI_DQDQDknxRR4AjtMpvQYu6CuxWEeDIlPINtOoBowO6r_IdUMaw2NNxaIYP_Yybr-ujxItsVOU7ND7pCgHWgivKo5GrZGz_FMlNP_WTflyBNtkNMQ-mXjVuEykSUHZ_IKoRETg9Q1HD_TeU037U1184AjCxSLjP_70xykcbsRafJ4"/>
+<div class="absolute top-1.5 left-1.5 flex flex-col gap-1">
+<span class="px-1.5 py-0.5 rounded-full bg-secondary-container text-on-secondary font-label-sm text-label-sm shadow-xs">
+              -19%
+            </span>
+</div>
+<button aria-label="Add to wishlist" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center text-outline hover:text-secondary-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">favorite</span>
+</button>
+</div>
+<!-- Info & Details -->
+<div class="flex-1 flex flex-col justify-between min-w-0">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Samsung</span>
+<span class="font-body-sm text-body-sm text-outline-variant">•</span>
+<div class="flex items-center text-amber-500">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold ml-0.5">4.9</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-0.5">(1.4k)</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2 leading-tight">
+              Samsung 65" Neo QLED 4K Smart TV
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">QN65QN90C Mini-LED Series</p>
+</div>
+<!-- Pricing Block -->
+<div class="mt-2">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">$1,299</span>
+<span class="font-body-sm text-body-sm text-outline line-through">$1,599</span>
+</div>
+<!-- Scheme Badge Card -->
+<div class="mt-1 flex items-center justify-between bg-primary-fixed/40 px-2 py-1 rounded-lg">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[15px] text-primary shrink-0">loyalty</span>
+<span class="font-label-sm text-label-sm text-on-primary-fixed truncate">Pay <strong class="text-primary font-bold">$749</strong> w/ $550 Voucher</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold shrink-0 ml-1">10+1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Hub Fulfillment Footer -->
+<div class="mt-3 pt-2.5 flex items-center justify-between border-t-0 bg-surface-container-low/60 -mx-3.5 -mb-3.5 p-2.5 px-3.5 rounded-b-2xl">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-tertiary shrink-0">bolt</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">
+<strong>4 units</strong> at Downtown Hub <span class="text-tertiary font-semibold">• 2-Hr Express</span>
+</span>
+</div>
+<button aria-label="Add Samsung TV to Cart" class="px-3 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md active:scale-95 shadow-sm transition-transform flex items-center gap-1 shrink-0" type="button">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>Add</span>
+</button>
+</div>
+</div>
+<!-- Product 2: LG OLED evo C3 -->
+<div class="relative flex flex-col bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm active:shadow-md transition-all">
+<div class="flex gap-3">
+<!-- Image & Badges -->
+<div class="relative w-32 h-32 rounded-xl bg-surface-container-low flex items-center justify-center p-2 shrink-0 overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="An LG 65-inch OLED evo television displaying rich deep pure blacks with neon lights in an upscale contemporary showroom with glossy reflective display base." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByjVzAF5d9brSmZ--78bUZGQGptFy3FiIMXXFjji_7qCBJnNqh0CjdB_ttKD7BbwGMhcPUptpSh1PiAAmAm5WymrrufezDXFOzC7uvzTeAL2cfwSt76b4dvJoLuWwdtSbbNBb7S1nRAsbSJVqSNGmbD3xEQeewIRIpvJx1tJ8-64U9IbMdunUZH-VvSv7xmKUjk8fx4GrzQETGDxbJNxgbcHm_dyHACobupMhw10J8u0qWJbrWwZBp"/>
+<div class="absolute top-1.5 left-1.5 flex flex-col gap-1">
+<span class="px-1.5 py-0.5 rounded-full bg-secondary-container text-on-secondary font-label-sm text-label-sm shadow-xs">
+              -22%
+            </span>
+</div>
+<button aria-label="Add to wishlist" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center text-outline hover:text-secondary-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">favorite</span>
+</button>
+</div>
+<!-- Info & Details -->
+<div class="flex-1 flex flex-col justify-between min-w-0">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">LG OLED</span>
+<span class="font-body-sm text-body-sm text-outline-variant">•</span>
+<div class="flex items-center text-amber-500">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold ml-0.5">4.8</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-0.5">(920)</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2 leading-tight">
+              LG 65" OLED evo C3 Series 4K
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">Self-lit Pixels • α9 Gen6 AI</p>
+</div>
+<!-- Pricing Block -->
+<div class="mt-2">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">$1,399</span>
+<span class="font-body-sm text-body-sm text-outline line-through">$1,799</span>
+</div>
+<!-- Scheme Badge Card -->
+<div class="mt-1 flex items-center justify-between bg-primary-fixed/40 px-2 py-1 rounded-lg">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[15px] text-primary shrink-0">loyalty</span>
+<span class="font-label-sm text-label-sm text-on-primary-fixed truncate">Pay <strong class="text-primary font-bold">$849</strong> w/ $550 Voucher</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold shrink-0 ml-1">10+1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Hub Fulfillment Footer -->
+<div class="mt-3 pt-2.5 flex items-center justify-between bg-surface-container-low/60 -mx-3.5 -mb-3.5 p-2.5 px-3.5 rounded-b-2xl">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-primary shrink-0">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">
+            Hub Pickup Ready <span class="text-secondary font-semibold">• Free Wall Mount</span>
+</span>
+</div>
+<button aria-label="Add LG TV to Cart" class="px-3 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md active:scale-95 shadow-sm transition-transform flex items-center gap-1 shrink-0" type="button">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>Add</span>
+</button>
+</div>
+</div>
+<!-- Product 3: Sony Bravia XR 65" -->
+<div class="relative flex flex-col bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm active:shadow-md transition-all">
+<div class="flex gap-3">
+<!-- Image & Badges -->
+<div class="relative w-32 h-32 rounded-xl bg-surface-container-low flex items-center justify-center p-2 shrink-0 overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="A high end Sony Bravia XR 65 inch television on a brushed metallic stand playing dramatic nature cinematography with crisp edge-lit highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjUp7ojLMZs5Iv4EwYv7VMP1Fuv45rBN2Mv_xG7Hphgok3Fp5sZvjQWX2cKT1YyPDuKjaZu-7rnqouAVlyKAAX71FkPCLRQGvz1qEp0gV4bnzrImPxXvAjQA7THD11XgcJfICbrgeqoBEf9622UYCP5uMkb_-laKDZ8UYnzVLS3uCaFd9XzBunYjPT02ve3m2rGSTnKg7jC7zZs0MJKwV6weviFfsXvSDNdyLAONsa1SsGDepL-Tyy"/>
+<div class="absolute top-1.5 left-1.5 flex flex-col gap-1">
+<span class="px-1.5 py-0.5 rounded-full bg-error text-on-error font-label-sm text-label-sm shadow-xs">
+              Low Stock
+            </span>
+</div>
+<button aria-label="Add to wishlist" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center text-outline hover:text-secondary-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">favorite</span>
+</button>
+</div>
+<!-- Info & Details -->
+<div class="flex-1 flex flex-col justify-between min-w-0">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">Sony</span>
+<span class="font-body-sm text-body-sm text-outline-variant">•</span>
+<div class="flex items-center text-amber-500">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold ml-0.5">4.9</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-0.5">(640)</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2 leading-tight">
+              Sony Bravia XR 65" Cognitive 4K
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">XR-65X90L Full Array LED</p>
+</div>
+<!-- Pricing Block -->
+<div class="mt-2">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">$1,498</span>
+<span class="font-body-sm text-body-sm text-outline line-through">$1,899</span>
+</div>
+<!-- Scheme Badge Card -->
+<div class="mt-1 flex items-center justify-between bg-primary-fixed/40 px-2 py-1 rounded-lg">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[15px] text-primary shrink-0">auto_awesome</span>
+<span class="font-label-sm text-label-sm text-on-primary-fixed truncate">Scheme Eligible • Max Bonus Tier</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold shrink-0 ml-1">10+1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Hub Fulfillment Footer -->
+<div class="mt-3 pt-2.5 flex items-center justify-between bg-surface-container-low/60 -mx-3.5 -mb-3.5 p-2.5 px-3.5 rounded-b-2xl">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-error shrink-0">inventory_2</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">
+<strong class="text-error">Only 2 units left</strong> at Hub
+          </span>
+</div>
+<button aria-label="Add Sony TV to Cart" class="px-3 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md active:scale-95 shadow-sm transition-transform flex items-center gap-1 shrink-0" type="button">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>Add</span>
+</button>
+</div>
+</div>
+<!-- Product 4: TCL 75" QLED -->
+<div class="relative flex flex-col bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm active:shadow-md transition-all">
+<div class="flex gap-3">
+<!-- Image & Badges -->
+<div class="relative w-32 h-32 rounded-xl bg-surface-container-low flex items-center justify-center p-2 shrink-0 overflow-hidden">
+<img class="w-full h-full object-contain" data-alt="A massive 75-inch TCL QLED Mini LED television mounted in a bright modern smart home living room with cinematic studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABysQNmM8OzW7NV_24MnTolSF5MEZDA4ZU9neB_7nKByIOE0IxNg5RbwG_K2goiFQZyPPnjN_e3AJ1A12g7J_uXXf0PhtU0wpJjUOVe-FpPI8goeydcXwciU6DEPHZ_dX4_KitGXeuBeG9hIlhAGVXMin3MG3kPqf5IMXB5HvJDLR7FjyPngP4fXX0uVKalNzdfb0KgioH7g1EcZ_-FsVG9PRkbgYBigwl-WdQnN7Z0NlmvDiPR9d9"/>
+<div class="absolute top-1.5 left-1.5 flex flex-col gap-1">
+<span class="px-1.5 py-0.5 rounded-full bg-tertiary text-on-tertiary font-label-sm text-label-sm shadow-xs">
+              Super Deal
+            </span>
+</div>
+<button aria-label="Add to wishlist" class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm flex items-center justify-center text-outline hover:text-secondary-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[14px]">favorite</span>
+</button>
+</div>
+<!-- Info & Details -->
+<div class="flex-1 flex flex-col justify-between min-w-0">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">TCL Big Screen</span>
+<span class="font-body-sm text-body-sm text-outline-variant">•</span>
+<div class="flex items-center text-amber-500">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold ml-0.5">4.7</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant ml-0.5">(1.8k)</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-2 leading-tight">
+              TCL 75" QLED 4K Mini-LED TV
+            </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">144Hz VRR Gaming • Dolby Vision</p>
+</div>
+<!-- Pricing Block -->
+<div class="mt-2">
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">$899</span>
+<span class="font-body-sm text-body-sm text-outline line-through">$1,099</span>
+</div>
+<!-- Scheme Badge Card -->
+<div class="mt-1 flex items-center justify-between bg-primary-fixed/40 px-2 py-1 rounded-lg">
+<div class="flex items-center gap-1 min-w-0">
+<span class="material-symbols-outlined text-[15px] text-primary shrink-0">loyalty</span>
+<span class="font-label-sm text-label-sm text-on-primary-fixed truncate">Pay <strong class="text-primary font-bold">$349</strong> w/ Voucher</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold shrink-0 ml-1">10+1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Hub Fulfillment Footer -->
+<div class="mt-3 pt-2.5 flex items-center justify-between bg-surface-container-low/60 -mx-3.5 -mb-3.5 p-2.5 px-3.5 rounded-b-2xl">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-tertiary shrink-0">local_shipping</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate">
+            Flagship Stock • <strong class="text-tertiary">Free Scheduled Delivery</strong>
+</span>
+</div>
+<button aria-label="Add TCL TV to Cart" class="px-3 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md active:scale-95 shadow-sm transition-transform flex items-center gap-1 shrink-0" type="button">
+<span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+<span>Add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Sticky Bottom Floating Refine Action Bar -->
+<div class="sticky bottom-20 z-40 px-gutter mt-4 mb-2 flex justify-center pointer-events-none">
+<button class="pointer-events-auto flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-inverse-surface text-inverse-on-surface shadow-xl active:scale-95 transition-transform" id="refineFiltersBtn" type="button">
+<span class="material-symbols-outlined text-[20px] text-primary-fixed">tune</span>
+<span class="font-label-md text-label-md">18 Items • Refine Filters</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span class="font-label-sm text-label-sm text-tertiary-fixed font-bold">3 Active</span>
+</button>
+</div>
+</div>
+<script>
+  (function() {
+    const refineBtn = document.getElementById('refineFiltersBtn');
+    if (refineBtn) {
+      refineBtn.addEventListener('click', function() {
+        refineBtn.classList.add('scale-90');
+        setTimeout(() => refineBtn.classList.remove('scale-90'), 150);
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe pointer-events-none px-gutter" data-active-classes="text-primary-container bg-primary-fixed/50 font-label-md"><div class="pointer-events-auto mx-auto max-w-md mb-2 rounded-full bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_10px_25px_-4px_rgba(37,99,235,0.14),0_4px_10px_-2px_rgba(15,23,42,0.06)] px-space-xs py-1.5 flex items-center justify-around"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-home" href="#"><span class="material-symbols-outlined text-[22px]">storefront</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-schemes" href="#"><span class="material-symbols-outlined text-[22px]">auto_awesome</span><span class="font-label-sm text-label-sm mt-0.5">Schemes</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95 relative" data-path="volt-mart-cart" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">shopping_bag</span><span class="absolute -top-1 -right-2 px-1 min-w-[16px] h-4 rounded-full bg-secondary-container text-white text-[10px] font-bold leading-none flex items-center justify-center ring-2 ring-surface-container-lowest">3</span></div><span class="font-label-sm text-label-sm mt-0.5">Cart</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-payments" href="#"><span class="material-symbols-outlined text-[22px]">credit_card</span><span class="font-label-sm text-label-sm mt-0.5">Payments</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-account" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-label-sm mt-0.5">Account</span></a></div></nav></body></html>

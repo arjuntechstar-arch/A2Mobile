@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-low": "#f2f3ff", "surface-container-lowest": "#ffffff", "on-primary-container": "#eeefff", "secondary-fixed": "#ffdbd1", "primary-container": "#2563eb", "on-surface-variant": "#434655", "surface-tint": "#0053db", "on-tertiary": "#ffffff", "tertiary-fixed": "#6ffbbe", "on-error": "#ffffff", "inverse-surface": "#283044", "error": "#ba1a1a", "on-background": "#131b2e", "on-tertiary-container": "#bdffdb", "outline-variant": "#c3c6d7", "on-primary": "#ffffff", "error-container": "#ffdad6", "surface-variant": "#dae2fd", "primary": "#004ac6", "secondary-container": "#fe5824", "tertiary": "#006242", "on-tertiary-fixed-variant": "#005236", "secondary": "#b02f00", "tertiary-fixed-dim": "#4edea3", "secondary-fixed-dim": "#ffb5a0", "primary-fixed": "#dbe1ff", "primary-fixed-dim": "#b4c5ff", "inverse-primary": "#b4c5ff", "surface-bright": "#faf8ff", "outline": "#737686", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#003ea8", "background": "#faf8ff", "surface-dim": "#d2d9f4", "on-primary-fixed": "#00174b", "surface-container": "#eaedff", "on-secondary-container": "#531100", "on-surface": "#131b2e", "surface-container-high": "#e2e7ff", "on-error-container": "#93000a", "on-secondary-fixed": "#3b0900", "surface": "#faf8ff", "inverse-on-surface": "#eef0ff", "on-secondary-fixed-variant": "#862200", "tertiary-container": "#007d55", "surface-container-highest": "#dae2fd", "on-tertiary-fixed": "#002113" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xs": "0.25rem", "gutter": "1rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-xl": "2rem", "space-md": "1rem", "margin": "1rem" }, "fontFamily": { "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Inter"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-md": ["Inter"], "label-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "headline-xl": ["Plus Jakarta Sans"], "headline-xl-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"] }, "fontSize": { "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "700"}], "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "700"}], "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "700"}], "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "800"}], "headline-lg-mobile": ["22px", {"lineHeight": "30px", "fontWeight": "700"}], "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "headline-xl": ["36px", {"lineHeight": "44px", "fontWeight": "800"}], "headline-xl-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "800"}], "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "700"}] } } } };</script><style>@layer base{html,body{width:100%;margin:0;padding:0;min-height:100%;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.5rem);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-background font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-20 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="VoltMart Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1Uldbor9CrrNUe81244s_Xec7H0VxIoaLLApwGSx4bMZdWojJhD2KCxR6T4ZMPZO7z36PnzKd_mnwBrqFlL9RFJdVCREqB_hLyRyraVEgl-gPabNSj3LJ-VY8o29ITSWCu9pu6no5cAJIdLJQVVUgU_a1mjOdrjXISUvdYw1aJ4jVd2zHY-b-H4Uu5P6Yrpti1h7oCgnP0vRlCkbz7XbHfStf5_VCHX2aXy9j2XYxJiRz-f4ynBWLxiWA"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">VoltMart</span><span class="text-xs text-on-surface-variant font-body-sm text-body-sm leading-none">•</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Retail</span></div><button class="flex items-center gap-1 text-left min-h-[24px] focus:outline-none" type="button"><span class="font-label-md text-label-md text-on-surface truncate">Downtown Flagship Hub</span><span class="material-symbols-outlined text-[16px] text-primary shrink-0">arrow_drop_down</span></button></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Notifications" class="w-11 h-11 relative flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary active:bg-surface-container-high transition-colors focus:outline-none" type="button"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-secondary-container ring-2 ring-surface"></span></button><button aria-label="Customer Account" class="w-11 h-11 flex items-center justify-center rounded-full p-0.5 focus:outline-none active:scale-95 transition-transform" type="button"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwuTddeus_W4dNvVH5Ncv3NblDJ52Cqa9aBSEdyS9OH-_FZCSNfyHOBlVOKodxEBb8zNmVsV24siXXyMideH8hvFAQ27nOMPjRJheuADpc05YB4D1UzBC9xN95MVK9iaGSlkE0SymVnAX0MsUqEUttsX3CEnq6MH-0nQRMjUPBKHIZXyyKHf_MWUGwW4-dCFquC3sGTeMs76yIqzVCXMOCMmLYtq5o5pHIzrFQUZo0p7TzbVAOONPA"/></button></div></div></header><main class="flex flex-col relative w-full pt-20 pb-28 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Interactive Toast Notification -->
+<div class="fixed top-24 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 transform -translate-y-12 opacity-0 pointer-events-none max-w-xs w-full px-space-md py-space-sm rounded-full bg-inverse-surface text-inverse-on-surface shadow-xl flex items-center gap-space-sm justify-between" id="toast-notification">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-tertiary-fixed">check_circle</span>
+<span class="font-label-md text-label-md" id="toast-message">Preference updated</span>
+</div>
+<span class="material-symbols-outlined text-[16px] opacity-60">close</span>
+</div>
+<div class="px-gutter flex flex-col gap-space-lg">
+<!-- User Profile Hero Card -->
+<div class="relative overflow-hidden rounded-2xl bg-surface-container-lowest shadow-[0_4px_20px_-2px_rgba(37,99,235,0.08)] p-space-md flex flex-col gap-space-md">
+<!-- Decorative Atmospheric Glow -->
+<div class="absolute -top-12 -right-12 w-44 h-44 rounded-full bg-primary-fixed/40 blur-2xl pointer-events-none"></div>
+<div class="absolute -bottom-10 -left-10 w-36 h-36 rounded-full bg-secondary-fixed/30 blur-2xl pointer-events-none"></div>
+<!-- Identity Header Row -->
+<div class="relative flex items-center gap-space-md">
+<!-- Avatar with Badge -->
+<div class="relative shrink-0">
+<div class="w-18 h-18 rounded-full p-1 bg-surface-container-low shadow-sm">
+<img class="w-16 h-16 rounded-full object-cover shadow-inner" data-alt="High quality close up studio portrait of a charismatic modern Asian young professional man named Alexander Chen smiling warmly with neat hair and a crisp navy jacket in soft cinematic retail lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEC41ko5C0HmWoK2JdiYVHpP7h1hLycZkE24PN3rziXrBN2XD_yW5y2XylkGVK_Y411vlKFvyFIdGuLVvtEL_uAfRjOToOSOdX8m9M08L8iBMQKO2-D_B9ltSumEXYqYw1AZ7lo-0Lsfe7IPPbNwNKXgWjgnJZ9MIcJl5vVJa0LZJmgycOoYShuCC325rbuTfvGRHXWbXhpzKP3endnDaNz9qLAZU6KKPThJe4lk216Jfy0Cd_v-uy"/>
+</div>
+<button aria-label="Edit Profile Photo" class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+<!-- Info Details -->
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h1 class="font-headline-md text-headline-md text-on-surface truncate">Alexander Chen</h1>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-label-sm text-label-sm shadow-sm">
+<span class="material-symbols-outlined text-[13px] text-amber-600" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+              Gold Saver
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">alexander.chen@email.com</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">+1 (555) 234-8942</p>
+</div>
+</div>
+<!-- KYC Verification Tag Box -->
+<div class="relative flex items-center justify-between px-space-md py-space-sm rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-space-xs min-w-0">
+<div class="w-6 h-6 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">KYC Verified &amp; Escrow Bound</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Aadhaar / Nat'l ID •••• 4829</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">Active</span>
+</div>
+<!-- KPI Stats Triple Bar -->
+<div class="grid grid-cols-3 gap-space-xs pt-space-xs">
+<div class="flex flex-col items-center justify-center text-center p-2 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-shadow">
+<span class="font-headline-sm text-headline-sm text-primary">2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-tight mt-0.5">Orders Built</span>
+</div>
+<div class="flex flex-col items-center justify-center text-center p-2 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-shadow">
+<span class="font-headline-sm text-headline-sm text-tertiary">$550</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-tight mt-0.5">Matured Scheme</span>
+</div>
+<div class="flex flex-col items-center justify-center text-center p-2 rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-center gap-0.5">
+<span class="font-headline-sm text-headline-sm text-secondary-container">150</span>
+<span class="material-symbols-outlined text-[14px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-tight mt-0.5">VoltPoints</span>
+</div>
+</div>
+</div>
+<!-- Active Savings Cardlet Banner -->
+<div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary-container p-space-md text-on-primary shadow-lg flex items-center justify-between">
+<div class="flex flex-col min-w-0 pr-space-sm z-10">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-[18px] text-primary-fixed">savings</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed">Festive Appliance Bonus</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm leading-snug">Lock in 0% EMI with $50 Match</h2>
+<p class="font-body-sm text-body-sm text-on-primary-container mt-0.5">Deposit $100 this week to unlock tier 2 perks.</p>
+</div>
+<button class="shrink-0 px-space-md py-2 rounded-full bg-surface-container-lowest text-primary font-label-md text-label-md shadow-md active:scale-95 transition-all">
+        Top Up
+      </button>
+</div>
+<!-- Interactive App Preferences & Toggles -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-1">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">App Controls &amp; Privacy</h2>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Smart Sync</span>
+</div>
+<div class="rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(37,99,235,0.06)] overflow-hidden flex flex-col">
+<!-- Toggle 1: Show KYC Identity -->
+<div class="p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-low/50">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-full bg-primary-fixed/40 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Display Verified ID on Store Hub</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Shows Aadhaar tag during store pickup scan</span>
+</div>
+</div>
+<button aria-checked="true" class="toggle-btn w-12 h-7 rounded-full bg-primary p-0.5 flex items-center transition-colors focus:outline-none" data-toggle="kyc-id" role="switch" type="button">
+<span class="toggle-dot w-6 h-6 rounded-full bg-surface-container-lowest shadow-md transform translate-x-5 transition-transform duration-200"></span>
+</button>
+</div>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- Toggle 2: Instant Biometric FaceID -->
+<div class="p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-low/50">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-full bg-primary-fixed/40 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">fingerprint</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Biometric &amp; FaceID Checkout</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Quick authorization for installment vouchers</span>
+</div>
+</div>
+<button aria-checked="true" class="toggle-btn w-12 h-7 rounded-full bg-primary p-0.5 flex items-center transition-colors focus:outline-none" data-toggle="biometric" role="switch" type="button">
+<span class="toggle-dot w-6 h-6 rounded-full bg-surface-container-lowest shadow-md transform translate-x-5 transition-transform duration-200"></span>
+</button>
+</div>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- Toggle 3: AutoPay Reminders -->
+<div class="p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-low/50">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed/60 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">mark_chat_unread</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">AutoPay SMS &amp; WhatsApp Alerts</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Get notified 48h before debit cycle</span>
+</div>
+</div>
+<button aria-checked="true" class="toggle-btn w-12 h-7 rounded-full bg-primary p-0.5 flex items-center transition-colors focus:outline-none" data-toggle="autopay" role="switch" type="button">
+<span class="toggle-dot w-6 h-6 rounded-full bg-surface-container-lowest shadow-md transform translate-x-5 transition-transform duration-200"></span>
+</button>
+</div>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- Toggle 4: Promotional Scheme Alerts -->
+<div class="p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-low/50">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Promotional Scheme Bonus Push</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Electronics flash sales &amp; festive giveaways</span>
+</div>
+</div>
+<button aria-checked="false" class="toggle-btn w-12 h-7 rounded-full bg-surface-dim p-0.5 flex items-center transition-colors focus:outline-none" data-toggle="promos" role="switch" type="button">
+<span class="toggle-dot w-6 h-6 rounded-full bg-surface-container-lowest shadow-md transform translate-x-0 transition-transform duration-200"></span>
+</button>
+</div>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- App Appearance Mode Selector -->
+<div class="p-space-md flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">light_mode</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Theme Appearance</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Luminous Crisp Retail Mode</span>
+</div>
+</div>
+<div class="flex items-center rounded-full bg-surface-container p-1 gap-1">
+<button class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm shadow-sm flex items-center gap-1 transition-all" id="theme-light-btn">
+<span class="material-symbols-outlined text-[14px]">sunny</span>
+              Light
+            </button>
+<button class="px-2.5 py-1 rounded-full text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-all" id="theme-dark-btn">
+<span class="material-symbols-outlined text-[14px]">dark_mode</span>
+              Dark
+            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Account Management Navigation Group -->
+<div class="flex flex-col gap-space-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface px-1">Account Management</h2>
+<div class="rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(37,99,235,0.06)] overflow-hidden flex flex-col">
+<!-- Item 1: Personal Details & KYC Documents -->
+<button class="w-full p-space-md flex items-center justify-between text-left hover:bg-surface-container-low transition-colors" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">contact_page</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Personal Details &amp; Verified KYC</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">ID card, SSN / PAN certificates</span>
+</div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm">2 Docs</span>
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</div>
+</button>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- Item 2: Saved Addresses & Delivery Hubs -->
+<button class="w-full p-space-md flex items-center justify-between text-left hover:bg-surface-container-low transition-colors" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">local_shipping</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Saved Addresses &amp; Delivery Hubs</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Default: Downtown Hub, 742 Evergreen Terr.</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">chevron_right</span>
+</button>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- Item 3: Payment Methods & Bank Mandates -->
+<button class="w-full p-space-md flex items-center justify-between text-left hover:bg-surface-container-low transition-colors" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">account_balance</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Bank Mandates &amp; Cards</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Chase Checking •••• 9241, 1 Visa Debit</span>
+</div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</div>
+</button>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- Item 4: Order History & Digital Invoices -->
+<button class="w-full p-space-md flex items-center justify-between text-left hover:bg-surface-container-low transition-colors" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">receipt_long</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Order History &amp; Digital Invoices</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Past appliance orders &amp; warranty slips</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">chevron_right</span>
+</button>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- Item 5: Scheme Statements & Tax Discharge Certificates -->
+<button class="w-full p-space-md flex items-center justify-between text-left hover:bg-surface-container-low transition-colors" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[22px]">description</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Scheme Statements &amp; Folios</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Download annual interest &amp; tax slips (PDF)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">download</span>
+</button>
+</div>
+</div>
+<!-- Security & Privacy Group -->
+<div class="flex flex-col gap-space-sm">
+<h2 class="font-headline-sm text-headline-sm text-on-surface px-1">Security &amp; Vault Protection</h2>
+<div class="rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(37,99,235,0.06)] overflow-hidden flex flex-col">
+<!-- Change Password & PIN -->
+<button class="w-full p-space-md flex items-center justify-between text-left hover:bg-surface-container-low transition-colors" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-[22px]">lock_reset</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Change Password &amp; Transaction PIN</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Last updated 42 days ago</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">chevron_right</span>
+</button>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- 2FA Authentication -->
+<button class="w-full p-space-md flex items-center justify-between text-left hover:bg-surface-container-low transition-colors" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-[22px]">security</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Two-Factor Authentication</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">SMS OTP &amp; Authenticator App</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm">Active</span>
+</button>
+<div class="h-[1px] bg-surface-container-high mx-space-md"></div>
+<!-- Privacy & Escrow Policy -->
+<button class="w-full p-space-md flex items-center justify-between text-left hover:bg-surface-container-low transition-colors" type="button">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-[22px]">policy</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Escrow Deposit Protection Terms</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">FDIC-insured trustee custodian rules</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Support, Hub Switcher & Exit Actions -->
+<div class="flex flex-col gap-space-sm mb-4">
+<h2 class="font-headline-sm text-headline-sm text-on-surface px-1">Customer Care &amp; Store Network</h2>
+<!-- Concierge Banner -->
+<div class="rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(37,99,235,0.06)] p-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="relative">
+<div class="w-11 h-11 rounded-full bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">support_agent</span>
+</div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-tertiary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-lg text-label-lg text-on-surface">24/7 Priority Concierge</span>
+<span class="px-1.5 py-0.2 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-[10px] font-bold">Online</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Average response: under 45 seconds</span>
+</div>
+</div>
+<button class="px-space-md py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm active:scale-95 transition-all">
+          Chat Now
+        </button>
+</div>
+<!-- Retail Store Switcher -->
+<div class="rounded-2xl bg-surface-container-lowest shadow-[0_4px_16px_-2px_rgba(37,99,235,0.06)] p-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-[24px]">storefront</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface">Preferred Pickup Hub</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Downtown Flagship Hub (#04)</span>
+</div>
+</div>
+<button class="px-space-md py-2 rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-container-highest transition-colors active:scale-95">
+          Change
+        </button>
+</div>
+<!-- Log Out Button -->
+<div class="pt-space-md flex flex-col items-center gap-space-sm">
+<button class="w-full py-3.5 px-space-md rounded-full bg-error-container text-on-error-container font-label-lg text-label-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-sm" id="logout-btn">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+          Log Out of VoltMart
+        </button>
+<span class="font-label-sm text-label-sm text-on-surface-variant/70">VoltMart App v2.4.1 (Build 4912) • Secured by EscrowCore™</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function () {
+    const toast = document.getElementById('toast-notification');
+    const toastMsg = document.getElementById('toast-message');
+    let toastTimeout;
+
+    function showToast(text) {
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = text;
+      toast.classList.remove('opacity-0', '-translate-y-12', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-12', 'pointer-events-none');
+      }, 2200);
+    }
+
+    // Toggle interactive functionality
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    toggleBtns.forEach((btn) => {
+      btn.addEventListener('click', function () {
+        const isChecked = this.getAttribute('aria-checked') === 'true';
+        const newChecked = !isChecked;
+        this.setAttribute('aria-checked', newChecked.toString());
+
+        const dot = this.querySelector('.toggle-dot');
+        if (newChecked) {
+          this.classList.remove('bg-surface-dim');
+          this.classList.add('bg-primary');
+          dot.classList.remove('translate-x-0');
+          dot.classList.add('translate-x-5');
+          showToast('Setting enabled');
+        } else {
+          this.classList.remove('bg-primary');
+          this.classList.add('bg-surface-dim');
+          dot.classList.remove('translate-x-5');
+          dot.classList.add('translate-x-0');
+          showToast('Setting disabled');
+        }
+      });
+    });
+
+    // Theme selector micro-interaction
+    const lightBtn = document.getElementById('theme-light-btn');
+    const darkBtn = document.getElementById('theme-dark-btn');
+
+    if (lightBtn && darkBtn) {
+      lightBtn.addEventListener('click', () => {
+        lightBtn.className = 'px-2.5 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm shadow-sm flex items-center gap-1 transition-all';
+        darkBtn.className = 'px-2.5 py-1 rounded-full text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-all';
+        showToast('Retail Light theme active');
+      });
+
+      darkBtn.addEventListener('click', () => {
+        darkBtn.className = 'px-2.5 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm shadow-sm flex items-center gap-1 transition-all';
+        lightBtn.className = 'px-2.5 py-1 rounded-full text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-all';
+        showToast('Dark appearance scheduled for next sync');
+      });
+    }
+
+    // Logout feedback
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        showToast('Session securely terminated');
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe pointer-events-none px-gutter" data-active-classes="text-primary-container bg-primary-fixed/50 font-label-md"><div class="pointer-events-auto mx-auto max-w-md mb-2 rounded-full bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_10px_25px_-4px_rgba(37,99,235,0.14),0_4px_10px_-2px_rgba(15,23,42,0.06)] px-space-xs py-1.5 flex items-center justify-around"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-home" href="#"><span class="material-symbols-outlined text-[22px]">storefront</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-schemes" href="#"><span class="material-symbols-outlined text-[22px]">auto_awesome</span><span class="font-label-sm text-label-sm mt-0.5">Schemes</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95 relative" data-path="volt-mart-cart" href="#"><div class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[22px]">shopping_bag</span><span class="absolute -top-1 -right-2 px-1 min-w-[16px] h-4 rounded-full bg-secondary-container text-white text-[10px] font-bold leading-none flex items-center justify-center ring-2 ring-surface-container-lowest">3</span></div><span class="font-label-sm text-label-sm mt-0.5">Cart</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-payments" href="#"><span class="material-symbols-outlined text-[22px]">credit_card</span><span class="font-label-sm text-label-sm mt-0.5">Payments</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-1 py-1 rounded-full text-on-surface-variant transition-all duration-200 active:scale-95" data-path="volt-mart-account" href="#"><span class="material-symbols-outlined text-[22px]">person</span><span class="font-label-sm text-label-sm mt-0.5">Account</span></a></div></nav></body></html>
